@@ -1,0 +1,19 @@
+{
+  "name": "Adi's World",
+  "short_name": "Adi's World",
+  "description": "Playful learning adventures for children ages 3–5.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f7f6ff",
+  "theme_color": "#6c5ce7",
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
