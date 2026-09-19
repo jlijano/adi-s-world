@@ -74,3 +74,18 @@ Changed:
 Reason:
 
 - The launch screen should use the approved Adi visual reference rather than a placeholder icon.
+
+
+## 1.2.2 — 2026-09-19
+
+Changed:
+
+- Updated in-app speech to prefer a neutral British English (en-GB) voice.
+- Added voice selection logic that prioritizes higher-quality British voices available on the device.
+- Reduced speaking speed and normalized pitch for clearer enunciation.
+- Added graceful fallback to the best available English voice when en-GB is unavailable.
+- Bumped the PWA cache version so devices receive the updated speech logic.
+
+Reason:
+
+- The previous default browser voice sounded too robotic. The new standard aims for a calmer, clearer, more natural voice for young learners.

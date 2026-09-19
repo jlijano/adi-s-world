@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.2.1  
+**Version:** 1.2.2  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -719,6 +719,7 @@ Current canonical project foundation:
 - Implemented MVP baseline: mobile-first responsive PWA shell with Word Forest, Number Island, and Puzzle Mountain playable activities; local star/progress tracking; optional browser speech; offline app-shell caching
 - Primary UI targets: Android phones first, tablets second, with responsive desktop compatibility
 - Launch experience: show a short, child-friendly splash/loading screen using Adi's World visual identity before revealing the main app; use the approved Adi's World reference splash artwork as the primary loading icon; keep it lightweight, non-blocking beyond necessary loading, and respectful of reduced-motion settings
+- Voice standard: use a neutral British English (en-GB) voice when available, with clear enunciation, natural pitch, and a slightly slower child-friendly speaking pace; gracefully fall back to the best available English voice when the device lacks a British voice
 - Master prompt governance: semantic versioning + changelog + Git history
 
 This file is the operating contract for future Adi's World work until explicitly revised.

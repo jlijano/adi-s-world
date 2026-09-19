@@ -149,13 +149,68 @@ function updateStarCount() {
   starCount.textContent = progress.stars || 0;
 }
 
+let preferredBritishVoice = null;
+
+function scoreBritishVoice(voice) {
+  const name = (voice.name || "").toLowerCase();
+  const lang = (voice.lang || "").toLowerCase();
+  let score = 0;
+
+  if (lang === "en-gb") score += 100;
+  else if (lang.startsWith("en-gb")) score += 90;
+  else if (lang.startsWith("en")) score += 20;
+
+  if (name.includes("google uk english")) score += 40;
+  if (name.includes("sonia")) score += 35;
+  if (name.includes("ryan")) score += 34;
+  if (name.includes("serena")) score += 33;
+  if (name.includes("daniel")) score += 32;
+  if (name.includes("kate")) score += 31;
+  if (name.includes("british")) score += 28;
+  if (voice.localService) score += 8;
+
+  if (name.includes("whisper") || name.includes("novelty")) score -= 50;
+
+  return score;
+}
+
+function refreshPreferredBritishVoice() {
+  if (!("speechSynthesis" in window)) return;
+
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return;
+
+  preferredBritishVoice =
+    voices
+      .filter((voice) => (voice.lang || "").toLowerCase().startsWith("en"))
+      .sort((a, b) => scoreBritishVoice(b) - scoreBritishVoice(a))[0] || null;
+}
+
+if ("speechSynthesis" in window) {
+  refreshPreferredBritishVoice();
+  window.speechSynthesis.addEventListener?.("voiceschanged", refreshPreferredBritishVoice);
+  window.speechSynthesis.onvoiceschanged = refreshPreferredBritishVoice;
+}
+
 function speak(text) {
   if (!soundEnabled || !("speechSynthesis" in window)) return;
+
+  refreshPreferredBritishVoice();
   window.speechSynthesis.cancel();
+
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.88;
-  utterance.pitch = 1.08;
-  utterance.volume = 0.9;
+  utterance.lang = "en-GB";
+
+  if (preferredBritishVoice) {
+    utterance.voice = preferredBritishVoice;
+  }
+
+  // Calm, neutral British delivery for young learners:
+  // slightly slower pace, natural pitch, and full volume for clear enunciation.
+  utterance.rate = 0.82;
+  utterance.pitch = 1.0;
+  utterance.volume = 1.0;
+
   window.speechSynthesis.speak(utterance);
 }
 
