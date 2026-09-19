@@ -387,3 +387,16 @@ Changed:
 Reason:
 
 - Number Island’s remaining MVP activities should match the 10-round randomized, intentional-confirmation, replayable quality standard established by Let’s Count! and Word Forest.
+
+
+## 1.9.1 — 2026-09-20
+
+Changed:
+
+- What Comes Next? now generates ascending number sequences with answers up to 30 instead of stopping at 10.
+- The existing 10-round randomized session structure, single missing-number blank, spoken numeric choice, Yes/No confirmation, and performance-based scoring remain unchanged.
+- PWA cache version bumped so devices receive the updated sequence range.
+
+Reason:
+
+- Number Island should temporarily support broader number-sequence practice up to 30 while retaining the same child-friendly interaction model.
