@@ -1,0 +1,195 @@
+.world-card[data-world="drawing"] {
+  background: linear-gradient(150deg, #fff0f8, #ffffff 62%);
+}
+.world-hero.drawing {
+  background: linear-gradient(135deg, #e8579d, #8f62db);
+}
+.drawing-setup-card {
+  display: grid;
+  gap: 18px;
+}
+.drawing-target-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+.drawing-target-grid.letter-tracing {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.drawing-target-grid.number-tracing {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.drawing-target-button {
+  min-height: 66px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  padding: 7px 5px;
+  border-radius: 16px;
+  border: 2px solid rgba(108,92,231,.10);
+  background: #faf9ff;
+  color: var(--ink);
+}
+.drawing-target-button strong {
+  font-size: 24px;
+  line-height: 1;
+}
+.drawing-target-button span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.drawing-target-button.is-selected {
+  border-color: #8f62db;
+  background: #f1eaff;
+  box-shadow: 0 0 0 3px rgba(143,98,219,.10);
+}
+.drawing-target-grid.word-writing {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.drawing-target-grid.word-writing .drawing-target-button strong {
+  font-size: 16px;
+}
+.drawing-target-grid.shape-tracing {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.drawing-target-grid.shape-tracing .drawing-target-button strong {
+  font-size: 30px;
+}
+.drawing-game-card {
+  overflow: hidden;
+}
+.drawing-word-cue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: -4px 0 12px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  background: #fff7fb;
+}
+.drawing-word-cue span {
+  font-size: 32px;
+}
+.drawing-word-cue strong {
+  font-size: 22px;
+}
+.drawing-board-wrap {
+  overflow: hidden;
+  border: 3px solid #ddd6f4;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(80,65,155,.04);
+}
+.drawing-board-wrap.free {
+  border-color: #d9dce7;
+}
+.drawing-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 760 / 430;
+  background:
+    linear-gradient(#f7f5fd 1px, transparent 1px) 0 25% / 100% 25%,
+    #fff;
+  touch-action: none;
+  cursor: crosshair;
+}
+.drawing-board-wrap.free .drawing-canvas {
+  aspect-ratio: 760 / 500;
+  background: #fff;
+}
+.drawing-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+.drawing-actions.three {
+  grid-template-columns: repeat(3, 1fr);
+}
+.drawing-tool-button {
+  min-height: 50px;
+  border-radius: 16px;
+  background: #f3f1fb;
+  color: var(--ink);
+  font-weight: 900;
+}
+.drawing-done-button {
+  min-height: 50px;
+}
+.drawing-palette {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.colour-swatch {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--swatch);
+  border: 4px solid white;
+  box-shadow: 0 0 0 2px #ddd8ee;
+}
+.colour-swatch.is-selected {
+  box-shadow: 0 0 0 4px #8f62db;
+  transform: scale(1.08);
+}
+.brush-size-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.brush-size-button {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 14px;
+  background: #f8f7fc;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 12px;
+}
+.brush-size-button span {
+  display: block;
+  width: var(--brush);
+  height: var(--brush);
+  border-radius: 50%;
+  background: #303344;
+}
+.brush-size-button.is-selected {
+  background: #efeaff;
+  box-shadow: inset 0 0 0 2px #8f62db;
+}
+@media (max-width: 420px) {
+  .drawing-target-grid.letter-tracing,
+  .drawing-target-grid.number-tracing {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .drawing-target-button {
+    min-height: 60px;
+  }
+  .drawing-actions.three {
+    grid-template-columns: 1fr 1fr;
+  }
+  .drawing-actions.three .drawing-done-button {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 700px) {
+  .drawing-target-grid.letter-tracing,
+  .drawing-target-grid.number-tracing {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+  .drawing-target-grid.shape-tracing {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
