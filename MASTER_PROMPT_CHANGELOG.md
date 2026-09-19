@@ -309,3 +309,19 @@ Changed:
 Reason:
 
 - Children should be able to build a word progressively and keep the correct parts they have already learned, while wrong taps remain temporary and non-destructive.
+
+
+## 1.7.2 — 2026-09-19
+
+Changed:
+
+- Build the Word now explicitly disables each letter tile after that specific tile is correctly placed.
+- A correctly used tile cannot be tapped, focused, or selected again during the current word.
+- Wrongly tapped letter tiles remain enabled and can still be selected later if they become the correct next letter.
+- Duplicate-letter words are handled per tile: only the used copy is disabled while another copy remains available for the next matching position.
+- Resetting the current word restores all letter tiles to selectable state.
+- PWA cache version bumped so devices receive the updated letter-selection behavior.
+
+Reason:
+
+- The child should clearly see which physical letter tiles have already been consumed while still being able to retry letters that were tapped too early or incorrectly.
