@@ -293,3 +293,19 @@ Changed:
 Reason:
 
 - These games extend Word Forest into early spelling, letter sequencing, phonological awareness, and rhyme recognition without repeating the core mechanics of the existing activities.
+
+
+## 1.7.1 — 2026-09-19
+
+Changed:
+
+- Build the Word now explicitly locks each correct next letter into its word slot.
+- Locked correct letters remain visible and stay in place while the child continues building the word.
+- Incorrect letters never fill a slot and do not remove or replace previously locked letters.
+- Added a clear locked-letter visual state with a gentle check animation.
+- Wrong-letter feedback now explains that the letter does not go in that position yet.
+- PWA cache version bumped so devices receive the updated Build the Word behavior.
+
+Reason:
+
+- Children should be able to build a word progressively and keep the correct parts they have already learned, while wrong taps remain temporary and non-destructive.
