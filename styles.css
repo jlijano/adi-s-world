@@ -1577,3 +1577,41 @@ button:focus-visible {
     transition: none !important;
   }
 }
+
+
+/* Build the Word sticky-correct-letter behavior */
+.word-slot.is-locked {
+  position: relative;
+  background: #eaf9ef;
+  border-color: rgba(36, 145, 77, .45);
+  color: #1f6d3d;
+  box-shadow: 0 8px 18px rgba(36,145,77,.10);
+  animation: buildLetterLock .34s cubic-bezier(.2,.8,.2,1);
+}
+
+.word-slot.is-locked::after {
+  content: "✓";
+  position: absolute;
+  right: 4px;
+  top: 2px;
+  font-size: 12px;
+  font-weight: 900;
+  color: #2a8b4d;
+}
+
+.build-letter-button.is-locked-choice {
+  opacity: .18;
+  transform: scale(.9);
+}
+
+@keyframes buildLetterLock {
+  0% { transform: scale(.82); }
+  65% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word-slot.is-locked {
+    animation: none !important;
+  }
+}
