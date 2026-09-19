@@ -1,6 +1,6 @@
 {
   "project": "Adi's World",
-  "master_prompt_version": "1.9.1",
+  "master_prompt_version": "1.10.0",
   "master_prompt_file": "PROJECT_MASTER_PROMPT.md",
   "changelog_file": "MASTER_PROMPT_CHANGELOG.md",
   "repository": "jlijano/adi-s-world",
