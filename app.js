@@ -34,12 +34,8 @@ const activities = {
       id: "picture-word",
       title: "Picture Match",
       icon: "🖼️",
-      description: "Choose the word that matches the picture.",
-      rounds: [
-        { prompt: "Which word matches this picture?", stage: "🐱", choices: ["Cat", "Dog", "Fish"], answer: "Cat", speak: "Which word matches this picture?" },
-        { prompt: "Which word matches this picture?", stage: "🍌", choices: ["Apple", "Banana", "Pear"], answer: "Banana", speak: "Which word matches this picture?" },
-        { prompt: "Which word matches this picture?", stage: "🚗", choices: ["Bus", "Bike", "Car"], answer: "Car", speak: "Which word matches this picture?" }
-      ]
+      description: "10 randomized A–Z picture-word rounds. Tap the picture to hear its name.",
+      rounds: []
     }
   ],
   number: [
@@ -213,6 +209,33 @@ function buildFirstSoundRounds() {
   });
 }
 
+function buildPictureMatchRounds() {
+  const targets = shuffle(FIRST_SOUND_WORDS).slice(0, LETTER_FIND_LEVELS.length);
+
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const target = targets[index];
+    const distractors = shuffle(FIRST_SOUND_WORDS.filter((item) => item.word !== target.word))
+      .slice(0, level.choiceCount - 1)
+      .map((item) => item.word);
+
+    return {
+      prompt: "Which word matches this picture? Tap the picture to hear its name.",
+      stage: target.emoji,
+      choices: shuffle([target.word, ...distractors]),
+      answer: target.word,
+      speak: "Which word matches this picture? Tap the picture to hear its name.",
+      difficultyLabel: level.label,
+      choiceCount: level.choiceCount,
+      rewardLabel: level.reward,
+      alphabetRound: true,
+      pictureMatchRound: true,
+      spokenWord: target.word,
+      word: target.word,
+      letter: target.letter
+    };
+  });
+}
+
 function prepareActivityForPlay(worldId, activityId) {
   const activity = (activities[worldId] || []).find((item) => item.id === activityId);
   if (!activity) return;
@@ -223,6 +246,10 @@ function prepareActivityForPlay(worldId, activityId) {
 
   if (activityId === "first-sound") {
     activity.rounds = buildFirstSoundRounds();
+  }
+
+  if (activityId === "picture-word") {
+    activity.rounds = buildPictureMatchRounds();
   }
 }
 
@@ -510,18 +537,24 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         <p>${round.prompt}</p>
       </div>
 
-      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""}">
+      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound ? "picture-match-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
-        <div class="${isNumber ? "big-number" : isSequence ? "sequence" : "big-symbol"}">${round.stage}</div>
+        ${round.pictureMatchRound
+          ? `<button class="picture-speak-button" type="button" data-speak-word="${escapeAttr(round.spokenWord)}" aria-label="Hear ${escapeAttr(round.spokenWord)}">
+               <span class="picture-speak-emoji" aria-hidden="true">${round.stage}</span>
+               <span class="picture-speak-hint">🔊 Tap to hear</span>
+             </button>`
+          : `<div class="${isNumber ? "big-number" : isSequence ? "sequence" : "big-symbol"}">${round.stage}</div>`}
         ${round.phonicsRound ? `<div class="phonics-word" aria-label="Spelling: ${round.spelling}">${round.spelling}</div>` : ""}
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-right" aria-hidden="true">⭐</span>' : ""}
       </div>
 
       <div class="choice-grid ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
         ${round.choices.map((choice, choiceIndex) => `
-          <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}">
-            <span aria-hidden="true">${choice}</span>
-            ${choice.length > 2 && !containsEmojiOnly(choice) ? `<span class="choice-label">${choice}</span>` : ""}
+          <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""} ${round.pictureMatchRound ? "picture-word-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}">
+            ${choice.length > 2 && !containsEmojiOnly(choice)
+              ? `<span class="${round.pictureMatchRound ? "picture-choice-word" : "choice-label"}">${choice}</span>`
+              : `<span aria-hidden="true">${choice}</span>`}
           </button>
         `).join("")}
       </div>
@@ -728,6 +761,15 @@ document.addEventListener("click", (event) => {
     prepareActivityForPlay(activityButton.dataset.worldId, activityButton.dataset.activity);
     startGameSession(activityButton.dataset.worldId, activityButton.dataset.activity);
     renderGame(activityButton.dataset.worldId, activityButton.dataset.activity, 0);
+    return;
+  }
+
+  const speakPictureButton = event.target.closest("[data-speak-word]");
+  if (speakPictureButton) {
+    speak(speakPictureButton.dataset.speakWord);
+    speakPictureButton.classList.remove("is-speaking");
+    void speakPictureButton.offsetWidth;
+    speakPictureButton.classList.add("is-speaking");
     return;
   }
 

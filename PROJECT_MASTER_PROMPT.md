@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.5.1  
+**Version:** 1.6.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -723,6 +723,7 @@ Current canonical project foundation:
 - Find the Letter standard: support the full A–Z alphabet, randomize targets and answer positions every time the activity is opened, and use 10 total rounds per play session. Rounds 1–3 use 3 visible choices, rounds 4–6 use 4 choices, and rounds 7–10 use 5 choices; use 10 distinct target letters per session when possible; keep the interaction playful with gentle motion, clear progress, and positive feedback
 - Star scoring standard: calculate stars from actual game performance. Each correct answer adds 1 session star and each incorrect attempt removes 1 session star. Session stars must never go below 0. When the activity is completed, add the final session-star total to the child's persistent star total. Store the best score for each activity for display, while still allowing new stars to be earned on later completed sessions.
 - First Sound standard: cover all letters A–Z using age-appropriate example words and visual cues, randomize the 10 target letters and answer positions every time the activity is opened, and use the same 10-round difficulty progression as Find the Letter: rounds 1–3 show 3 letter choices, rounds 4–6 show 4, and rounds 7–10 show 5. Show the spelling of the pictured word directly below the visual cue (for example, 🍎 with “Apple”). Apply the same performance-based star scoring and playful transitions.
+- Picture Match standard: use the same A–Z word/visual pool, 10 randomized rounds, 3/4/5 choice progression, performance-based star scoring, and playful transitions as First Sound. The child chooses the written word that matches the picture. Tapping the picture must speak the picture name using the app's voice standard without changing the score; do not show the answer spelling beside the picture because the word choices are the learning challenge.
 - Master prompt governance: semantic versioning + changelog + Git history
 
 This file is the operating contract for future Adi's World work until explicitly revised.

@@ -184,3 +184,26 @@ Changed:
 Reason:
 
 - The activities should remain visually manageable for ages 3–5 while still increasing difficulty gradually, and First Sound should connect the image, spoken prompt, printed word, and starting letter more clearly.
+
+
+## 1.6.0 — 2026-09-19
+
+Added:
+
+- Full A–Z Picture Match content using the same age-appropriate word and visual pool as First Sound.
+- Ten randomized Picture Match rounds every time the activity opens.
+- The same progressive choice structure as the other alphabet games: 3 choices in rounds 1–3, 4 choices in rounds 4–6, and 5 choices in rounds 7–10.
+- The same performance-based star scoring: +1 for a correct answer and -1 for an incorrect attempt, with no negative session score.
+- Tappable picture audio: tapping the displayed picture speaks its name using the neutral British voice standard.
+- A visual “Tap to hear” affordance and gentle audio-feedback animation.
+- Word-choice styling optimized for phone and tablet layouts.
+
+Changed:
+
+- Picture Match no longer uses three fixed examples.
+- Picture Match answer choices are randomized from the full A–Z vocabulary pool each session.
+- PWA cache version bumped so devices receive the new Picture Match logic and styling.
+
+Reason:
+
+- Picture Match should match the replayability, scoring, difficulty progression, alphabet coverage, and child-friendly interaction standards established by Find the Letter and First Sound while adding an audio-supported picture-to-word learning cue.

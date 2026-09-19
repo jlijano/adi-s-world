@@ -1198,3 +1198,92 @@ button:focus-visible {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
+
+
+/* Picture Match */
+.picture-match-stage {
+  min-height: 170px;
+}
+
+.picture-speak-button {
+  position: relative;
+  z-index: 2;
+  min-width: 150px;
+  min-height: 132px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 28px;
+  background: #ffffff;
+  color: #293552;
+  box-shadow: 0 14px 30px rgba(70,55,140,.12);
+  cursor: pointer;
+  touch-action: manipulation;
+  animation: targetLetterFloat 2s ease-in-out infinite;
+}
+
+.picture-speak-button:focus-visible {
+  outline: 4px solid rgba(108,92,231,.28);
+  outline-offset: 4px;
+}
+
+.picture-speak-button:active {
+  transform: scale(.96);
+}
+
+.picture-speak-button.is-speaking {
+  animation: pictureSpeakPulse .5s ease;
+}
+
+.picture-speak-emoji {
+  font-size: clamp(64px, 19vw, 96px);
+  line-height: 1;
+}
+
+.picture-speak-hint {
+  font-size: 13px;
+  font-weight: 900;
+  color: #6558c9;
+}
+
+.picture-word-choice {
+  min-height: 72px;
+  font-size: 18px;
+}
+
+.picture-choice-word {
+  display: block;
+  width: 100%;
+  overflow-wrap: anywhere;
+  font-size: clamp(16px, 4.6vw, 22px);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+@keyframes pictureSpeakPulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@media (min-width: 700px) {
+  .picture-speak-button {
+    min-width: 190px;
+    min-height: 150px;
+  }
+
+  .picture-choice-word {
+    font-size: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .picture-speak-button,
+  .picture-speak-button.is-speaking {
+    animation: none !important;
+    transform: none !important;
+  }
+}
