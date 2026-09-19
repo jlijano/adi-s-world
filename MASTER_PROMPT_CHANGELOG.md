@@ -1,5 +1,29 @@
 # Adi's World Master Prompt Changelog
 
+## 1.13.0 — 2026-09-20
+
+Added:
+
+- New Word Forest game: **Match the Sound**, based on connecting pictures to the beginning sound of their names.
+- Universal How to Play support for Match the Sound before the first round.
+- 10 randomized rounds with progressive boards: 3 pictures/3 letters, then 4/4, then 5 pictures/4 letters.
+- Tap-picture then tap-letter interaction designed for phones instead of freehand line drawing.
+- Spoken picture-name and letter-sound reinforcement.
+- Sticky correct matches that remain visibly locked while the child completes the rest of the board.
+- Calm wrong-match retry behavior with the existing -1 star rule, never below zero.
+- Round reset that clears only the current board without changing the score.
+- Phone-first responsive board styling, accessibility labels, and reduced-motion support.
+
+Changed:
+
+- Word Forest overview copy now includes sound matching among its literacy activities.
+- PWA cache version bumped to v27.
+
+Reason:
+
+- The worksheet's educational goal is categorizing several pictures by their beginning sounds. The digital version preserves that matching mechanic while making it touch-friendly for ages 3–5.
+
+
 ## 1.12.0 — 2026-09-20
 
 Added:
