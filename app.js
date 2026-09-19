@@ -2312,12 +2312,20 @@ function handleSoundMatchPicture(pictureIndex, button) {
   speak(`${picture.word}. Which letter starts ${picture.word}?`);
 }
 
+function reshuffleSoundMatchLetters() {
+  const grid = document.querySelector(".sound-match-letter-grid");
+  if (!grid) return;
+  shuffle(Array.from(grid.children)).forEach((control) => grid.appendChild(control));
+}
+
 function handleSoundMatchLetter(letter, button) {
   if (!activeGame || activeGame.correctThisRound) return;
   const { worldId, activityId, roundIndex } = activeGame;
   const activity = activities[worldId]?.find((item) => item.id === activityId);
   const round = activity?.rounds?.[roundIndex];
   if (!round?.soundMatchRound) return;
+
+  reshuffleSoundMatchLetters();
 
   if (activeGame.soundMatchSelectedPicture === null) {
     const feedback = document.getElementById("feedback");
