@@ -1059,7 +1059,7 @@ function renderWorld(worldId) {
   setActiveNav("worlds");
   const worldActivities = activities[worldId] || [];
   const worldGameCopy = {
-    word: "Word Forest games use 10 short, child-friendly rounds with fresh randomized challenges.",
+    word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges. Start the Word lets you choose a letter and up to 20 rounds.",
     number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
     puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving."
   };
