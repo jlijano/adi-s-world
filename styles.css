@@ -332,6 +332,7 @@ button:focus-visible {
 .world-card.word { background: linear-gradient(150deg, #f3fff5, #ffffff 60%); }
 .world-card.number { background: linear-gradient(150deg, #eaf8ff, #ffffff 60%); }
 .world-card.puzzle { background: linear-gradient(150deg, #fff5ea, #ffffff 60%); }
+.world-card.discovery { background: linear-gradient(150deg, #eefcf9, #ffffff 60%); }
 
 .world-hero,
 .progress-hero {
@@ -344,6 +345,7 @@ button:focus-visible {
 .world-hero.word { background: linear-gradient(135deg, #26a269, #54c98a); }
 .world-hero.number { background: linear-gradient(135deg, #2a8fe3, #58b9f2); }
 .world-hero.puzzle { background: linear-gradient(135deg, #ef8d32, #f3b050); }
+.world-hero.discovery { background: linear-gradient(135deg, #4f46c8, #168f91); }
 
 .world-hero .eyebrow,
 .activity-header .eyebrow,
@@ -383,6 +385,35 @@ button:focus-visible {
   display: grid;
   gap: 12px;
   margin-top: 16px;
+}
+
+.world-empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 28px 20px;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(55, 46, 110, .08);
+}
+
+.world-empty-icon {
+  font-size: 46px;
+  line-height: 1;
+}
+
+.world-empty-state strong {
+  font-size: 18px;
+}
+
+.world-empty-state p {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.4;
 }
 
 .activity-card {
