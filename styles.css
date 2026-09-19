@@ -1970,3 +1970,138 @@ button:focus-visible {
     transition: none !important;
   }
 }
+
+
+/* Number Island — Count & Match */
+.count-match-answer-area {
+  display: grid;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.count-match-step-label {
+  justify-self: center;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: #eef7ff;
+  color: #236da7;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.count-match-selected-number {
+  justify-self: center;
+  min-width: 148px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  background: #effaf6;
+  border: 2px solid rgba(42,139,83,.20);
+  color: #27724b;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.count-match-selected-number strong {
+  font-size: 28px;
+}
+
+.count-match-word-step {
+  display: grid;
+  gap: 12px;
+}
+
+.count-match-word-step[hidden],
+.count-match-selected-number[hidden],
+[data-count-match-number-grid][hidden] {
+  display: none !important;
+}
+
+.count-match-word-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+}
+
+.count-match-word-choice {
+  min-height: 64px;
+  padding: 10px 14px;
+  border: 2px solid rgba(42,143,227,.10);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff, #f5faff);
+  color: #293552;
+  font-size: clamp(17px, 5vw, 22px);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  box-shadow: 0 7px 16px rgba(31,102,158,.08);
+}
+
+.count-match-word-choice.is-correct {
+  background: #e7fff4;
+  border-color: #2cb67d;
+  animation: correctLetterPop .55s cubic-bezier(.2,.9,.25,1) both;
+}
+
+.count-match-word-choice.is-try-again {
+  background: #fff6df;
+  border-color: #f6b73c;
+  animation: gentleWiggle .42s ease;
+}
+
+.count-match-confirm-word {
+  font-size: clamp(24px, 7vw, 38px);
+  line-height: 1.1;
+}
+
+.count-match-stage-content .counting-object-grid {
+  max-width: 560px;
+}
+
+@media (max-width: 390px) {
+  .count-match-stage-content .counting-object-grid {
+    grid-template-columns: repeat(5, minmax(44px, 1fr));
+    gap: 6px;
+  }
+
+  .count-match-stage-content .counting-object {
+    min-width: 44px;
+    min-height: 54px;
+    padding: 4px;
+    border-radius: 15px;
+  }
+
+  .count-match-stage-content .counting-object-emoji {
+    font-size: clamp(27px, 8.5vw, 38px);
+  }
+
+  .count-match-stage-content .counting-check {
+    width: 19px;
+    height: 19px;
+    font-size: 11px;
+  }
+
+  .count-match-word-choice {
+    min-height: 60px;
+  }
+}
+
+@media (min-width: 700px) {
+  .count-match-word-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .count-match-word-choice {
+    min-height: 74px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .count-match-word-choice,
+  .count-match-word-choice.is-correct,
+  .count-match-word-choice.is-try-again {
+    animation: none !important;
+    transform: none !important;
+  }
+}

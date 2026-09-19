@@ -73,6 +73,13 @@ const activities = {
       icon: "➡️",
       description: "10 randomized rounds. Find the one number that comes next, hear it, then confirm.",
       rounds: []
+    },
+    {
+      id: "count-match",
+      title: "Count & Match",
+      icon: "🧮",
+      description: "30 randomized rounds. Count the objects, choose the numeral, then match the number word.",
+      rounds: []
     }
   ],
   puzzle: [
@@ -218,7 +225,11 @@ const COUNTING_OBJECTS = [
   { emoji: "🍪", singular: "cookie", plural: "cookies" }
 ];
 
-const NUMBER_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+const NUMBER_WORDS = [
+  "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+  "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty",
+  "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five", "Twenty-six", "Twenty-seven", "Twenty-eight", "Twenty-nine", "Thirty"
+];
 
 const FIRST_SOUND_WORDS = [
   { letter: "A", word: "Apple", emoji: "🍎" },
@@ -311,6 +322,64 @@ function buildCountStarsRounds() {
       difficultyLabel: level.label,
       choiceCount: level.choiceCount,
       countingRound: true,
+      quantity,
+      objectEmoji: object.emoji,
+      objectSingular: object.singular,
+      objectPlural: object.plural
+    };
+  });
+}
+
+function buildCountMatchChoices(answer, choiceCount) {
+  const offsets = shuffle([1, -1, 2, -2, 3, -3, 4, -4, 5, -5, 6, -6]);
+  const distractors = [];
+
+  offsets.forEach((offset) => {
+    const candidate = answer + offset;
+    if (candidate >= 1 && candidate <= 30 && candidate !== answer && !distractors.includes(candidate)) {
+      distractors.push(candidate);
+    }
+  });
+
+  if (distractors.length < choiceCount - 1) {
+    shuffle(Array.from({ length: 30 }, (_, index) => index + 1))
+      .filter((candidate) => candidate !== answer && !distractors.includes(candidate))
+      .forEach((candidate) => distractors.push(candidate));
+  }
+
+  return shuffle([answer, ...distractors.slice(0, choiceCount - 1)]).map(String);
+}
+
+function buildCountMatchRounds() {
+  const quantities = [
+    ...shuffle(Array.from({ length: 10 }, (_, index) => index + 1)),
+    ...shuffle(Array.from({ length: 10 }, (_, index) => index + 11)),
+    ...shuffle(Array.from({ length: 10 }, (_, index) => index + 21))
+  ];
+  let previousObject = null;
+
+  return quantities.map((quantity, index) => {
+    const choiceCount = index < 10 ? 3 : index < 20 ? 4 : 5;
+    const difficultyLabel = index < 10 ? "Warm-up" : index < 20 ? "Explorer" : "Super Search";
+    const objectPool = COUNTING_OBJECTS.filter((item) => item.emoji !== previousObject);
+    const object = shuffle(objectPool.length ? objectPool : COUNTING_OBJECTS)[0];
+    previousObject = object.emoji;
+
+    const numericChoices = buildCountMatchChoices(quantity, choiceCount);
+    const wordChoices = buildCountMatchChoices(quantity, choiceCount)
+      .map((value) => numberWord(Number(value)).toLowerCase());
+
+    return {
+      prompt: `Count the ${object.plural}. Which number matches?`,
+      stage: object.emoji,
+      choices: numericChoices,
+      wordChoices,
+      answer: String(quantity),
+      wordAnswer: numberWord(quantity).toLowerCase(),
+      speak: `Count the ${object.plural}. Which number matches?`,
+      difficultyLabel,
+      choiceCount,
+      countMatchRound: true,
       quantity,
       objectEmoji: object.emoji,
       objectSingular: object.singular,
@@ -580,6 +649,10 @@ function prepareActivityForPlay(worldId, activityId) {
   if (activityId === "number-order") {
     activity.rounds = buildNumberOrderRounds();
   }
+
+  if (activityId === "count-match") {
+    activity.rounds = buildCountMatchRounds();
+  }
 }
 
 function startGameSession(worldId, activityId) {
@@ -613,6 +686,7 @@ let pendingPictureChoice = null;
 let pendingFirstSoundChoice = null;
 let pendingNumberChoice = null;
 let pendingCompareChoice = null;
+let pendingCountMatchWordChoice = null;
 
 const screen = document.getElementById("screen");
 const starCount = document.getElementById("star-count");
@@ -860,7 +934,8 @@ function renderGame(worldId, activityId, roundIndex = 0) {
     correctThisRound: false,
     buildIndex: 0,
     countedIds: new Set(),
-    answerLocked: false
+    answerLocked: false,
+    countMatchNumberCorrect: false
   };
   currentView = { type: "game", worldId, activityId };
   setActiveNav("worlds");
@@ -899,7 +974,19 @@ function renderGame(worldId, activityId, roundIndex = 0) {
 
       <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound ? "picture-match-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
-        ${round.compareRound
+        ${round.countMatchRound
+          ? `<div class="counting-stage-content count-match-stage-content">
+               <div class="counting-object-grid ${round.quantity > 20 ? "count-many" : ""}" aria-label="${round.quantity} ${escapeAttr(round.objectPlural)}. Tap each object once to count it.">
+                 ${Array.from({ length: round.quantity }, (_, objectIndex) => `
+                   <button class="counting-object" type="button" data-count-object="${objectIndex}" aria-pressed="false" aria-label="${escapeAttr(round.objectSingular)} ${objectIndex + 1}, not counted" style="--object-index:${objectIndex}">
+                     <span class="counting-object-emoji" aria-hidden="true">${round.objectEmoji}</span>
+                     <span class="counting-check" aria-hidden="true">✓</span>
+                   </button>
+                 `).join("")}
+               </div>
+               <button class="count-reset-button" type="button" data-count-reset>↺ Count again</button>
+             </div>`
+          : round.compareRound
           ? `<div class="compare-stage" aria-label="Compare the left and right groups">
                <div class="compare-group" aria-label="Left group: ${round.leftQuantity} ${escapeAttr(round.objectPlural)}">
                  <span class="compare-side-label">Left</span>
@@ -952,6 +1039,30 @@ function renderGame(worldId, activityId, roundIndex = 0) {
             `).join("")}
           </div>
           <button class="build-reset-button" type="button" data-build-reset>↺ Start this word again</button>
+        </div>
+      ` : round.countMatchRound ? `
+        <div class="count-match-answer-area">
+          <div class="count-match-step-label" data-count-match-step-label>Step 1 of 2 · Pick the number</div>
+          <div class="choice-grid count-number-grid choices-${round.choiceCount}" data-count-match-number-grid aria-label="Number choices">
+            ${round.choices.map((choice, choiceIndex) => `
+              <button class="choice-button count-number-choice" style="--choice-index:${choiceIndex}" type="button" data-number-choice="${choice}" aria-label="${numberWord(choice)}. Tap to hear and choose this number.">
+                <span aria-hidden="true">${choice}</span>
+              </button>
+            `).join("")}
+          </div>
+          <div class="count-match-selected-number" data-count-match-selected-number hidden>
+            Number <strong></strong> ✓
+          </div>
+          <div class="count-match-word-step" data-count-match-word-step hidden>
+            <div class="count-match-step-label">Step 2 of 2 · Match the number word</div>
+            <div class="choice-grid count-match-word-grid choices-${round.choiceCount}" aria-label="Number word choices">
+              ${round.wordChoices.map((choice, choiceIndex) => `
+                <button class="choice-button count-match-word-choice" style="--choice-index:${choiceIndex}" type="button" data-count-match-word-choice="${escapeAttr(choice)}" aria-label="${escapeAttr(choice)}. Tap to hear and choose this number word.">
+                  <span>${choice}</span>
+                </button>
+              `).join("")}
+            </div>
+          </div>
         </div>
       ` : round.countingRound || round.numberSequenceRound ? `
         <div class="choice-grid count-number-grid choices-${round.choiceCount}" aria-label="Number choices">
@@ -1006,6 +1117,54 @@ function refreshVisibleSessionScore() {
   if (scoreDetail && gameSession) {
     scoreDetail.textContent = `${gameSession.correctAnswers} correct • ${gameSession.mistakes} mistakes`;
   }
+}
+
+function closeCountMatchWordConfirmation() {
+  document.getElementById("count-match-word-confirm-overlay")?.remove();
+  pendingCountMatchWordChoice = null;
+  document.querySelectorAll("[data-count-match-word-choice]").forEach((button) => {
+    if (!activeGame?.correctThisRound) button.disabled = false;
+  });
+}
+
+function showCountMatchWordConfirmation(choice, button) {
+  if (!activeGame || activeGame.correctThisRound || !activeGame.countMatchNumberCorrect || pendingCountMatchWordChoice) return;
+
+  pendingCountMatchWordChoice = { choice, button };
+  document.querySelectorAll("[data-count-match-word-choice]").forEach((wordButton) => {
+    wordButton.disabled = true;
+  });
+
+  const openDialog = () => {
+    if (!pendingCountMatchWordChoice || pendingCountMatchWordChoice.choice !== choice || activeGame?.correctThisRound) return;
+
+    document.getElementById("count-match-word-confirm-overlay")?.remove();
+    const overlay = document.createElement("div");
+    overlay.id = "count-match-word-confirm-overlay";
+    overlay.className = "picture-confirm-overlay";
+    overlay.innerHTML = `
+      <div class="picture-confirm-card" role="dialog" aria-modal="true" aria-labelledby="count-match-word-confirm-title">
+        <span class="picture-confirm-heard">🔊 You chose</span>
+        <strong class="picture-confirm-word count-match-confirm-word">${choice}</strong>
+        <h2 id="count-match-word-confirm-title">Is this the answer you want?</h2>
+        <div class="picture-confirm-actions">
+          <button class="picture-confirm-button yes" type="button" data-count-match-word-confirm="yes" aria-label="Yes, choose ${escapeAttr(choice)}">
+            <span class="picture-confirm-symbol" aria-hidden="true">✓</span>
+            <span>Yes</span>
+          </button>
+          <button class="picture-confirm-button no" type="button" data-count-match-word-confirm="no" aria-label="No, choose another number word">
+            <span class="picture-confirm-symbol" aria-hidden="true">✕</span>
+            <span>No</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector("[data-count-match-word-confirm='yes']")?.focus();
+  };
+
+  speak(choice, openDialog);
 }
 
 function closeCompareChoiceConfirmation() {
@@ -1114,7 +1273,7 @@ function resetCountStarsRound(announce = true) {
     button.setAttribute("aria-pressed", "false");
     const activity = (activities[activeGame.worldId] || []).find((item) => item.id === activeGame.activityId);
     const round = activity?.rounds?.[activeGame.roundIndex];
-    if (round?.countingRound) {
+    if (round?.countingRound || round?.countMatchRound) {
       button.setAttribute("aria-label", `${round.objectSingular} ${index + 1}, not counted`);
     }
   });
@@ -1132,7 +1291,7 @@ function handleCountObject(button) {
   if (!activeGame || activeGame.correctThisRound) return;
   const activity = (activities[activeGame.worldId] || []).find((item) => item.id === activeGame.activityId);
   const round = activity?.rounds?.[activeGame.roundIndex];
-  if (!round?.countingRound) return;
+  if (!round?.countingRound && !round?.countMatchRound) return;
 
   const objectId = Number(button.dataset.countObject);
   if (activeGame.countedIds.has(objectId)) return;
@@ -1144,6 +1303,105 @@ function handleCountObject(button) {
   button.setAttribute("aria-pressed", "true");
   button.setAttribute("aria-label", `${round.objectSingular} ${objectId + 1}, counted as ${numberWord(count)}`);
   speak(numberWord(count));
+}
+
+function handleCountMatchNumberChoice(choice, button) {
+  if (!activeGame || activeGame.correctThisRound || activeGame.answerLocked) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId].find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.countMatchRound || activeGame.countMatchNumberCorrect) return;
+
+  activeGame.answerLocked = true;
+  const feedback = document.getElementById("feedback");
+
+  if (choice !== round.answer) {
+    updateSessionScore(-1);
+    refreshVisibleSessionScore();
+    button.classList.add("is-try-again");
+    feedback.className = "feedback try";
+    feedback.textContent = "Almost! Count the objects again.";
+    speak("Almost! Count the objects again.");
+    setTimeout(() => {
+      button.classList.remove("is-try-again");
+      activeGame.answerLocked = false;
+      resetCountStarsRound(false);
+    }, 650);
+    return;
+  }
+
+  activeGame.countMatchNumberCorrect = true;
+  activeGame.answerLocked = false;
+  button.classList.add("is-correct");
+
+  document.querySelectorAll("[data-number-choice]").forEach((numberButton) => {
+    numberButton.disabled = true;
+  });
+  const numberGrid = document.querySelector("[data-count-match-number-grid]");
+  if (numberGrid) numberGrid.hidden = true;
+
+  const selectedNumber = document.querySelector("[data-count-match-selected-number]");
+  if (selectedNumber) {
+    selectedNumber.hidden = false;
+    const strong = selectedNumber.querySelector("strong");
+    if (strong) strong.textContent = choice;
+  }
+
+  const wordStep = document.querySelector("[data-count-match-word-step]");
+  if (wordStep) wordStep.hidden = false;
+
+  const stepLabel = document.querySelector("[data-count-match-step-label]");
+  if (stepLabel) stepLabel.textContent = "Great counting!";
+
+  const prompt = document.querySelector(".adi-prompt p");
+  if (prompt) prompt.textContent = `Which word says ${choice}?`;
+
+  feedback.className = "feedback good";
+  feedback.textContent = `Great! ${numberWord(choice)}. Now match the number word.`;
+  speak(`Great! ${numberWord(choice)}. Now find the word ${numberWord(choice)}.`);
+}
+
+function handleCountMatchWordChoice(choice, button) {
+  if (!activeGame || activeGame.correctThisRound || activeGame.answerLocked || !activeGame.countMatchNumberCorrect) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId].find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.countMatchRound) return;
+
+  activeGame.answerLocked = true;
+  const feedback = document.getElementById("feedback");
+
+  if (choice !== round.wordAnswer) {
+    updateSessionScore(-1);
+    refreshVisibleSessionScore();
+    button.classList.add("is-try-again");
+    feedback.className = "feedback try";
+    feedback.textContent = "Almost! Try another number word.";
+    speak("Almost! Try another number word.");
+    setTimeout(() => {
+      button.classList.remove("is-try-again");
+      activeGame.answerLocked = false;
+    }, 650);
+    return;
+  }
+
+  activeGame.correctThisRound = true;
+  updateSessionScore(1);
+  refreshVisibleSessionScore();
+  button.classList.add("is-correct");
+  feedback.className = "feedback good";
+  feedback.textContent = `Brilliant! ${round.answer} is ${round.wordAnswer}! ⭐`;
+  document.querySelector(".game-card")?.classList.add("round-success");
+  document.querySelectorAll("[data-count-match-word-choice], [data-count-object], [data-count-reset]").forEach((control) => {
+    control.disabled = true;
+  });
+  speak(`Brilliant! ${numberWord(round.answer)}!`);
+
+  setTimeout(() => {
+    const nextRound = roundIndex + 1;
+    if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+    else completeActivity(worldId, activityId);
+  }, 1100);
 }
 
 function handleNumberSequenceChoice(choice, button) {
@@ -1454,7 +1712,7 @@ function completeActivity(worldId, activityId) {
   celebration.classList.add("is-visible");
   celebration.setAttribute("aria-hidden", "false");
 
-  const isCountingGame = activityId === "count-stars";
+  const isCountingGame = activityId === "count-stars" || activityId === "count-match";
   const resultMessage = sessionStars === 1
     ? `${isCountingGame ? "Great counting!" : "Great job!"} You earned one star!`
     : `${isCountingGame ? "Great counting!" : "Great job!"} You earned ${sessionStars} stars!`;
@@ -1600,6 +1858,19 @@ document.addEventListener("click", (event) => {
     return;
   }
 
+  const countMatchWordConfirmButton = event.target.closest("[data-count-match-word-confirm]");
+  if (countMatchWordConfirmButton) {
+    if (countMatchWordConfirmButton.dataset.countMatchWordConfirm === "yes" && pendingCountMatchWordChoice) {
+      const { choice, button } = pendingCountMatchWordChoice;
+      closeCountMatchWordConfirmation();
+      handleCountMatchWordChoice(choice, button);
+    } else {
+      closeCountMatchWordConfirmation();
+      speak("Okay. Choose another number word.");
+    }
+    return;
+  }
+
   const compareConfirmButton = event.target.closest("[data-compare-confirm]");
   if (compareConfirmButton) {
     if (compareConfirmButton.dataset.compareConfirm === "yes" && pendingCompareChoice) {
@@ -1623,12 +1894,19 @@ document.addEventListener("click", (event) => {
       const round = activity && activeGame ? activity.rounds[activeGame.roundIndex] : null;
       closeNumberChoiceConfirmation();
 
-      if (round?.numberSequenceRound) handleNumberSequenceChoice(choice, button);
+      if (round?.countMatchRound) handleCountMatchNumberChoice(choice, button);
+      else if (round?.numberSequenceRound) handleNumberSequenceChoice(choice, button);
       else handleCountStarsChoice(choice, button);
     } else {
       closeNumberChoiceConfirmation();
       speak("Okay. Choose another number.");
     }
+    return;
+  }
+
+  const countMatchWordButton = event.target.closest("[data-count-match-word-choice]");
+  if (countMatchWordButton) {
+    showCountMatchWordConfirmation(countMatchWordButton.dataset.countMatchWordChoice, countMatchWordButton);
     return;
   }
 

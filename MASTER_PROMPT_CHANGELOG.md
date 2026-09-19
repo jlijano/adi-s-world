@@ -400,3 +400,27 @@ Changed:
 Reason:
 
 - Number Island should temporarily support broader number-sequence practice up to 30 while retaining the same child-friendly interaction model.
+
+
+## 1.10.0 — 2026-09-20
+
+Added:
+
+- New Number Island game: Count & Match.
+- Count & Match uses 30 randomized rounds per session and quantities 1–30, with every quantity used once per session.
+- Rounds 1–10 use quantities 1–10 with 3 choices, rounds 11–20 use 11–20 with 4 choices, and rounds 21–30 use 21–30 with 5 choices.
+- Children tap individual objects to count them, confirm the matching numeral, then match that numeral to its written number word.
+- Correct numeral progress stays visibly locked while the child completes the number-word stage.
+- Numeral and number-word choices are spoken before the shared Yes/No confirmation step.
+- Number-word vocabulary now supports one through thirty.
+- Responsive layouts support up to 30 individually tappable objects without changing the existing Let’s Count! layout.
+
+Changed:
+
+- A Count & Match round awards one correct answer/session star only after both the numeral and number-word stages are completed.
+- Confirmed incorrect numeral or word choices count as mistakes and subtract one session star, never below zero, while keeping the child on the same round.
+- PWA cache version bumped so devices receive the new game.
+
+Reason:
+
+- The worksheet-inspired activity adds quantity-to-numeral and numeral-to-number-word association as a distinct early-math skill while preserving Adi’s World’s touch-first, audio-supported interaction model.
