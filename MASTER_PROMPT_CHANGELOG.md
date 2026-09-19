@@ -334,3 +334,19 @@ Changed:
 Reason:
 
 - Number Island needs a replayable, developmentally appropriate counting-and-number-recognition activity that teaches one-to-one counting through direct touch interaction rather than worksheet-style selection.
+
+
+## 1.8.1 — 2026-09-19
+
+Changed:
+
+- Renamed Number Island’s first game from “Count the Stars” to “Let’s Count!” so the title matches its randomized multi-object design.
+- Replaced the star activity icon with a neutral counting icon.
+- Number Island now shows its own world-specific “Pick a game” description instead of the Word Forest message.
+- The first counting round now starts from a randomized non-star object pool, preventing the old star-first presentation from appearing as a fixed opening.
+- The activity card now explicitly states that the game contains 10 randomized rounds.
+- PWA cache version bumped so existing devices receive the corrected Number Island copy and game presentation.
+
+Reason:
+
+- The game now counts many object types, so the interface and opening round should clearly communicate that it is a general counting game rather than a star-only activity.

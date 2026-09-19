@@ -55,9 +55,9 @@ const activities = {
   number: [
     {
       id: "count-stars",
-      title: "Count the Stars",
-      icon: "⭐",
-      description: "Tap each object to count, then choose and confirm the matching number.",
+      title: "Let's Count!",
+      icon: "🔢",
+      description: "10 randomized rounds. Tap each object to count, then choose and confirm the matching number.",
       rounds: []
     },
     {
@@ -288,6 +288,7 @@ function buildCountingChoices(answer, choiceCount) {
 
 function buildCountStarsRounds() {
   const usedCombinations = new Set();
+  const firstRoundObjects = shuffle(COUNTING_OBJECTS.filter((item) => item.emoji !== "⭐"));
   let previousObject = null;
 
   return LETTER_FIND_LEVELS.map((level, index) => {
@@ -298,8 +299,9 @@ function buildCountStarsRounds() {
     let attempts = 0;
 
     do {
-      const objectPool = COUNTING_OBJECTS.filter((item) => item.emoji !== previousObject);
-      object = shuffle(objectPool.length ? objectPool : COUNTING_OBJECTS)[0];
+      const basePool = index === 0 ? firstRoundObjects : COUNTING_OBJECTS;
+      const objectPool = basePool.filter((item) => item.emoji !== previousObject);
+      object = shuffle(objectPool.length ? objectPool : basePool)[0];
       quantity = range[0] + Math.floor(Math.random() * (range[1] - range[0] + 1));
       key = object.emoji + ":" + quantity;
       attempts += 1;
@@ -711,6 +713,11 @@ function renderWorld(worldId) {
   currentView = { type: "world", worldId };
   setActiveNav("worlds");
   const worldActivities = activities[worldId] || [];
+  const worldGameCopy = {
+    word: "Word Forest games use 10 short, child-friendly rounds with fresh randomized challenges.",
+    number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
+    puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving."
+  };
 
   screen.innerHTML = `
     <div class="back-row"><button class="back-button" type="button" data-action="back-worlds">← All worlds</button></div>
@@ -724,7 +731,7 @@ function renderWorld(worldId) {
       <div class="section-heading">
         <div>
           <h2 id="activity-heading">Pick a game</h2>
-          <p>Word Forest games use 10 short, child-friendly rounds with fresh randomized challenges.</p>
+          <p>${worldGameCopy[worldId] || "Pick a short, child-friendly learning challenge."}</p>
         </div>
       </div>
       <div class="activity-list">
