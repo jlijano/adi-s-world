@@ -444,15 +444,181 @@
     drawGuide(canvas.getContext("2d"), canvas, round);
   }
 
+  function drawValidationGuide(ctx, canvas, round, lineWidth) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.strokeStyle = "#fff";
+    ctx.fillStyle = "#fff";
+    ctx.lineWidth = lineWidth;
+    ctx.setLineDash([]);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    if (round.guideType === "shape") {
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const size = Math.min(canvas.width, canvas.height) * 0.58;
+      ctx.beginPath();
+
+      if (round.guide === "circle") ctx.arc(cx, cy, size / 2, 0, Math.PI * 2);
+      if (round.guide === "square") ctx.rect(cx - size / 2, cy - size / 2, size, size);
+      if (round.guide === "triangle") {
+        ctx.moveTo(cx, cy - size / 2);
+        ctx.lineTo(cx + size / 2, cy + size / 2);
+        ctx.lineTo(cx - size / 2, cy + size / 2);
+        ctx.closePath();
+      }
+      if (round.guide === "diamond") {
+        ctx.moveTo(cx, cy - size / 2);
+        ctx.lineTo(cx + size / 2, cy);
+        ctx.lineTo(cx, cy + size / 2);
+        ctx.lineTo(cx - size / 2, cy);
+        ctx.closePath();
+      }
+      if (round.guide === "star") {
+        for (let i = 0; i < 10; i += 1) {
+          const radius = i % 2 === 0 ? size / 2 : size / 4;
+          const angle = -Math.PI / 2 + i * Math.PI / 5;
+          const x = cx + Math.cos(angle) * radius;
+          const y = cy + Math.sin(angle) * radius;
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+      }
+      if (round.guide === "heart") {
+        const s = size / 2;
+        ctx.moveTo(cx, cy + s * 0.7);
+        ctx.bezierCurveTo(cx - s * 1.2, cy, cx - s, cy - s, cx, cy - s * 0.25);
+        ctx.bezierCurveTo(cx + s, cy - s, cx + s * 1.2, cy, cx, cy + s * 0.7);
+      }
+      ctx.stroke();
+    } else {
+      const text = String(round.guide);
+      const maxFont = text.length > 6 ? 120 : text.length > 3 ? 160 : 250;
+      ctx.font = `900 ${maxFont}px Arial, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.strokeText(text, canvas.width / 2, canvas.height / 2 + 8);
+    }
+
+    ctx.restore();
+  }
+
+  function drawStrokeMask(ctx, strokes, widthBoost = 0) {
+    ctx.save();
+    ctx.strokeStyle = "#fff";
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    for (const stroke of strokes || []) {
+      if (!stroke.points || stroke.points.length < 2) continue;
+      ctx.lineWidth = Math.max(1, (stroke.width || 11) + widthBoost);
+      ctx.beginPath();
+      stroke.points.forEach((point, index) => {
+        if (index === 0) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
+      });
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  function evaluateTracing(round) {
+    const canvas = document.getElementById("drawing-canvas");
+    const strokes = activeGame?.strokes || [];
+    if (!canvas || !round || !strokes.length) {
+      return { accuracy: 0, coverage: 0, inkPixels: 0 };
+    }
+
+    const makeMask = () => {
+      const mask = document.createElement("canvas");
+      mask.width = canvas.width;
+      mask.height = canvas.height;
+      return mask;
+    };
+
+    const broadGuide = makeMask();
+    const coreGuide = makeMask();
+    const ink = makeMask();
+    const broadInk = makeMask();
+
+    drawValidationGuide(broadGuide.getContext("2d"), broadGuide, round, round.guideType === "shape" ? 58 : 54);
+    drawValidationGuide(coreGuide.getContext("2d"), coreGuide, round, round.guideType === "shape" ? 28 : 26);
+    drawStrokeMask(ink.getContext("2d"), strokes, 0);
+    drawStrokeMask(broadInk.getContext("2d"), strokes, 34);
+
+    const broadGuidePixels = broadGuide.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+    const coreGuidePixels = coreGuide.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+    const inkPixels = ink.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+    const broadInkPixels = broadInk.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+
+    let inkCount = 0;
+    let inkOnGuide = 0;
+    let guideCount = 0;
+    let guideCovered = 0;
+
+    for (let i = 3; i < inkPixels.length; i += 4) {
+      const hasInk = inkPixels[i] > 20;
+      const nearGuide = broadGuidePixels[i] > 20;
+      const core = coreGuidePixels[i] > 20;
+      const nearInk = broadInkPixels[i] > 20;
+
+      if (hasInk) {
+        inkCount += 1;
+        if (nearGuide) inkOnGuide += 1;
+      }
+
+      if (core) {
+        guideCount += 1;
+        if (nearInk) guideCovered += 1;
+      }
+    }
+
+    return {
+      accuracy: inkCount ? inkOnGuide / inkCount : 0,
+      coverage: guideCount ? guideCovered / guideCount : 0,
+      inkPixels: inkCount
+    };
+  }
+
   function finishStructuredRound() {
     if (!activeGame || activeGame.worldId !== "drawing" || activeGame.activityId === "free-drawing" || activeGame.correctThisRound) return;
+
     const feedback = document.getElementById("feedback");
-    if ((activeGame.drawingDistance || 0) < 140) {
+    const activity = activities.drawing.find((item) => item.id === activeGame.activityId);
+    const round = activity?.rounds?.[activeGame.roundIndex];
+    if (!round) return;
+
+    if ((activeGame.drawingDistance || 0) < 140 || !(activeGame.strokes || []).length) {
       updateSessionScore(-1);
       refreshVisibleSessionScore();
       feedback.className = "feedback try";
       feedback.textContent = "Add a little more tracing, then try Done again.";
       speak("Add a little more tracing, then try Done again.");
+      return;
+    }
+
+    const result = evaluateTracing(round);
+    const isWord = activeGame.activityId === "word-writing";
+    const minimumAccuracy = isWord ? 0.62 : 0.68;
+    const minimumCoverage = isWord ? 0.34 : 0.44;
+
+    if (result.accuracy < minimumAccuracy) {
+      updateSessionScore(-1);
+      refreshVisibleSessionScore();
+      feedback.className = "feedback try";
+      feedback.textContent = "Stay closer to the dotted guide. Clear it and try again.";
+      speak("Stay closer to the dotted guide. Clear it and try again.");
+      return;
+    }
+
+    if (result.coverage < minimumCoverage) {
+      updateSessionScore(-1);
+      refreshVisibleSessionScore();
+      feedback.className = "feedback try";
+      feedback.textContent = "Good start! Trace more of the dotted guide before you finish.";
+      speak("Good start. Trace more of the dotted guide before you finish.");
       return;
     }
 
@@ -465,7 +631,6 @@
     speak("Lovely tracing! Great job.");
 
     const { activityId, roundIndex } = activeGame;
-    const activity = activities.drawing.find((item) => item.id === activityId);
     setTimeout(() => {
       if (roundIndex + 1 < activity.rounds.length) renderDrawingRound(activityId, roundIndex + 1);
       else completeActivity("drawing", activityId);
