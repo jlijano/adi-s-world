@@ -527,8 +527,9 @@
   function evaluateTracing(round) {
     const canvas = document.getElementById("drawing-canvas");
     const strokes = activeGame?.strokes || [];
+
     if (!canvas || !round || !strokes.length) {
-      return { accuracy: 0, coverage: 0, inkPixels: 0 };
+      return { accuracy: 0, coverage: 0, strayRatio: 1, inkPixels: 0 };
     }
 
     const makeMask = () => {
@@ -538,48 +539,51 @@
       return mask;
     };
 
-    const broadGuide = makeMask();
-    const coreGuide = makeMask();
+    const centerGuide = makeMask();
+    const toleranceGuide = makeMask();
     const ink = makeMask();
-    const broadInk = makeMask();
+    const expandedInk = makeMask();
 
-    drawValidationGuide(broadGuide.getContext("2d"), broadGuide, round, round.guideType === "shape" ? 58 : 54);
-    drawValidationGuide(coreGuide.getContext("2d"), coreGuide, round, round.guideType === "shape" ? 28 : 26);
+    const centerWidth = round.guideType === "shape" ? 12 : 10;
+    const toleranceWidth = round.guideType === "shape" ? 26 : 22;
+
+    drawValidationGuide(centerGuide.getContext("2d"), centerGuide, round, centerWidth);
+    drawValidationGuide(toleranceGuide.getContext("2d"), toleranceGuide, round, toleranceWidth);
     drawStrokeMask(ink.getContext("2d"), strokes, 0);
-    drawStrokeMask(broadInk.getContext("2d"), strokes, 34);
+    drawStrokeMask(expandedInk.getContext("2d"), strokes, 8);
 
-    const broadGuidePixels = broadGuide.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
-    const coreGuidePixels = coreGuide.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+    const centerPixels = centerGuide.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+    const tolerancePixels = toleranceGuide.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
     const inkPixels = ink.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
-    const broadInkPixels = broadInk.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+    const expandedInkPixels = expandedInk.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
 
     let inkCount = 0;
-    let inkOnGuide = 0;
+    let inkNearGuide = 0;
     let guideCount = 0;
     let guideCovered = 0;
 
     for (let i = 3; i < inkPixels.length; i += 4) {
       const hasInk = inkPixels[i] > 20;
-      const nearGuide = broadGuidePixels[i] > 20;
-      const core = coreGuidePixels[i] > 20;
-      const nearInk = broadInkPixels[i] > 20;
+      const nearGuide = tolerancePixels[i] > 20;
+      const onCenterGuide = centerPixels[i] > 20;
+      const nearInk = expandedInkPixels[i] > 20;
 
       if (hasInk) {
         inkCount += 1;
-        if (nearGuide) inkOnGuide += 1;
+        if (nearGuide) inkNearGuide += 1;
       }
 
-      if (core) {
+      if (onCenterGuide) {
         guideCount += 1;
         if (nearInk) guideCovered += 1;
       }
     }
 
-    return {
-      accuracy: inkCount ? inkOnGuide / inkCount : 0,
-      coverage: guideCount ? guideCovered / guideCount : 0,
-      inkPixels: inkCount
-    };
+    const accuracy = inkCount ? inkNearGuide / inkCount : 0;
+    const coverage = guideCount ? guideCovered / guideCount : 0;
+    const strayRatio = inkCount ? (inkCount - inkNearGuide) / inkCount : 1;
+
+    return { accuracy, coverage, strayRatio, inkPixels: inkCount };
   }
 
   function finishStructuredRound() {
@@ -601,15 +605,16 @@
 
     const result = evaluateTracing(round);
     const isWord = activeGame.activityId === "word-writing";
-    const minimumAccuracy = isWord ? 0.62 : 0.68;
-    const minimumCoverage = isWord ? 0.34 : 0.44;
+    const minimumAccuracy = isWord ? 0.74 : 0.80;
+    const minimumCoverage = isWord ? 0.40 : 0.48;
+    const maximumStrayRatio = isWord ? 0.26 : 0.20;
 
-    if (result.accuracy < minimumAccuracy) {
+    if (result.accuracy < minimumAccuracy || result.strayRatio > maximumStrayRatio) {
       updateSessionScore(-1);
       refreshVisibleSessionScore();
       feedback.className = "feedback try";
-      feedback.textContent = "Stay closer to the dotted guide. Clear it and try again.";
-      speak("Stay closer to the dotted guide. Clear it and try again.");
+      feedback.textContent = "Stay on the dotted line. Clear it and try the shape again.";
+      speak("Stay on the dotted line. Clear it and try the shape again.");
       return;
     }
 
@@ -617,8 +622,8 @@
       updateSessionScore(-1);
       refreshVisibleSessionScore();
       feedback.className = "feedback try";
-      feedback.textContent = "Good start! Trace more of the dotted guide before you finish.";
-      speak("Good start. Trace more of the dotted guide before you finish.");
+      feedback.textContent = "Good start! Follow more of the dotted line before you finish.";
+      speak("Good start. Follow more of the dotted line before you finish.");
       return;
     }
 
