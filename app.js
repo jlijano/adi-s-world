@@ -6,7 +6,7 @@ const worlds = [
   { id: "word", name: "Word Forest", icon: "🌳", note: "Letters, sounds & words", status: "open" },
   { id: "number", name: "Number Island", icon: "🏝️", note: "Counting & early math", status: "open" },
   { id: "drawing", name: "Drawing Garden", icon: "🎨", note: "Tracing & creativity", status: "soon" },
-  { id: "discovery", name: "Discovery Lab", icon: "🔬", note: "Science & curiosity", status: "soon" },
+  { id: "discovery", name: "Discovery Lab", icon: "🔬", note: "Science & curiosity", status: "open" },
   { id: "robot", name: "Robot Road", icon: "🤖", note: "Sequences & coding", status: "soon" },
   { id: "puzzle", name: "Puzzle Mountain", icon: "🧩", note: "Logic & problem-solving", status: "open" },
   { id: "memory", name: "Memory Castle", icon: "🏰", note: "Memory & attention", status: "soon" },
@@ -1074,7 +1074,7 @@ function renderHome() {
       <div class="section-heading">
         <div>
           <h2 id="continue-heading">Choose an adventure</h2>
-          <p>Three worlds are ready to play.</p>
+          <p>Four worlds are ready to play.</p>
         </div>
         <button class="text-button" type="button" data-action="show-worlds">See all</button>
       </div>
