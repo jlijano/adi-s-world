@@ -364,6 +364,26 @@ function buildCompareRounds() {
   });
 }
 
+function buildSequenceChoices(answer, choiceCount) {
+  const offsets = shuffle([1, -1, 2, -2, 3, -3, 4, -4, 5, -5]);
+  const distractors = [];
+
+  offsets.forEach((offset) => {
+    const candidate = answer + offset;
+    if (candidate >= 1 && candidate <= 30 && candidate !== answer && !distractors.includes(candidate)) {
+      distractors.push(candidate);
+    }
+  });
+
+  if (distractors.length < choiceCount - 1) {
+    shuffle(Array.from({ length: 30 }, (_, index) => index + 1))
+      .filter((candidate) => candidate !== answer && !distractors.includes(candidate))
+      .forEach((candidate) => distractors.push(candidate));
+  }
+
+  return shuffle([answer, ...distractors.slice(0, choiceCount - 1)]).map(String);
+}
+
 function buildNumberOrderRounds() {
   const candidates = [];
   [2, 3].forEach((shownCount) => {
@@ -382,7 +402,7 @@ function buildNumberOrderRounds() {
     return {
       prompt: "What number comes next?",
       stage: item.sequence.join(" "),
-      choices: buildCountingChoices(item.answer, level.choiceCount),
+      choices: buildSequenceChoices(item.answer, level.choiceCount),
       answer: String(item.answer),
       speak: `What number comes next? ${spokenSequence}.`,
       difficultyLabel: level.label,
