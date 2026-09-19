@@ -432,17 +432,24 @@ function buildSoundHuntRounds(letter, totalRounds) {
 
   return Array.from({ length: totalRounds }, (_, roundIndex) => {
     const choiceCount = getSoundHuntChoiceCount(roundIndex, totalRounds);
-    const requestedCorrectCount = Math.min(getSoundHuntCorrectCount(roundIndex, totalRounds), correctPool.length);
+    const uniqueCorrectPool = [];
+    const seenCorrectEmojis = new Set();
+    for (const item of shuffle(correctPool)) {
+      if (seenCorrectEmojis.has(item.emoji)) continue;
+      uniqueCorrectPool.push(item);
+      seenCorrectEmojis.add(item.emoji);
+    }
+    const requestedCorrectCount = Math.min(getSoundHuntCorrectCount(roundIndex, totalRounds), uniqueCorrectPool.length);
 
     let selectedCorrect = [];
     let attempts = 0;
     do {
-      selectedCorrect = shuffle(correctPool).slice(0, requestedCorrectCount);
+      selectedCorrect = shuffle(uniqueCorrectPool).slice(0, requestedCorrectCount);
       attempts += 1;
     } while (
       selectedCorrect.map((item) => item.word).sort().join("|") === previousSignature &&
       attempts < 12 &&
-      correctPool.length > requestedCorrectCount
+      uniqueCorrectPool.length > requestedCorrectCount
     );
 
     previousSignature = selectedCorrect.map((item) => item.word).sort().join("|");
