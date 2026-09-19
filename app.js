@@ -1129,7 +1129,8 @@ function renderWorld(worldId) {
   const worldGameCopy = {
     word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges. Start the Word lets you choose a letter and up to 20 rounds.",
     number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
-    puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving."
+    puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving.",
+    discovery: "Discovery Lab explores science, nature, senses, weather, animals, and cause-and-effect through simple child-friendly experiments and challenges."
   };
 
   screen.innerHTML = `
@@ -1147,6 +1148,7 @@ function renderWorld(worldId) {
           <p>${worldGameCopy[worldId] || "Pick a short, child-friendly learning challenge."}</p>
         </div>
       </div>
+      ${worldActivities.length ? `
       <div class="activity-list">
         ${worldActivities.map((activity) => {
           const key = `${worldId}:${activity.id}`;
@@ -1161,7 +1163,12 @@ function renderWorld(worldId) {
               <span class="activity-stars" aria-label="${done} stars earned">${done ? "⭐".repeat(Math.min(done, 3)) : "○○○"}</span>
             </button>`;
         }).join("")}
-      </div>
+      </div>` : `
+      <div class="world-empty-state" role="status">
+        <span class="world-empty-icon" aria-hidden="true">🧪</span>
+        <strong>Discovery games are coming next!</strong>
+        <p>This world is open and ready for its first science adventure.</p>
+      </div>`}
     </section>
   `;
   screen.focus({ preventScroll: true });
