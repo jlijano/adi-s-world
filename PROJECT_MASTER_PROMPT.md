@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.11.1  
+**Version:** 1.12.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -762,6 +762,30 @@ Permanent behavior:
 - Difficulty scales proportionally through the session: approximately the first 30% uses 3 choices, the middle 35% uses 4, and the final 35% uses 5.
 - The game uses existing British-English speech selection, performance-based star scoring, best-score storage, persistent stars, responsive Word Forest styling, reduced-motion behavior, and localStorage progress.
 - Android phone layout is the primary target, with tablet layouts expanding naturally.
+
+
+---
+
+## Sound Hunt — Permanent Word Forest Standard
+
+**Game:** Sound Hunt  
+**World:** Word Forest  
+**Source learning mechanic:** Image-based worksheet activity where the child colors every picture whose name begins with a chosen target letter/sound.
+
+Permanent behavior:
+
+- Sound Hunt uses the universal How to Play screen before its game-specific setup flow.
+- The setup screen requires exactly one A–Z practice letter before Start is enabled; tapping a letter shows uppercase/lowercase selected state with a visible check and speaks the existing letter-sound cue.
+- The setup defaults to 10 rounds and offers 5, 10, 15, or 20 rounds. The selected letter stays fixed for the entire session.
+- Every round presents at least five picture choices, increasing to six later in the session while keeping large phone-friendly targets.
+- All pictures begin visually black and white/desaturated.
+- Correct picture taps immediately turn that picture to full colour, show a check, lock the picture so it cannot be selected twice, and preserve that progress for the rest of the round.
+- Wrong picture taps leave the picture black and white, give calm retry feedback, subtract one session star without going below zero, and never clear already-correct pictures.
+- Sound Hunt uses immediate classification feedback rather than a Yes/No confirmation for each picture.
+- A round finishes only when all correct pictures are found; the whole completed round awards one correct answer/session star total.
+- Each picture has one separate accessible audio control that speaks the picture name without affecting score.
+- Correct examples, distractors, picture positions, and round order randomize without duplicate visible choices or ambiguous multiple-correct-answer combinations.
+- Reuse British-English speech preference, performance-based stars, best-score storage, persistent progress, localStorage, reduced-motion support, and mobile-first Word Forest styling.
 
 
 ---
