@@ -1339,7 +1339,10 @@ function resetBuildWordRound() {
   });
   document.querySelectorAll("[data-build-letter]").forEach((button) => {
     button.disabled = false;
-    button.classList.remove("is-used", "is-try-again");
+    button.removeAttribute("aria-disabled");
+    button.removeAttribute("data-locked");
+    button.removeAttribute("tabindex");
+    button.classList.remove("is-used", "is-locked-choice", "is-try-again");
   });
   const feedback = document.getElementById("feedback");
   if (feedback) {
@@ -1350,7 +1353,7 @@ function resetBuildWordRound() {
 }
 
 function handleBuildLetter(letter, button) {
-  if (!activeGame || activeGame.correctThisRound) return;
+  if (!activeGame || activeGame.correctThisRound || button.disabled || button.dataset.locked === "true") return;
   const { worldId, activityId, roundIndex } = activeGame;
   const activity = activities[worldId].find((item) => item.id === activityId);
   const round = activity?.rounds?.[roundIndex];
@@ -1379,8 +1382,11 @@ function handleBuildLetter(letter, button) {
   }
   activeGame.buildIndex += 1;
   button.disabled = true;
+  button.dataset.locked = "true";
+  button.setAttribute("aria-disabled", "true");
+  button.setAttribute("tabindex", "-1");
   button.classList.add("is-used", "is-locked-choice");
-  button.setAttribute("aria-label", letter + " used");
+  button.setAttribute("aria-label", letter + " already used");
 
   if (activeGame.buildIndex < round.answer.length) {
     const feedback = document.getElementById("feedback");
