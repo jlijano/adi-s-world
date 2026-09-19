@@ -880,6 +880,15 @@ function numberWord(value) {
   return NUMBER_WORDS[Number(value)] || String(value);
 }
 
+function refreshVisibleSessionScore() {
+  const scoreValue = document.querySelector(".session-score strong");
+  const scoreDetail = document.querySelector(".session-score small");
+  if (scoreValue) scoreValue.textContent = String(gameSession?.score ?? 0);
+  if (scoreDetail && gameSession) {
+    scoreDetail.textContent = `${gameSession.correctAnswers} correct • ${gameSession.mistakes} mistakes`;
+  }
+}
+
 function closeNumberChoiceConfirmation() {
   document.getElementById("number-confirm-overlay")?.remove();
   pendingNumberChoice = null;
@@ -944,7 +953,7 @@ function resetCountStarsRound(announce = true) {
   });
 
   const feedback = document.getElementById("feedback");
-  if (feedback && !feedback.classList.contains("try")) {
+  if (feedback && announce) {
     feedback.className = "feedback";
     feedback.textContent = "";
   }
@@ -983,6 +992,7 @@ function handleCountStarsChoice(choice, button) {
   if (choice === round.answer) {
     activeGame.correctThisRound = true;
     updateSessionScore(1);
+    refreshVisibleSessionScore();
     button.classList.add("is-correct");
     feedback.className = "feedback good";
     feedback.textContent = `Great counting! ${numberWord(choice)}! ⭐`;
@@ -1001,6 +1011,7 @@ function handleCountStarsChoice(choice, button) {
   }
 
   updateSessionScore(-1);
+  refreshVisibleSessionScore();
   button.classList.add("is-try-again");
   feedback.className = "feedback try";
   feedback.textContent = "Almost! Let's count them again.";
