@@ -36,6 +36,20 @@ const activities = {
       icon: "🖼️",
       description: "10 randomized A–Z picture-word rounds. Tap the picture to hear its name.",
       rounds: []
+    },
+    {
+      id: "build-word",
+      title: "Build the Word",
+      icon: "🧱",
+      description: "Build 10 picture words by tapping letters in order. Words are 3–7 letters.",
+      rounds: []
+    },
+    {
+      id: "rhyme-time",
+      title: "Rhyme Time",
+      icon: "🎵",
+      description: "Listen, compare, and find the word that rhymes.",
+      rounds: []
     }
   ],
   number: [
