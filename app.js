@@ -2220,6 +2220,122 @@ function resetBuildWordRound() {
 }
 
 
+
+function resetSoundMatchRound() {
+  if (!activeGame) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId]?.find((item) => item.id === activityId);
+  if (!activity?.rounds?.[roundIndex]?.soundMatchRound) return;
+  renderGame(worldId, activityId, roundIndex);
+  speak("Round reset. Tap a picture, then tap its beginning letter.");
+}
+
+function handleSoundMatchPicture(pictureIndex, button) {
+  if (!activeGame || activeGame.correctThisRound) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId]?.find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.soundMatchRound || activeGame.soundMatchMatchedIndexes.has(pictureIndex)) return;
+
+  activeGame.soundMatchSelectedPicture = pictureIndex;
+
+  document.querySelectorAll("[data-sound-match-picture]").forEach((control) => {
+    const index = Number(control.dataset.soundMatchPicture);
+    const selected = index === pictureIndex;
+    control.classList.toggle("is-selected", selected);
+    control.setAttribute("aria-pressed", selected ? "true" : "false");
+  });
+
+  const picture = round.soundMatchPictures[pictureIndex];
+  if (!picture) return;
+  const feedback = document.getElementById("feedback");
+  feedback.className = "feedback";
+  feedback.textContent = `${picture.word}. Now choose its beginning letter.`;
+  speak(`${picture.word}. Which letter starts ${picture.word}?`);
+}
+
+function handleSoundMatchLetter(letter, button) {
+  if (!activeGame || activeGame.correctThisRound) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId]?.find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.soundMatchRound) return;
+
+  if (activeGame.soundMatchSelectedPicture === null) {
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback try";
+    feedback.textContent = "Pick a picture first.";
+    speak("Pick a picture first, then choose its beginning letter.");
+    return;
+  }
+
+  const pictureIndex = activeGame.soundMatchSelectedPicture;
+  const picture = round.soundMatchPictures[pictureIndex];
+  if (!picture || activeGame.soundMatchMatchedIndexes.has(pictureIndex)) return;
+
+  speakLetterSound(letter, button);
+
+  if (letter !== picture.letter) {
+    updateSessionScore(-1);
+    refreshVisibleSessionScore();
+    button.classList.add("is-try-again");
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback try";
+    feedback.textContent = `Almost! ${picture.word} starts with a different sound.`;
+    speak(`Almost. Listen again. ${picture.word}.`);
+    setTimeout(() => button.classList.remove("is-try-again"), 600);
+    return;
+  }
+
+  activeGame.soundMatchMatchedIndexes.add(pictureIndex);
+  activeGame.soundMatchSelectedPicture = null;
+
+  const pictureButton = document.querySelector(`[data-sound-match-picture="${pictureIndex}"]`);
+  const pictureCard = document.querySelector(`[data-sound-match-picture-card="${pictureIndex}"]`);
+  const linkedLetter = document.querySelector(`[data-sound-match-linked-letter="${pictureIndex}"]`);
+
+  if (pictureButton) {
+    pictureButton.classList.remove("is-selected");
+    pictureButton.classList.add("is-matched");
+    pictureButton.disabled = true;
+    pictureButton.setAttribute("aria-pressed", "false");
+    pictureButton.setAttribute("aria-label", `${picture.word}. Matched to ${letter}.`);
+  }
+
+  pictureCard?.classList.add("is-matched");
+  if (linkedLetter) linkedLetter.textContent = `✓ ${letter}`;
+
+  button.classList.add("is-match-hit");
+  setTimeout(() => button.classList.remove("is-match-hit"), 450);
+
+  const remaining = round.soundMatchPictures.length - activeGame.soundMatchMatchedIndexes.size;
+  const feedback = document.getElementById("feedback");
+
+  if (remaining > 0) {
+    feedback.className = "feedback good";
+    feedback.textContent = `${picture.word} starts with ${letter}! Match ${remaining} more.`;
+    speak(`${picture.word} starts with ${letter}. Great match!`);
+    return;
+  }
+
+  activeGame.correctThisRound = true;
+  updateSessionScore(1);
+  refreshVisibleSessionScore();
+  document.querySelector(".game-card")?.classList.add("round-success");
+  document.querySelectorAll("[data-sound-match-letter], [data-sound-match-reset]").forEach((control) => {
+    control.disabled = true;
+  });
+  feedback.className = "feedback good";
+  feedback.textContent = "Brilliant! You matched every picture! ⭐";
+  speak("Brilliant! You matched every picture to its beginning sound.");
+
+  setTimeout(() => {
+    const nextRound = roundIndex + 1;
+    if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+    else completeActivity(worldId, activityId);
+  }, 1250);
+}
+
 function handleSoundHuntChoice(choiceIndex, button) {
   if (!activeGame || activeGame.correctThisRound || button.disabled) return;
   const { worldId, activityId, roundIndex } = activeGame;
@@ -2617,6 +2733,24 @@ document.addEventListener("click", (event) => {
   const startWordStartButton = event.target.closest("[data-start-word-start]");
   if (startWordStartButton) {
     startConfiguredStartWordGame();
+    return;
+  }
+
+  const soundMatchResetButton = event.target.closest("[data-sound-match-reset]");
+  if (soundMatchResetButton) {
+    resetSoundMatchRound();
+    return;
+  }
+
+  const soundMatchPictureButton = event.target.closest("[data-sound-match-picture]");
+  if (soundMatchPictureButton) {
+    handleSoundMatchPicture(Number(soundMatchPictureButton.dataset.soundMatchPicture), soundMatchPictureButton);
+    return;
+  }
+
+  const soundMatchLetterButton = event.target.closest("[data-sound-match-letter]");
+  if (soundMatchLetterButton) {
+    handleSoundMatchLetter(soundMatchLetterButton.dataset.soundMatchLetter, soundMatchLetterButton);
     return;
   }
 
