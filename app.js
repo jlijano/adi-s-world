@@ -182,65 +182,220 @@ const BIBLE_STORIES = [
     id: "creation",
     title: "God Creates the World",
     reference: "Genesis 1",
-    cover: "🌍✨",
-    summary: "God lovingly makes the world, the sky, plants, animals, and people.",
+    summary: "God makes the world, the sky, plants, animals, and people.",
+    maxStars: 5,
+    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+    coverAlt: "Child-friendly Bible illustration representing God's creation of the world.",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+    credits: "Bible illustration via Wikimedia Commons",
+    license: "Public Domain",
     scenes: [
-      { art: "🌑 ✨ 💡", title: "Light", text: "At the beginning, God created the heavens and the earth. God made light and separated the light from the darkness." },
-      { art: "☁️ 🌊 🌱", title: "Sky, Seas, and Plants", text: "God made the sky, gathered the waters into seas, and made dry land appear. Then plants and trees began to grow." },
-      { art: "☀️ 🌙 ⭐", title: "Sun, Moon, and Stars", text: "God made lights in the sky: the sun for the day, and the moon and stars for the night." },
-      { art: "🐠 🐦 🐘 👨‍👩‍👧", title: "Animals and People", text: "God filled the seas with fish, the sky with birds, and the land with animals. God also made people and cared for everything He had made." }
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        title: "In the Beginning",
+        text: "In the beginning, God made the heavens and the earth. Everything began because God created it.",
+        alt: "Bible illustration representing the beginning of God's creation."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        title: "Light and Darkness",
+        text: "God made light. He called the light day, and He called the darkness night.",
+        alt: "Bible illustration representing light and darkness in the creation story."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        title: "Sky, Land, and Plants",
+        text: "God made the sky, the seas, and dry land. He made plants and trees grow on the land.",
+        alt: "Bible illustration representing the sky, land, seas, and plants God created."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        title: "Sun, Moon, and Stars",
+        text: "God made the sun for the day. He made the moon and stars to shine at night.",
+        alt: "Bible illustration representing the sun, moon, and stars in the creation story."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        title: "Animals and People",
+        text: "God made fish, birds, and animals. Then God made people. God saw that His creation was very good.",
+        alt: "Bible illustration representing animals and people as part of God's creation."
+      }
     ]
   },
   {
     id: "noah",
     title: "Noah and the Ark",
     reference: "Genesis 6–9",
-    cover: "🚢🌈",
-    summary: "Noah trusts God, builds the ark, and sees God's rainbow promise.",
+    summary: "Noah obeys God, builds the ark, and sees God's rainbow promise.",
+    maxStars: 5,
+    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+    coverAlt: "Bible illustration of Noah and his family entering the ark.",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:New_pictorial_Bible_(1)_-_Noah_entering_the_ark.png",
+    credits: "New Pictorial Bible illustration via Wikimedia Commons",
+    license: "Public Domain",
     scenes: [
-      { art: "👨 🔨 🚢", title: "Noah Builds", text: "God told Noah to build a very large ark. Noah trusted God and carefully did what God asked." },
-      { art: "🦒 🐘 🐑 🐦", title: "Animals Come Aboard", text: "Animals came to the ark, and Noah's family went inside too. They were safe together in the ark." },
-      { art: "🌧️ 🌧️ 🚢", title: "The Rain", text: "Rain fell for many days and water covered the land. God kept Noah, his family, and the animals safe." },
-      { art: "🕊️ 🌿 🌈", title: "A New Beginning", text: "When the water went down, Noah left the ark. God placed a rainbow in the sky as a sign of His promise." }
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        title: "God Speaks to Noah",
+        text: "God told Noah to build a very large ark. Noah trusted God and listened carefully.",
+        alt: "Bible illustration representing God telling Noah to prepare the ark."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        title: "Noah Builds the Ark",
+        text: "Noah worked hard and built the ark just as God told him to do.",
+        alt: "Bible illustration representing Noah preparing the ark."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        title: "Animals Enter the Ark",
+        text: "Animals came to the ark, and Noah's family went inside too. God kept them together and safe.",
+        alt: "Bible illustration of Noah, his family, and animals entering the ark."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        title: "The Rain",
+        text: "Rain fell for many days. Noah, his family, and the animals stayed safe inside the ark.",
+        alt: "Bible illustration representing Noah and the animals safe inside the ark during the rain."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        title: "The Rainbow Promise",
+        text: "When the water went down, God put a rainbow in the sky as a sign of His promise.",
+        alt: "Bible illustration representing Noah's family after the flood and God's promise."
+      }
     ]
   },
   {
     id: "david-goliath",
     title: "David and Goliath",
     reference: "1 Samuel 17",
-    cover: "👦🪨",
     summary: "David trusts God when he faces the giant Goliath.",
+    maxStars: 5,
+    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+    coverAlt: "Bible illustration of David standing before Goliath.",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+    credits: "James Tissot Bible illustration via Wikimedia Commons",
+    license: "Public Domain",
     scenes: [
-      { art: "🛡️ 🗡️ 😨", title: "A Giant Challenge", text: "A giant warrior named Goliath frightened the Israelite army. He challenged someone to come and fight him." },
-      { art: "👦 🐑 🙏", title: "David Trusts God", text: "Young David came to the camp. He remembered how God had helped him before and believed God would help him again." },
-      { art: "🪨 〰️ 🎯", title: "David Uses His Sling", text: "David chose smooth stones and used his sling. He faced Goliath bravely, trusting God instead of heavy armor." },
-      { art: "🙌 😊 🛡️", title: "The People Rejoice", text: "David defeated Goliath, and the people were no longer afraid. David gave God the credit for helping him." }
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        title: "A Giant Challenge",
+        text: "A giant named Goliath challenged the people of Israel. The soldiers were afraid of him.",
+        alt: "Bible illustration of Goliath speaking to David without graphic violence."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        title: "David Trusts God",
+        text: "David remembered how God had helped him before. He trusted that God would be with him again.",
+        alt: "Bible illustration of young David courageously facing Goliath."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        title: "Five Smooth Stones",
+        text: "David chose five smooth stones from a stream. He carried his sling and went forward with courage.",
+        alt: "Bible illustration representing David preparing to face Goliath."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        title: "David Faces Goliath",
+        text: "David trusted God and used his sling. Goliath fell, and the danger was over.",
+        alt: "Bible illustration of David facing Goliath, shown without graphic detail."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        title: "The People Rejoice",
+        text: "The people were glad and no longer afraid. David knew that God had helped him.",
+        alt: "Bible illustration representing David's courage and the people's relief."
+      }
     ]
   },
   {
     id: "daniel-lions",
     title: "Daniel and the Lions",
     reference: "Daniel 6",
-    cover: "🦁🙏",
     summary: "Daniel keeps praying to God, and God protects him.",
+    maxStars: 5,
+    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+    coverAlt: "Bible illustration of Daniel safely sitting near calm lions.",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+    credits: "Briton Rivière, Daniel's Answer to the King, via Wikimedia Commons",
+    license: "Public Domain",
     scenes: [
-      { art: "👨 🙏 🪟", title: "Daniel Prays", text: "Daniel loved God and prayed every day. Even when a new law said he should stop, Daniel continued to pray faithfully." },
-      { art: "👑 😟 📜", title: "The King's Sad Order", text: "Daniel was reported to the king. The king cared about Daniel, but the law meant Daniel was placed in a lions' den." },
-      { art: "🦁 🦁 😇", title: "God Protects Daniel", text: "God sent an angel and kept the lions from hurting Daniel. Daniel was safe through the night." },
-      { art: "👑 😊 🙌", title: "Daniel Is Safe", text: "In the morning, the king was overjoyed to find Daniel alive. Daniel's trust in God had not been in vain." }
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        title: "Daniel Prays",
+        text: "Daniel loved God and prayed every day. Prayer was an important part of his life.",
+        alt: "Bible illustration representing Daniel faithfully praying to God."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        title: "A Law Against Prayer",
+        text: "A new law said Daniel should not pray to God. Daniel still chose to pray faithfully.",
+        alt: "Bible illustration representing Daniel continuing to pray despite the new law."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        title: "Daniel and the Lions",
+        text: "Daniel was placed in a lions' den. God stayed with Daniel through the night.",
+        alt: "Child-friendly Bible illustration of Daniel safely sitting near lions."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        title: "God Protects Daniel",
+        text: "God sent an angel and kept the lions from hurting Daniel. Daniel was safe.",
+        alt: "Bible illustration of Daniel protected by God among calm lions."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        title: "Daniel Is Safe",
+        text: "In the morning, the king was very happy to find Daniel safe. Daniel kept trusting God.",
+        alt: "Bible illustration of Daniel safe after spending the night near the lions."
+      }
     ]
   },
   {
     id: "jesus-children",
     title: "Jesus Welcomes the Children",
     reference: "Mark 10:13–16",
-    cover: "✝️👧🧒",
     summary: "Jesus welcomes children and shows that they are important to Him.",
+    maxStars: 5,
+    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+    coverAlt: "Bible illustration of Jesus warmly welcoming children.",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:JesuswithChildren.jpg",
+    credits: "O. A. Stemler, Jesus with Children, via Wikimedia Commons",
+    license: "Public Domain (United States)",
     scenes: [
-      { art: "👨‍👩‍👧‍👦 ➡️ ✝️", title: "Families Come to Jesus", text: "Families brought their children to Jesus because they wanted Him to bless them." },
-      { art: "🛑 😕", title: "The Disciples Try to Stop Them", text: "Some disciples tried to send the families away. Jesus did not want the children to be kept from Him." },
-      { art: "✝️ 🤗 👧 🧒", title: "Jesus Welcomes Them", text: "Jesus invited the children to come close. He showed everyone that children are important in God's kingdom." },
-      { art: "🙏 💛 ✨", title: "Jesus Blesses the Children", text: "Jesus took the children in His arms and blessed them. His kindness showed God's love and care for children." }
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        title: "Families Come to Jesus",
+        text: "Families brought their children to Jesus. They wanted Jesus to bless them.",
+        alt: "Bible illustration of families bringing children to Jesus."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        title: "The Disciples Try to Stop Them",
+        text: "Some disciples tried to send the families away. Jesus wanted the children to come to Him.",
+        alt: "Bible illustration representing children coming to Jesus."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        title: "Jesus Says Come",
+        text: "Jesus said, \"Let the little children come to me.\" He welcomed them with love.",
+        alt: "Bible illustration of Jesus inviting children to come close."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        title: "Jesus Welcomes the Children",
+        text: "The children came close to Jesus. He showed everyone that children are important to God.",
+        alt: "Bible illustration of Jesus warmly welcoming children."
+      },
+      {
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        title: "Jesus Blesses Them",
+        text: "Jesus took the children in His arms and blessed them. He showed them kindness and love.",
+        alt: "Bible illustration of Jesus blessing children."
+      }
     ]
   }
 ];
@@ -1233,6 +1388,75 @@ function saveProgress() {
   updateStarCount();
 }
 
+function ensureStoryProgressStore() {
+  if (!progress.storyProgress || typeof progress.storyProgress !== "object") {
+    progress.storyProgress = {};
+  }
+  return progress.storyProgress;
+}
+
+function getStoryProgress(storyId) {
+  const store = ensureStoryProgressStore();
+  const current = store[storyId];
+
+  if (!current || typeof current !== "object") {
+    return { seenScenes: [], stars: 0, completed: false };
+  }
+
+  const story = BIBLE_STORIES.find((item) => item.id === storyId);
+  const maxStars = story?.maxStars || 5;
+  const seenScenes = Array.isArray(current.seenScenes)
+    ? [...new Set(current.seenScenes.filter((index) => Number.isInteger(index) && index >= 0 && index < maxStars))].sort((a, b) => a - b)
+    : [];
+
+  return {
+    ...current,
+    seenScenes,
+    stars: Math.min(maxStars, seenScenes.length),
+    completed: seenScenes.length >= maxStars
+  };
+}
+
+function markStorySceneSeen(storyId, sceneIndex) {
+  const story = BIBLE_STORIES.find((item) => item.id === storyId);
+  if (!story || !Number.isInteger(sceneIndex) || sceneIndex < 0 || sceneIndex >= story.scenes.length) {
+    return getStoryProgress(storyId);
+  }
+
+  const store = ensureStoryProgressStore();
+  const current = getStoryProgress(storyId);
+
+  if (!current.seenScenes.includes(sceneIndex)) {
+    current.seenScenes.push(sceneIndex);
+    current.seenScenes.sort((a, b) => a - b);
+    current.stars = Math.min(story.maxStars || 5, current.seenScenes.length);
+    current.completed = current.stars >= (story.maxStars || 5);
+    store[storyId] = current;
+    progress.stars = (progress.stars || 0) + 1;
+    saveProgress();
+  } else {
+    store[storyId] = current;
+  }
+
+  return current;
+}
+
+function getStoryStars(storyId) {
+  return getStoryProgress(storyId).stars;
+}
+
+function isStoryComplete(storyId) {
+  return getStoryProgress(storyId).completed;
+}
+
+function renderStoryStars(stars, maxStars = 5) {
+  return Array.from({ length: maxStars }, (_, index) => index < stars ? "⭐" : "☆").join("");
+}
+
+function stopStorySpeech() {
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+}
+
 function updateStarCount() {
   starCount.textContent = progress.stars || 0;
 }
@@ -1467,25 +1691,30 @@ function renderBibleStoryLibrary() {
     <div class="back-row"><button class="back-button" type="button" data-action="back-world" data-world-id="blessing">← Blessing Garden</button></div>
     <header class="activity-header bible-story-header">
       <span class="eyebrow">Blessing Garden</span>
-      <h1>📚 Bible Stories</h1>
-      <p class="helper-text">Choose a story to read and listen to. No questions — just story time.</p>
+      <h1>Bible Stories</h1>
+      <p class="helper-text">Choose a Bible story to read and listen to.</p>
+      <p class="bible-library-reward-note">Each story can earn up to 5 stars.</p>
     </header>
     <section class="bible-story-grid" aria-label="Bible story library">
-      ${BIBLE_STORIES.map((story) => `
-        <button class="bible-story-card" type="button" data-bible-story="${story.id}">
-          <span class="bible-story-cover" aria-hidden="true">${story.cover}</span>
-          <span class="bible-story-card-copy">
-            <strong>${story.title}</strong>
-            <small class="bible-story-reference">${story.reference}</small>
-            <small>${story.summary}</small>
-          </span>
-          <span class="bible-story-open" aria-hidden="true">›</span>
-        </button>
-      `).join("")}
+      ${BIBLE_STORIES.map((story) => {
+        const storyProgress = getStoryProgress(story.id);
+        return `
+          <button class="bible-story-card" type="button" data-bible-story="${story.id}">
+            <img class="bible-story-cover" src="${story.coverImage}" alt="${escapeAttr(story.coverAlt)}" loading="lazy">
+            <span class="bible-story-card-copy">
+              <strong>${story.title}</strong>
+              <small class="bible-story-reference">${story.reference}</small>
+              <small>${story.summary}</small>
+              <span class="bible-story-stars" aria-label="${storyProgress.stars} of ${story.maxStars} stars">${renderStoryStars(storyProgress.stars, story.maxStars)}</span>
+            </span>
+            <span class="bible-story-open" aria-hidden="true">›</span>
+          </button>
+        `;
+      }).join("")}
     </section>
   `;
   screen.focus({ preventScroll: true });
-  setTimeout(() => speak("Bible Stories. Choose a story to read and listen to."), 200);
+  setTimeout(() => speak("Bible Stories. Choose a Bible story to read and listen to. Each story can earn up to five stars."), 200);
 }
 
 function renderBibleStory(storyId, sceneIndex = 0, announce = true) {
@@ -1496,38 +1725,74 @@ function renderBibleStory(storyId, sceneIndex = 0, announce = true) {
   const scene = story.scenes[safeIndex];
   const isFirst = safeIndex === 0;
   const isLast = safeIndex === story.scenes.length - 1;
+  const storyProgress = markStorySceneSeen(storyId, safeIndex);
 
   currentView = { type: "bible-story", worldId: "blessing", activityId: "story-garden", storyId, sceneIndex: safeIndex };
   setActiveNav("worlds");
 
   screen.innerHTML = `
-    <div class="back-row"><button class="back-button" type="button" data-bible-story-library>← All Bible Stories</button></div>
+    <div class="back-row"><button class="back-button" type="button" data-bible-story-library aria-label="Back to all Bible stories">← All Bible Stories</button></div>
     <header class="activity-header bible-reader-title">
       <span class="eyebrow">${story.reference}</span>
       <h1>${story.title}</h1>
-      <div class="bible-story-progress" aria-label="Story page ${safeIndex + 1} of ${story.scenes.length}">
-        ${story.scenes.map((_, index) => `<span class="${index <= safeIndex ? "is-filled" : ""}"></span>`).join("")}
+      <div class="bible-reader-star-row" aria-label="${storyProgress.stars} of ${story.maxStars} story stars earned">
+        <span aria-hidden="true">${renderStoryStars(storyProgress.stars, story.maxStars)}</span>
+        <strong>${storyProgress.stars}/${story.maxStars}</strong>
+      </div>
+      <div class="bible-story-progress" aria-label="${storyProgress.seenScenes.length} of ${story.scenes.length} story pages completed">
+        ${story.scenes.map((_, index) => `<span class="${storyProgress.seenScenes.includes(index) ? "is-filled" : ""}"></span>`).join("")}
       </div>
     </header>
 
     <article class="bible-reader-card game-enter">
-      <div class="bible-reader-art" role="img" aria-label="Picture scene for ${escapeAttr(scene.title)}">${scene.art}</div>
+      <img class="bible-reader-image" src="${scene.image}" alt="${escapeAttr(scene.alt)}">
       <div class="bible-reader-page-label">Page ${safeIndex + 1} of ${story.scenes.length}</div>
       <h2>${scene.title}</h2>
       <p class="bible-reader-text">${scene.text}</p>
-      <button class="bible-read-button" type="button" data-bible-read-aloud aria-label="Read this page aloud">🔊 Read to me</button>
+      <button class="bible-read-button" type="button" data-bible-read-aloud aria-label="Read ${escapeAttr(scene.title)} aloud">🔊 Read to me</button>
 
       <div class="bible-reader-actions">
-        <button class="secondary-story-button" type="button" data-bible-story-prev ${isFirst ? "disabled" : ""}>← Back</button>
+        <button class="secondary-story-button" type="button" data-bible-story-prev ${isFirst ? "disabled" : ""} aria-label="Previous story page">← Back</button>
         ${isLast
-          ? '<button class="primary-story-button" type="button" data-bible-story-library>✓ Story shelf</button>'
-          : '<button class="primary-story-button" type="button" data-bible-story-next>Next →</button>'}
+          ? '<button class="primary-story-button" type="button" data-bible-story-finish aria-label="Finish this Bible story">Finish Story</button>'
+          : '<button class="primary-story-button" type="button" data-bible-story-next aria-label="Next story page">Next →</button>'}
       </div>
+
+      <p class="bible-reader-credits">
+        Illustration credit: ${story.credits}. License: ${story.license}.
+        <a href="${story.sourceUrl}" target="_blank" rel="noopener noreferrer">Image source</a>
+      </p>
     </article>
   `;
 
   screen.focus({ preventScroll: true });
   if (announce) setTimeout(() => speak(`${scene.title}. ${scene.text}`), 220);
+}
+
+function renderBibleStoryCompletion(storyId) {
+  const story = BIBLE_STORIES.find((item) => item.id === storyId);
+  if (!story) return renderBibleStoryLibrary();
+
+  const storyProgress = getStoryProgress(storyId);
+  currentView = { type: "bible-story-complete", worldId: "blessing", activityId: "story-garden", storyId };
+  setActiveNav("worlds");
+
+  screen.innerHTML = `
+    <div class="back-row"><button class="back-button" type="button" data-bible-story-library>← All Bible Stories</button></div>
+    <section class="bible-story-completion game-enter" role="status" aria-live="polite">
+      <span class="eyebrow">${story.reference}</span>
+      <h1>You finished the story!</h1>
+      <p class="bible-completion-title">${story.title}</p>
+      <div class="bible-completion-stars" aria-label="${storyProgress.stars} of ${story.maxStars} stars earned">
+        ${renderStoryStars(storyProgress.stars, story.maxStars)}
+      </div>
+      <p>You earned ${storyProgress.stars} stars!</p>
+      <button class="primary-story-button bible-completion-button" type="button" data-bible-story-library>Back to Bible Stories</button>
+    </section>
+  `;
+
+  screen.focus({ preventScroll: true });
+  setTimeout(() => speak(`You finished the story! You earned ${storyProgress.stars} stars!`), 180);
 }
 
 function renderGameInstructions(worldId, activityId) {
@@ -2904,19 +3169,29 @@ document.addEventListener("click", (event) => {
 
   const bibleStoryLibraryButton = event.target.closest("[data-bible-story-library]");
   if (bibleStoryLibraryButton) {
+    stopStorySpeech();
     renderBibleStoryLibrary();
     return;
   }
 
   const bibleStoryPrevButton = event.target.closest("[data-bible-story-prev]");
   if (bibleStoryPrevButton && currentView.type === "bible-story") {
+    stopStorySpeech();
     renderBibleStory(currentView.storyId, currentView.sceneIndex - 1);
     return;
   }
 
   const bibleStoryNextButton = event.target.closest("[data-bible-story-next]");
   if (bibleStoryNextButton && currentView.type === "bible-story") {
+    stopStorySpeech();
     renderBibleStory(currentView.storyId, currentView.sceneIndex + 1);
+    return;
+  }
+
+  const bibleStoryFinishButton = event.target.closest("[data-bible-story-finish]");
+  if (bibleStoryFinishButton && currentView.type === "bible-story") {
+    stopStorySpeech();
+    renderBibleStoryCompletion(currentView.storyId);
     return;
   }
 
