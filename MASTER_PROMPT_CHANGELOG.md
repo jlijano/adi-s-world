@@ -62,3 +62,15 @@ Changed:
 Reason:
 
 - The web app should feel more like a polished native children’s app when opened, using the limited visual assets currently available.
+
+
+## 1.2.1 — 2026-09-19
+
+Changed:
+
+- Replaced the temporary splash icon with the approved Adi's World reference artwork supplied by the user.
+- Added the optimized splash image to the PWA app-shell cache.
+
+Reason:
+
+- The launch screen should use the approved Adi visual reference rather than a placeholder icon.
