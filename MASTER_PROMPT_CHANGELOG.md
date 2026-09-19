@@ -1,4 +1,4 @@
-# Master Prompt Changelog
+# Adi's World Master Prompt Changelog
 
 ## 1.11.0 — 2026-09-20
 
@@ -24,8 +24,6 @@ Changed:
 Reason:
 
 - The source worksheet teaches a distinct progression from picture recognition to beginning-sound recognition to completing a printed word. Start the Word preserves that learning mechanic while adapting it into touch-first, audio-supported play and allowing parents or children to deliberately practise a chosen letter.
-
-# Adi's World Master Prompt Changelog
 
 This changelog tracks durable changes to `PROJECT_MASTER_PROMPT.md`.
 
