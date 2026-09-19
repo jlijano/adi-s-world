@@ -139,7 +139,7 @@ button:focus-visible {
 .screen {
   width: min(100%, 980px);
   margin: 0 auto;
-  padding: 18px 16px 32px;
+  padding: 18px 16px calc(124px + var(--safe-bottom));
 }
 
 .hero {
@@ -333,6 +333,7 @@ button:focus-visible {
 .world-card.number { background: linear-gradient(150deg, #eaf8ff, #ffffff 60%); }
 .world-card.puzzle { background: linear-gradient(150deg, #fff5ea, #ffffff 60%); }
 .world-card.discovery { background: linear-gradient(150deg, #eefcf9, #ffffff 60%); }
+.world-card.blessing { background: linear-gradient(150deg, #fff8e8, #ffffff 60%); }
 
 .world-hero,
 .progress-hero {
@@ -346,6 +347,7 @@ button:focus-visible {
 .world-hero.number { background: linear-gradient(135deg, #2a8fe3, #58b9f2); }
 .world-hero.puzzle { background: linear-gradient(135deg, #ef8d32, #f3b050); }
 .world-hero.discovery { background: linear-gradient(135deg, #4f46c8, #168f91); }
+.world-hero.blessing { background: linear-gradient(135deg, #8a5a19, #c28a2c 58%, #e4b95f); }
 
 .world-hero .eyebrow,
 .activity-header .eyebrow,
@@ -2606,5 +2608,171 @@ button:focus-visible {
     animation: none !important;
     transition: none !important;
     transform: none !important;
+  }
+}
+
+
+/* Blessing Garden */
+.bible-story-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.bible-story-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  box-shadow: 0 8px 25px rgba(55, 46, 110, .08);
+}
+
+.bible-story-cover {
+  min-height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #fff4d8, #f7e7b5);
+  font-size: 30px;
+  line-height: 1;
+}
+
+.bible-story-card-copy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.bible-story-card strong {
+  font-size: 16px;
+}
+
+.bible-story-card small {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.bible-story-card .bible-story-reference {
+  color: #8a5a19;
+  font-weight: 800;
+}
+
+.bible-story-open {
+  font-size: 30px;
+  color: #8a5a19;
+}
+
+.bible-reader-card {
+  padding: 18px;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.bible-reader-art {
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #fff8e8, #f8edca);
+  font-size: clamp(48px, 13vw, 78px);
+  letter-spacing: .08em;
+  text-align: center;
+}
+
+.bible-reader-page-label {
+  margin-top: 16px;
+  color: #8a5a19;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.bible-reader-card h2 {
+  margin: 6px 0 8px;
+  font-size: 24px;
+}
+
+.bible-reader-text {
+  margin: 0;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.bible-read-button {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 17px;
+  background: #fff4d8;
+  color: #6e4513;
+  font-weight: 900;
+}
+
+.bible-reader-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.secondary-story-button,
+.primary-story-button {
+  min-height: 52px;
+  border: 0;
+  border-radius: 17px;
+  font-weight: 900;
+}
+
+.secondary-story-button {
+  background: #f1eff8;
+  color: var(--ink);
+}
+
+.secondary-story-button:disabled {
+  opacity: .45;
+}
+
+.primary-story-button {
+  background: #8a5a19;
+  color: #fff;
+}
+
+.bible-story-progress {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.bible-story-progress span {
+  flex: 1;
+  height: 7px;
+  border-radius: 999px;
+  background: #e8dfc8;
+}
+
+.bible-story-progress span.is-filled {
+  background: #b77a20;
+}
+
+@media (min-width: 700px) {
+  .bible-story-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bible-reader-card {
+    max-width: 680px;
+    margin: 0 auto;
   }
 }
