@@ -367,7 +367,7 @@ function buildCompareRounds() {
 function buildNumberOrderRounds() {
   const candidates = [];
   [2, 3].forEach((shownCount) => {
-    for (let answer = shownCount + 1; answer <= 10; answer += 1) {
+    for (let answer = shownCount + 1; answer <= 30; answer += 1) {
       const sequence = Array.from({ length: shownCount }, (_, offset) => answer - shownCount + offset);
       candidates.push({ answer, sequence });
     }
