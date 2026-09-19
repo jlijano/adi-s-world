@@ -902,7 +902,8 @@ function handleBuildLetter(letter, button) {
     button.classList.add("is-try-again");
     const feedback = document.getElementById("feedback");
     feedback.className = "feedback try";
-    feedback.textContent = "Almost! Try a different letter.";
+    feedback.textContent = "Almost! That letter does not go here yet.";
+    speak("Almost! That letter does not go here yet.");
     setTimeout(() => button.classList.remove("is-try-again"), 600);
     return;
   }
@@ -910,11 +911,13 @@ function handleBuildLetter(letter, button) {
   const slot = document.querySelector("[data-build-slot=\"" + activeGame.buildIndex + "\"]");
   if (slot) {
     slot.textContent = letter;
-    slot.classList.add("is-filled");
+    slot.classList.add("is-filled", "is-locked");
+    slot.setAttribute("aria-label", letter + " locked in place");
   }
   activeGame.buildIndex += 1;
   button.disabled = true;
-  button.classList.add("is-used");
+  button.classList.add("is-used", "is-locked-choice");
+  button.setAttribute("aria-label", letter + " used");
 
   if (activeGame.buildIndex < round.answer.length) {
     const feedback = document.getElementById("feedback");
