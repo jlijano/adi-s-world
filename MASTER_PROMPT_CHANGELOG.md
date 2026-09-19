@@ -17,7 +17,7 @@ Added:
 Changed:
 
 - Word Forest overview copy now includes sound matching among its literacy activities.
-- PWA cache version bumped to v27.
+- PWA cache version bumped to v29.
 
 Reason:
 
