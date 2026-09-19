@@ -424,3 +424,19 @@ Changed:
 Reason:
 
 - The worksheet-inspired activity adds quantity-to-numeral and numeral-to-number-word association as a distinct early-math skill while preserving Adi’s World’s touch-first, audio-supported interaction model.
+
+
+## 1.10.1 — 2026-09-20
+
+Changed:
+
+- Build the Word now treats each correctly used letter tile as consumed for the rest of the current word.
+- A correctly used tile becomes disabled and cannot be tapped, focused, or selected again.
+- Incorrectly tapped tiles remain enabled and can still be selected later if they become the correct next letter.
+- Duplicate-letter words are handled per physical tile, so only the used copy is disabled while another copy remains available.
+- Resetting the current word restores all letter tiles to selectable state.
+- PWA cache version bumped so devices receive the updated tile-selection behavior.
+
+Reason:
+
+- The child should clearly see which letter tiles have already been used while still being able to retry a letter that was tapped too early or incorrectly.
