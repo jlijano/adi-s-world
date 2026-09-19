@@ -207,3 +207,24 @@ Changed:
 Reason:
 
 - Picture Match should match the replayability, scoring, difficulty progression, alphabet coverage, and child-friendly interaction standards established by Find the Letter and First Sound while adding an audio-supported picture-to-word learning cue.
+
+
+## 1.6.1 — 2026-09-19
+
+Added:
+
+- Picture Match now reads a tapped written answer aloud before it is submitted.
+- After the spoken word finishes, a child-friendly confirmation dialog asks: “Is this the answer you want?”
+- The confirmation dialog uses large Yes/check and No/X controls for phone and tablet use.
+- Choosing No returns the child to the word choices without changing the score.
+- Choosing Yes submits the selected word to the existing correct/wrong scoring logic.
+- Added accessible dialog semantics, focus handling, responsive layout, and reduced-motion support.
+
+Changed:
+
+- Picture Match scoring now occurs only after the child explicitly confirms a word choice.
+- PWA cache version bumped so devices receive the new confirmation interaction.
+
+Reason:
+
+- The interaction should reinforce recognition of the printed word together with its spoken form before the child commits to an answer, supporting vocabulary and early word-recognition practice rather than simple guessing.
