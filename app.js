@@ -90,16 +90,11 @@ const activities = {
     },
     {
       id: "story-garden",
-      title: "Story Garden",
-      icon: "🌈",
-      description: "Look at 5 picture-story scenes and choose the Bible story.",
-      rounds: [
-        { prompt: "Which Bible story does this picture show?", stage: "🌧️  🚢  🦒  🐘  🌈", choices: ["Noah's Ark", "David and Goliath", "Jonah"], answer: "Noah's Ark", speak: "Rain, an ark, animals, and a rainbow. Which Bible story is this?" },
-        { prompt: "Which Bible story does this picture show?", stage: "👦  🪨  🛡️  🗡️", choices: ["David and Goliath", "Daniel and the Lions", "Creation"], answer: "David and Goliath", speak: "A young boy, a stone, and a giant warrior. Which Bible story is this?" },
-        { prompt: "Which Bible story does this picture show?", stage: "🌊  🐋  🙏", choices: ["Jonah and the Big Fish", "Noah's Ark", "The Lost Sheep"], answer: "Jonah and the Big Fish", speak: "The sea, a great fish, and a man praying. Which Bible story is this?" },
-        { prompt: "Which Bible story does this picture show?", stage: "🦁  🦁  🙏  👨", choices: ["Daniel and the Lions", "David and Goliath", "The Good Samaritan"], answer: "Daniel and the Lions", speak: "Lions and a man praying to God. Which Bible story is this?" },
-        { prompt: "Which Bible story does this picture show?", stage: "🐑  🔎  😊", choices: ["The Lost Sheep", "Creation", "Jonah and the Big Fish"], answer: "The Lost Sheep", speak: "A sheep was lost, searched for, and found. Which Bible story is this?" }
-      ]
+      title: "Bible Stories",
+      icon: "📚",
+      description: "Read and listen to 5 Bible stories with picture scenes. No quiz.",
+      reader: true,
+      rounds: []
     },
     {
       id: "bible-questions",
@@ -182,6 +177,74 @@ const activities = {
   ]
 };
 
+const BIBLE_STORIES = [
+  {
+    id: "creation",
+    title: "God Creates the World",
+    reference: "Genesis 1",
+    cover: "🌍✨",
+    summary: "God lovingly makes the world, the sky, plants, animals, and people.",
+    scenes: [
+      { art: "🌑 ✨ 💡", title: "Light", text: "At the beginning, God created the heavens and the earth. God made light and separated the light from the darkness." },
+      { art: "☁️ 🌊 🌱", title: "Sky, Seas, and Plants", text: "God made the sky, gathered the waters into seas, and made dry land appear. Then plants and trees began to grow." },
+      { art: "☀️ 🌙 ⭐", title: "Sun, Moon, and Stars", text: "God made lights in the sky: the sun for the day, and the moon and stars for the night." },
+      { art: "🐠 🐦 🐘 👨‍👩‍👧", title: "Animals and People", text: "God filled the seas with fish, the sky with birds, and the land with animals. God also made people and cared for everything He had made." }
+    ]
+  },
+  {
+    id: "noah",
+    title: "Noah and the Ark",
+    reference: "Genesis 6–9",
+    cover: "🚢🌈",
+    summary: "Noah trusts God, builds the ark, and sees God's rainbow promise.",
+    scenes: [
+      { art: "👨 🔨 🚢", title: "Noah Builds", text: "God told Noah to build a very large ark. Noah trusted God and carefully did what God asked." },
+      { art: "🦒 🐘 🐑 🐦", title: "Animals Come Aboard", text: "Animals came to the ark, and Noah's family went inside too. They were safe together in the ark." },
+      { art: "🌧️ 🌧️ 🚢", title: "The Rain", text: "Rain fell for many days and water covered the land. God kept Noah, his family, and the animals safe." },
+      { art: "🕊️ 🌿 🌈", title: "A New Beginning", text: "When the water went down, Noah left the ark. God placed a rainbow in the sky as a sign of His promise." }
+    ]
+  },
+  {
+    id: "david-goliath",
+    title: "David and Goliath",
+    reference: "1 Samuel 17",
+    cover: "👦🪨",
+    summary: "David trusts God when he faces the giant Goliath.",
+    scenes: [
+      { art: "🛡️ 🗡️ 😨", title: "A Giant Challenge", text: "A giant warrior named Goliath frightened the Israelite army. He challenged someone to come and fight him." },
+      { art: "👦 🐑 🙏", title: "David Trusts God", text: "Young David came to the camp. He remembered how God had helped him before and believed God would help him again." },
+      { art: "🪨 〰️ 🎯", title: "David Uses His Sling", text: "David chose smooth stones and used his sling. He faced Goliath bravely, trusting God instead of heavy armor." },
+      { art: "🙌 😊 🛡️", title: "The People Rejoice", text: "David defeated Goliath, and the people were no longer afraid. David gave God the credit for helping him." }
+    ]
+  },
+  {
+    id: "daniel-lions",
+    title: "Daniel and the Lions",
+    reference: "Daniel 6",
+    cover: "🦁🙏",
+    summary: "Daniel keeps praying to God, and God protects him.",
+    scenes: [
+      { art: "👨 🙏 🪟", title: "Daniel Prays", text: "Daniel loved God and prayed every day. Even when a new law said he should stop, Daniel continued to pray faithfully." },
+      { art: "👑 😟 📜", title: "The King's Sad Order", text: "Daniel was reported to the king. The king cared about Daniel, but the law meant Daniel was placed in a lions' den." },
+      { art: "🦁 🦁 😇", title: "God Protects Daniel", text: "God sent an angel and kept the lions from hurting Daniel. Daniel was safe through the night." },
+      { art: "👑 😊 🙌", title: "Daniel Is Safe", text: "In the morning, the king was overjoyed to find Daniel alive. Daniel's trust in God had not been in vain." }
+    ]
+  },
+  {
+    id: "jesus-children",
+    title: "Jesus Welcomes the Children",
+    reference: "Mark 10:13–16",
+    cover: "✝️👧🧒",
+    summary: "Jesus welcomes children and shows that they are important to Him.",
+    scenes: [
+      { art: "👨‍👩‍👧‍👦 ➡️ ✝️", title: "Families Come to Jesus", text: "Families brought their children to Jesus because they wanted Him to bless them." },
+      { art: "🛑 😕", title: "The Disciples Try to Stop Them", text: "Some disciples tried to send the families away. Jesus did not want the children to be kept from Him." },
+      { art: "✝️ 🤗 👧 🧒", title: "Jesus Welcomes Them", text: "Jesus invited the children to come close. He showed everyone that children are important in God's kingdom." },
+      { art: "🙏 💛 ✨", title: "Jesus Blesses the Children", text: "Jesus took the children in His arms and blessed them. His kindness showed God's love and care for children." }
+    ]
+  }
+];
+
 const GAME_INSTRUCTIONS = {
   "word:letter-find": {
     intro: "Listen for the letter Adi asks you to find.",
@@ -229,9 +292,9 @@ const GAME_INSTRUCTIONS = {
     spoken: "Listen to the Bible verse, then tap the word that completes it."
   },
   "blessing:story-garden": {
-    intro: "Look at the picture clues and find the Bible story.",
-    steps: ["Look at the picture-story scene.", "Listen to the clue.", "Tap the Bible story that matches."],
-    spoken: "Look at the picture clues, listen carefully, then choose the Bible story they show."
+    intro: "Choose a Bible story, then read or listen one picture scene at a time.",
+    steps: ["Choose a story from the story shelf.", "Look at each picture scene while Adi reads the story.", "Use Back and Next to move through the story. There are no quiz questions."],
+    spoken: "Choose a Bible story, then enjoy each picture scene. You can listen, go back, or go to the next page. There is no quiz."
   },
   "blessing:bible-questions": {
     intro: "Answer simple questions about Bible verses and stories.",
@@ -1351,7 +1414,7 @@ function renderWorld(worldId) {
     number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
     puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving.",
     discovery: "Discovery Lab explores science, nature, senses, weather, animals, and cause-and-effect through simple child-friendly experiments and challenges.",
-    blessing: "Blessing Garden introduces short Bible verses, illustrated story clues, and simple faith-based questions for young learners."
+    blessing: "Blessing Garden has short Bible verses, picture Bible stories to read and listen to, and simple Bible questions for young learners."
   };
 
   screen.innerHTML = `
@@ -1395,6 +1458,77 @@ function renderWorld(worldId) {
   screen.focus({ preventScroll: true });
 }
 
+
+function renderBibleStoryLibrary() {
+  currentView = { type: "bible-story-library", worldId: "blessing", activityId: "story-garden" };
+  setActiveNav("worlds");
+
+  screen.innerHTML = `
+    <div class="back-row"><button class="back-button" type="button" data-action="back-world" data-world-id="blessing">← Blessing Garden</button></div>
+    <header class="activity-header bible-story-header">
+      <span class="eyebrow">Blessing Garden</span>
+      <h1>📚 Bible Stories</h1>
+      <p class="helper-text">Choose a story to read and listen to. No questions — just story time.</p>
+    </header>
+    <section class="bible-story-grid" aria-label="Bible story library">
+      ${BIBLE_STORIES.map((story) => `
+        <button class="bible-story-card" type="button" data-bible-story="${story.id}">
+          <span class="bible-story-cover" aria-hidden="true">${story.cover}</span>
+          <span class="bible-story-card-copy">
+            <strong>${story.title}</strong>
+            <small class="bible-story-reference">${story.reference}</small>
+            <small>${story.summary}</small>
+          </span>
+          <span class="bible-story-open" aria-hidden="true">›</span>
+        </button>
+      `).join("")}
+    </section>
+  `;
+  screen.focus({ preventScroll: true });
+  setTimeout(() => speak("Bible Stories. Choose a story to read and listen to."), 200);
+}
+
+function renderBibleStory(storyId, sceneIndex = 0, announce = true) {
+  const story = BIBLE_STORIES.find((item) => item.id === storyId);
+  if (!story) return renderBibleStoryLibrary();
+
+  const safeIndex = Math.max(0, Math.min(sceneIndex, story.scenes.length - 1));
+  const scene = story.scenes[safeIndex];
+  const isFirst = safeIndex === 0;
+  const isLast = safeIndex === story.scenes.length - 1;
+
+  currentView = { type: "bible-story", worldId: "blessing", activityId: "story-garden", storyId, sceneIndex: safeIndex };
+  setActiveNav("worlds");
+
+  screen.innerHTML = `
+    <div class="back-row"><button class="back-button" type="button" data-bible-story-library>← All Bible Stories</button></div>
+    <header class="activity-header bible-reader-title">
+      <span class="eyebrow">${story.reference}</span>
+      <h1>${story.title}</h1>
+      <div class="bible-story-progress" aria-label="Story page ${safeIndex + 1} of ${story.scenes.length}">
+        ${story.scenes.map((_, index) => `<span class="${index <= safeIndex ? "is-filled" : ""}"></span>`).join("")}
+      </div>
+    </header>
+
+    <article class="bible-reader-card game-enter">
+      <div class="bible-reader-art" role="img" aria-label="Picture scene for ${escapeAttr(scene.title)}">${scene.art}</div>
+      <div class="bible-reader-page-label">Page ${safeIndex + 1} of ${story.scenes.length}</div>
+      <h2>${scene.title}</h2>
+      <p class="bible-reader-text">${scene.text}</p>
+      <button class="bible-read-button" type="button" data-bible-read-aloud aria-label="Read this page aloud">🔊 Read to me</button>
+
+      <div class="bible-reader-actions">
+        <button class="secondary-story-button" type="button" data-bible-story-prev ${isFirst ? "disabled" : ""}>← Back</button>
+        ${isLast
+          ? '<button class="primary-story-button" type="button" data-bible-story-library>✓ Story shelf</button>'
+          : '<button class="primary-story-button" type="button" data-bible-story-next>Next →</button>'}
+      </div>
+    </article>
+  `;
+
+  screen.focus({ preventScroll: true });
+  if (announce) setTimeout(() => speak(`${scene.title}. ${scene.text}`), 220);
+}
 
 function renderGameInstructions(worldId, activityId) {
   const activity = (activities[worldId] || []).find((item) => item.id === activityId);
@@ -2754,7 +2888,43 @@ document.addEventListener("click", (event) => {
 
   const activityButton = event.target.closest("[data-activity]");
   if (activityButton) {
-    renderGameInstructions(activityButton.dataset.worldId, activityButton.dataset.activity);
+    if (activityButton.dataset.worldId === "blessing" && activityButton.dataset.activity === "story-garden") {
+      renderBibleStoryLibrary();
+    } else {
+      renderGameInstructions(activityButton.dataset.worldId, activityButton.dataset.activity);
+    }
+    return;
+  }
+
+  const bibleStoryButton = event.target.closest("[data-bible-story]");
+  if (bibleStoryButton) {
+    renderBibleStory(bibleStoryButton.dataset.bibleStory, 0);
+    return;
+  }
+
+  const bibleStoryLibraryButton = event.target.closest("[data-bible-story-library]");
+  if (bibleStoryLibraryButton) {
+    renderBibleStoryLibrary();
+    return;
+  }
+
+  const bibleStoryPrevButton = event.target.closest("[data-bible-story-prev]");
+  if (bibleStoryPrevButton && currentView.type === "bible-story") {
+    renderBibleStory(currentView.storyId, currentView.sceneIndex - 1);
+    return;
+  }
+
+  const bibleStoryNextButton = event.target.closest("[data-bible-story-next]");
+  if (bibleStoryNextButton && currentView.type === "bible-story") {
+    renderBibleStory(currentView.storyId, currentView.sceneIndex + 1);
+    return;
+  }
+
+  const bibleReadButton = event.target.closest("[data-bible-read-aloud]");
+  if (bibleReadButton && currentView.type === "bible-story") {
+    const story = BIBLE_STORIES.find((item) => item.id === currentView.storyId);
+    const scene = story?.scenes[currentView.sceneIndex];
+    if (scene) speak(`${scene.title}. ${scene.text}`);
     return;
   }
 
@@ -2762,6 +2932,11 @@ document.addEventListener("click", (event) => {
   if (instructedStartButton) {
     const worldId = instructedStartButton.dataset.worldId;
     const activityId = instructedStartButton.dataset.activityId;
+
+    if (worldId === "blessing" && activityId === "story-garden") {
+      renderBibleStoryLibrary();
+      return;
+    }
 
     if (activityId === "start-word") {
       startWordSetup = { letter: null, rounds: 10 };
