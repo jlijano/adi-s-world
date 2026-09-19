@@ -110,3 +110,18 @@ Changed:
 Reason:
 
 - The activity should cover the complete alphabet over repeated play while feeling progressively more game-like and replayable on phones and tablets.
+
+
+## 1.3.1 — 2026-09-19
+
+Changed:
+
+- Find the Letter now runs for 10 rounds per play session.
+- Rounds 1–3 use 5 choices, rounds 4–6 use 7 choices, and rounds 7–10 use 10 choices.
+- Each session uses 10 randomized target letters from the A–Z pool with randomized answer positions.
+- Updated Word Forest activity copy so it no longer implies every game has only three rounds.
+- Bumped the PWA cache version so devices receive the new round structure.
+
+Reason:
+
+- The Find the Letter activity should provide a longer, more complete alphabet-learning session while keeping the difficulty progression capped at 10 visible choices.
