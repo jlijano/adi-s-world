@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.8.1  
+**Version:** 1.8.2  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -460,6 +460,8 @@ Prioritize offline availability for:
 Cache deliberately. Do not blindly cache everything.
 
 Always consider cache invalidation when updating core app files.
+
+For core application files (`index.html`, `app.js`, and `styles.css`), prefer a network-first service-worker strategy with cached offline fallback so deployed fixes are not hidden behind stale PWA content. Service-worker registration should bypass HTTP cache when checking for updates.
 
 ---
 

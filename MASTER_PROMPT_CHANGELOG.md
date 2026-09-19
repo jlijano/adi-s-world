@@ -350,3 +350,17 @@ Changed:
 Reason:
 
 - The game now counts many object types, so the interface and opening round should clearly communicate that it is a general counting game rather than a star-only activity.
+
+
+## 1.8.2 — 2026-09-19
+
+Changed:
+
+- Core PWA files now use a network-first service-worker strategy with cached offline fallback.
+- Service-worker registration now uses `updateViaCache: "none"` and explicitly checks for updates after load.
+- Core requests for navigation, `index.html`, `app.js`, and `styles.css` no longer prefer stale cached copies over a newer deployed version.
+- PWA cache version bumped to v18.
+
+Reason:
+
+- A device could remain on the previous v1.8.0 interface while the server was already serving v1.8.1, producing a mixed experience where randomized counting worked but old “Count the Stars” and Word Forest text remained visible. Core UI updates must refresh reliably while preserving offline fallback.
