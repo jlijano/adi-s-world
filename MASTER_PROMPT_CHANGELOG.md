@@ -43,3 +43,22 @@ Changed:
 Reason:
 
 - The project moved from planning into a working product baseline that future features should build on rather than replace.
+
+
+## 1.2.0 — 2026-09-19
+
+Added:
+
+- Child-friendly animated launch/loading screen for phone and tablet.
+- Adi's World app icon as the launch focal point.
+- Gentle clouds, stars, sparkles, and three-dot loading animation.
+- Reduced-motion behavior for accessibility.
+
+Changed:
+
+- App shell stays hidden until the splash transition completes to prevent visual flashing.
+- Service-worker cache version bumped so deployed devices receive the new launch experience.
+
+Reason:
+
+- The web app should feel more like a polished native children’s app when opened, using the limited visual assets currently available.
