@@ -228,3 +228,23 @@ Changed:
 Reason:
 
 - The interaction should reinforce recognition of the printed word together with its spoken form before the child commits to an answer, supporting vocabulary and early word-recognition practice rather than simple guessing.
+
+
+## 1.6.2 — 2026-09-19
+
+Added:
+
+- First Sound letter choices now play a child-friendly letter-sound cue when tapped.
+- The sound cue plays before the selected letter is submitted for scoring.
+- Added A–Z sound cues, such as “D, duh, duh”, “O, o, o”, and “G, guh, guh”.
+- Added a small speaker affordance and gentle pulse animation on First Sound letter buttons while audio is playing.
+- Added reduced-motion support for the new letter-audio feedback.
+
+Changed:
+
+- First Sound now reinforces the printed letter, its spoken sound, the pictured object, and the displayed spelling in the same interaction.
+- PWA cache version bumped so devices receive the new letter-sound behavior.
+
+Reason:
+
+- The activity should train phonemic familiarity as well as visual letter recognition and word-picture association.
