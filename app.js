@@ -172,10 +172,33 @@ function prepareActivityForPlay(worldId, activityId) {
   }
 }
 
+function startGameSession(worldId, activityId) {
+  gameSession = {
+    worldId,
+    activityId,
+    correctAnswers: 0,
+    mistakes: 0,
+    score: 0
+  };
+}
+
+function updateSessionScore(delta) {
+  if (!gameSession) return;
+
+  if (delta > 0) {
+    gameSession.correctAnswers += 1;
+  } else if (delta < 0) {
+    gameSession.mistakes += 1;
+  }
+
+  gameSession.score = Math.max(0, gameSession.correctAnswers - gameSession.mistakes);
+}
+
 let progress = loadProgress();
 let soundEnabled = localStorage.getItem(SOUND_KEY) !== "off";
 let currentView = { type: "home" };
 let activeGame = null;
+let gameSession = null;
 
 const screen = document.getElementById("screen");
 const starCount = document.getElementById("star-count");
@@ -418,6 +441,10 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         ${isAlphabetRound ? `<span class="round-pill">${round.choiceCount} choices</span>` : ""}
       </div>
       <h1>${activity.icon} ${activity.title}</h1>
+      <div class="session-score" aria-label="Current game score">
+        <span>⭐ <strong>${gameSession?.score ?? 0}</strong></span>
+        <small>${gameSession ? `${gameSession.correctAnswers} correct • ${gameSession.mistakes} mistakes` : ""}</small>
+      </div>
       <div class="progress-track" aria-label="Game progress">
         <div class="progress-fill" style="width:${progressPct}%"></div>
       </div>
@@ -469,6 +496,7 @@ function handleChoice(choice, button) {
 
   if (choice === round.answer) {
     activeGame.correctThisRound = true;
+    updateSessionScore(1);
     button.classList.add("is-correct");
     feedback.className = "feedback good";
     feedback.textContent = round.alphabetRound
@@ -487,6 +515,7 @@ function handleChoice(choice, button) {
       }
     }, round.alphabetRound ? 1050 : 900);
   } else {
+    updateSessionScore(-1);
     button.classList.add("is-try-again");
     feedback.className = "feedback try";
     feedback.textContent = "Almost! Try another one.";
@@ -497,23 +526,33 @@ function handleChoice(choice, button) {
 
 function completeActivity(worldId, activityId) {
   const key = `${worldId}:${activityId}`;
-  const firstCompletion = !progress.completed[key];
+  const sessionStars = Math.max(0, gameSession?.score ?? 0);
+  const previousBest = Number(progress.completed[key]) || 0;
 
-  if (firstCompletion) {
-    progress.completed[key] = 3;
-    progress.stars += 3;
-    saveProgress();
-  }
+  progress.completed[key] = Math.max(previousBest, sessionStars);
+  progress.stars = Math.max(0, (Number(progress.stars) || 0) + sessionStars);
+  saveProgress();
 
   celebration.classList.add("is-visible");
   celebration.setAttribute("aria-hidden", "false");
-  speak(firstCompletion ? "Great job! You earned three stars!" : "Great job! You finished the game again!");
+
+  const resultMessage = sessionStars === 1
+    ? "Great job! You earned one star!"
+    : `Great job! You earned ${sessionStars} stars!`;
+
+  const celebrationText = celebration.querySelector("p");
+  if (celebrationText) {
+    celebrationText.textContent = `${gameSession?.correctAnswers ?? 0} correct • ${gameSession?.mistakes ?? 0} mistakes • +${sessionStars} stars`;
+  }
+
+  speak(resultMessage);
 
   setTimeout(() => {
     celebration.classList.remove("is-visible");
     celebration.setAttribute("aria-hidden", "true");
+    gameSession = null;
     renderWorld(worldId);
-  }, 1500);
+  }, 1800);
 }
 
 function renderProgress() {
@@ -632,6 +671,7 @@ document.addEventListener("click", (event) => {
   const activityButton = event.target.closest("[data-activity]");
   if (activityButton) {
     prepareActivityForPlay(activityButton.dataset.worldId, activityButton.dataset.activity);
+    startGameSession(activityButton.dataset.worldId, activityButton.dataset.activity);
     renderGame(activityButton.dataset.worldId, activityButton.dataset.activity, 0);
     return;
   }
