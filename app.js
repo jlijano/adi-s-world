@@ -124,6 +124,35 @@ const LETTER_FIND_LEVELS = [
   { choiceCount: 5, label: "Super Search", reward: "⭐ ⭐ ⭐" }
 ];
 
+const LETTER_SOUND_CUES = {
+  A: "A. ah. ah.",
+  B: "B. buh. buh.",
+  C: "C. kuh. kuh.",
+  D: "D. duh. duh.",
+  E: "E. eh. eh.",
+  F: "F. fff. fff.",
+  G: "G. guh. guh.",
+  H: "H. huh. huh.",
+  I: "I. ih. ih.",
+  J: "J. juh. juh.",
+  K: "K. kuh. kuh.",
+  L: "L. lll. lll.",
+  M: "M. mmm. mmm.",
+  N: "N. nnn. nnn.",
+  O: "O. o. o.",
+  P: "P. puh. puh.",
+  Q: "Q. kwuh. kwuh.",
+  R: "R. rrr. rrr.",
+  S: "S. sss. sss.",
+  T: "T. tuh. tuh.",
+  U: "U. uh. uh.",
+  V: "V. vvv. vvv.",
+  W: "W. wuh. wuh.",
+  X: "X. ks. ks.",
+  Y: "Y. yuh. yuh.",
+  Z: "Zed. zzz. zzz."
+};
+
 const FIRST_SOUND_WORDS = [
   { letter: "A", word: "Apple", emoji: "🍎" },
   { letter: "B", word: "Ball", emoji: "⚽" },
@@ -203,6 +232,7 @@ function buildFirstSoundRounds() {
       rewardLabel: level.reward,
       alphabetRound: true,
       phonicsRound: true,
+      letterSoundRound: true,
       word: target.word,
       spelling: target.word
     };
@@ -566,7 +596,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
 
       <div class="choice-grid ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
         ${round.choices.map((choice, choiceIndex) => `
-          <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""} ${round.pictureMatchRound ? "picture-word-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}">
+          <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""} ${round.pictureMatchRound ? "picture-word-choice" : ""} ${round.letterSoundRound ? "letter-sound-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" ${round.letterSoundRound ? `aria-label="${escapeAttr(choice)}, tap to hear the letter sound"` : ""}>
             ${choice.length > 2 && !containsEmojiOnly(choice)
               ? `<span class="${round.pictureMatchRound ? "picture-choice-word" : "choice-label"}">${choice}</span>`
               : `<span aria-hidden="true">${choice}</span>`}
@@ -594,6 +624,21 @@ function closePictureChoiceConfirmation() {
   const overlay = document.getElementById("picture-confirm-overlay");
   overlay?.remove();
   pendingPictureChoice = null;
+}
+
+function speakLetterSound(letter, button, onDone) {
+  const cue = LETTER_SOUND_CUES[letter] || `${letter}. ${letter}. ${letter}.`;
+
+  if (button) {
+    button.classList.remove("is-speaking-letter");
+    void button.offsetWidth;
+    button.classList.add("is-speaking-letter");
+  }
+
+  speak(cue, () => {
+    button?.classList.remove("is-speaking-letter");
+    if (typeof onDone === "function") onDone();
+  });
 }
 
 function showPictureChoiceConfirmation(choice, button) {
@@ -854,6 +899,12 @@ document.addEventListener("click", (event) => {
 
     if (round?.pictureMatchRound) {
       showPictureChoiceConfirmation(choiceButton.dataset.choice, choiceButton);
+    } else if (round?.letterSoundRound) {
+      const selectedLetter = choiceButton.dataset.choice;
+      speakLetterSound(selectedLetter, choiceButton, () => {
+        if (!activeGame || activeGame.correctThisRound) return;
+        handleChoice(selectedLetter, choiceButton);
+      });
     } else {
       handleChoice(choiceButton.dataset.choice, choiceButton);
     }
