@@ -268,3 +268,28 @@ Changed:
 Reason:
 
 - The confirmation step gives the child time to hear the phonics cue, visually review the selected letter, and intentionally commit to an answer before scoring.
+
+
+## 1.7.0 — 2026-09-19
+
+Added:
+
+- New Word Forest game: Build the Word.
+- Build the Word uses 10 randomized rounds and words capped at 7 letters.
+- Children tap the picture to hear the target word, then tap scrambled letters in order to build it.
+- Letter tiles play their letter sound; completing a word adds one star and incorrect letter attempts subtract one star, never below zero.
+- A no-penalty reset lets the child restart the current word.
+- New Word Forest game: Rhyme Time.
+- Rhyme Time uses 10 randomized rounds with the established 3/4/5 choice progression.
+- The source picture can be tapped to hear the word and the printed source word stays visible.
+- Candidate words are spoken before the existing Yes/No confirmation and are only scored after confirmation.
+- Rhyme Time uses the same +1 correct / -1 confirmed mistake scoring.
+
+Changed:
+
+- Word Forest now contains five playable learning games.
+- PWA cache version bumped so devices receive the new games.
+
+Reason:
+
+- These games extend Word Forest into early spelling, letter sequencing, phonological awareness, and rhyme recognition without repeating the core mechanics of the existing activities.

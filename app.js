@@ -36,6 +36,20 @@ const activities = {
       icon: "🖼️",
       description: "10 randomized A–Z picture-word rounds. Tap the picture to hear its name.",
       rounds: []
+    },
+    {
+      id: "build-word",
+      title: "Build the Word",
+      icon: "🧱",
+      description: "Build 10 picture words by tapping letters in order. Words are 3–7 letters.",
+      rounds: []
+    },
+    {
+      id: "rhyme-time",
+      title: "Rhyme Time",
+      icon: "🎵",
+      description: "Listen, compare, and find the word that rhymes.",
+      rounds: []
     }
   ],
   number: [
@@ -153,6 +167,54 @@ const LETTER_SOUND_CUES = {
   Z: "Zed. zzz. zzz."
 };
 
+const BUILD_WORD_POOL = [
+  { word: "Cat", emoji: "🐱" },
+  { word: "Dog", emoji: "🐶" },
+  { word: "Sun", emoji: "☀️" },
+  { word: "Hat", emoji: "🎩" },
+  { word: "Pig", emoji: "🐷" },
+  { word: "Van", emoji: "🚐" },
+  { word: "Fish", emoji: "🐟" },
+  { word: "Goat", emoji: "🐐" },
+  { word: "Kite", emoji: "🪁" },
+  { word: "Lion", emoji: "🦁" },
+  { word: "Moon", emoji: "🌙" },
+  { word: "Nest", emoji: "🪺" },
+  { word: "Apple", emoji: "🍎" },
+  { word: "Queen", emoji: "👑" },
+  { word: "Tiger", emoji: "🐯" },
+  { word: "Whale", emoji: "🐋" },
+  { word: "Zebra", emoji: "🦓" },
+  { word: "Rabbit", emoji: "🐰" },
+  { word: "Orange", emoji: "🍊" },
+  { word: "Banana", emoji: "🍌" },
+  { word: "Flower", emoji: "🌼" },
+  { word: "Rocket", emoji: "🚀" },
+  { word: "Turtle", emoji: "🐢" },
+  { word: "Planet", emoji: "🪐" },
+  { word: "Rainbow", emoji: "🌈" }
+];
+
+const RHYME_ITEMS = [
+  { word: "Cat", emoji: "🐱", rhyme: "Hat" },
+  { word: "Dog", emoji: "🐶", rhyme: "Frog" },
+  { word: "Sun", emoji: "☀️", rhyme: "Fun" },
+  { word: "Bee", emoji: "🐝", rhyme: "Tree" },
+  { word: "Star", emoji: "⭐", rhyme: "Car" },
+  { word: "Cake", emoji: "🎂", rhyme: "Snake" },
+  { word: "Moon", emoji: "🌙", rhyme: "Spoon" },
+  { word: "Fox", emoji: "🦊", rhyme: "Box" },
+  { word: "Light", emoji: "💡", rhyme: "Kite" },
+  { word: "Bear", emoji: "🐻", rhyme: "Chair" },
+  { word: "Boat", emoji: "⛵", rhyme: "Goat" },
+  { word: "Ring", emoji: "💍", rhyme: "King" },
+  { word: "Mouse", emoji: "🐭", rhyme: "House" },
+  { word: "Duck", emoji: "🦆", rhyme: "Truck" },
+  { word: "Snail", emoji: "🐌", rhyme: "Whale" }
+];
+
+const RHYME_DISTRACTORS = ["Dog","Sun","Fish","Moon","Pig","Ball","Nest","Lion","Van","Apple","Tiger","Rabbit","Queen","Star","Boat","Cake","Mouse","Duck","Bee","Fox"];
+
 const FIRST_SOUND_WORDS = [
   { letter: "A", word: "Apple", emoji: "🍎" },
   { letter: "B", word: "Ball", emoji: "⚽" },
@@ -266,6 +328,63 @@ function buildPictureMatchRounds() {
   });
 }
 
+function buildBuildWordRounds() {
+  const picked = [];
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const pool = BUILD_WORD_POOL.filter((item) => {
+      const length = item.word.length;
+      if (index < 3) return length >= 3 && length <= 4;
+      if (index < 6) return length >= 4 && length <= 5;
+      return length >= 5 && length <= 7;
+    });
+    const available = pool.filter((item) => !picked.some((chosen) => chosen.word === item.word));
+    const fallback = BUILD_WORD_POOL.filter((item) => !picked.some((chosen) => chosen.word === item.word));
+    const target = shuffle(available.length ? available : fallback)[0];
+    picked.push(target);
+    const answer = target.word.toUpperCase();
+    const letters = answer.split("").map((letter, tileId) => ({ letter, tileId }));
+    return {
+      prompt: "Build the word. Tap the picture to hear it, then tap the letters in order.",
+      stage: target.emoji,
+      answer,
+      speak: "Build the word. Tap the picture to hear it, then tap the letters in order.",
+      difficultyLabel: level.label,
+      rewardLabel: level.reward,
+      alphabetRound: true,
+      buildWordRound: true,
+      spokenWord: target.word,
+      word: target.word,
+      letters: shuffle(letters),
+      choiceCount: answer.length
+    };
+  });
+}
+
+function buildRhymeRounds() {
+  const targets = shuffle(RHYME_ITEMS).slice(0, LETTER_FIND_LEVELS.length);
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const target = targets[index];
+    const blocked = new Set([target.word.toLowerCase(), target.rhyme.toLowerCase()]);
+    const distractors = shuffle(RHYME_DISTRACTORS.filter((word) => !blocked.has(word.toLowerCase())))
+      .slice(0, level.choiceCount - 1);
+    return {
+      prompt: "Which word rhymes with " + target.word + "? Tap the picture to hear it.",
+      stage: target.emoji,
+      choices: shuffle([target.rhyme, ...distractors]),
+      answer: target.rhyme,
+      speak: "Which word rhymes with " + target.word + "?",
+      difficultyLabel: level.label,
+      choiceCount: level.choiceCount,
+      rewardLabel: level.reward,
+      alphabetRound: true,
+      pictureMatchRound: true,
+      rhymeRound: true,
+      spokenWord: target.word,
+      displayWord: target.word
+    };
+  });
+}
+
 function prepareActivityForPlay(worldId, activityId) {
   const activity = (activities[worldId] || []).find((item) => item.id === activityId);
   if (!activity) return;
@@ -280,6 +399,14 @@ function prepareActivityForPlay(worldId, activityId) {
 
   if (activityId === "picture-word") {
     activity.rounds = buildPictureMatchRounds();
+  }
+
+  if (activityId === "build-word") {
+    activity.rounds = buildBuildWordRounds();
+  }
+
+  if (activityId === "rhyme-time") {
+    activity.rounds = buildRhymeRounds();
   }
 }
 
@@ -520,7 +647,7 @@ function renderWorld(worldId) {
       <div class="section-heading">
         <div>
           <h2 id="activity-heading">Pick a game</h2>
-          <p>Games use short, child-friendly rounds. Find the Letter now has 10.</p>
+          <p>Word Forest games use 10 short, child-friendly rounds with fresh randomized challenges.</p>
         </div>
       </div>
       <div class="activity-list">
@@ -547,7 +674,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
   const activity = (activities[worldId] || []).find((item) => item.id === activityId);
   if (!activity) return renderWorld(worldId);
 
-  activeGame = { worldId, activityId, roundIndex, correctThisRound: false };
+  activeGame = { worldId, activityId, roundIndex, correctThisRound: false, buildIndex: 0 };
   currentView = { type: "game", worldId, activityId };
   setActiveNav("worlds");
 
@@ -583,27 +710,44 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         <p>${round.prompt}</p>
       </div>
 
-      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound ? "picture-match-stage" : ""}">
+      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound ? "picture-match-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
-        ${round.pictureMatchRound
+        ${round.pictureMatchRound || round.buildWordRound
           ? `<button class="picture-speak-button" type="button" data-speak-word="${escapeAttr(round.spokenWord)}" aria-label="Hear ${escapeAttr(round.spokenWord)}">
                <span class="picture-speak-emoji" aria-hidden="true">${round.stage}</span>
                <span class="picture-speak-hint">🔊 Tap to hear</span>
              </button>`
           : `<div class="${isNumber ? "big-number" : isSequence ? "sequence" : "big-symbol"}">${round.stage}</div>`}
         ${round.phonicsRound ? `<div class="phonics-word" aria-label="Spelling: ${round.spelling}">${round.spelling}</div>` : ""}
+        ${round.rhymeRound ? `<div class="phonics-word rhyme-source-word" aria-label="Rhyme word: ${round.displayWord}">${round.displayWord}</div>` : ""}
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-right" aria-hidden="true">⭐</span>' : ""}
       </div>
 
-      <div class="choice-grid ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
-        ${round.choices.map((choice, choiceIndex) => `
-          <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""} ${round.pictureMatchRound ? "picture-word-choice" : ""} ${round.letterSoundRound ? "letter-sound-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" ${round.letterSoundRound ? `aria-label="${escapeAttr(choice)}, tap to hear the letter sound"` : ""}>
-            ${choice.length > 2 && !containsEmojiOnly(choice)
-              ? `<span class="${round.pictureMatchRound ? "picture-choice-word" : "choice-label"}">${choice}</span>`
-              : `<span aria-hidden="true">${choice}</span>`}
-          </button>
-        `).join("")}
-      </div>
+      ${round.buildWordRound ? `
+        <div class="build-word-area">
+          <div class="word-slots" aria-label="Word has ${round.answer.length} letters">
+            ${round.answer.split("").map((letter, slotIndex) => `<span class="word-slot" data-build-slot="${slotIndex}" aria-hidden="true">_</span>`).join("")}
+          </div>
+          <div class="build-letter-tray" aria-label="Letter choices">
+            ${round.letters.map((tile, choiceIndex) => `
+              <button class="build-letter-button" type="button" data-build-letter="${escapeAttr(tile.letter)}" data-build-tile="${tile.tileId}" style="--choice-index:${choiceIndex}" aria-label="${escapeAttr(tile.letter)}, tap to add this letter">
+                ${tile.letter}<span aria-hidden="true" class="build-letter-speaker">🔊</span>
+              </button>
+            `).join("")}
+          </div>
+          <button class="build-reset-button" type="button" data-build-reset>↺ Start this word again</button>
+        </div>
+      ` : `
+        <div class="choice-grid ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
+          ${round.choices.map((choice, choiceIndex) => `
+            <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""} ${round.pictureMatchRound ? "picture-word-choice" : ""} ${round.letterSoundRound ? "letter-sound-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" ${round.letterSoundRound ? `aria-label="${escapeAttr(choice)}, tap to hear the letter sound"` : ""}>
+              ${choice.length > 2 && !containsEmojiOnly(choice)
+                ? `<span class="${round.pictureMatchRound ? "picture-choice-word" : "choice-label"}">${choice}</span>`
+                : `<span aria-hidden="true">${choice}</span>`}
+            </button>
+          `).join("")}
+        </div>
+      `}
 
       <div id="feedback" class="feedback" aria-live="assertive"></div>
     </section>
@@ -722,6 +866,76 @@ function showPictureChoiceConfirmation(choice, button) {
   };
 
   speak(choice, openDialog);
+}
+
+function resetBuildWordRound() {
+  if (!activeGame) return;
+  activeGame.buildIndex = 0;
+  document.querySelectorAll("[data-build-slot]").forEach((slot) => {
+    slot.textContent = "_";
+    slot.classList.remove("is-filled");
+  });
+  document.querySelectorAll("[data-build-letter]").forEach((button) => {
+    button.disabled = false;
+    button.classList.remove("is-used", "is-try-again");
+  });
+  const feedback = document.getElementById("feedback");
+  if (feedback) {
+    feedback.className = "feedback";
+    feedback.textContent = "";
+  }
+  speak("Build the word again.");
+}
+
+function handleBuildLetter(letter, button) {
+  if (!activeGame || activeGame.correctThisRound) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId].find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.buildWordRound) return;
+
+  const expectedLetter = round.answer[activeGame.buildIndex];
+  speakLetterSound(letter, button);
+
+  if (letter !== expectedLetter) {
+    updateSessionScore(-1);
+    button.classList.add("is-try-again");
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback try";
+    feedback.textContent = "Almost! Try a different letter.";
+    setTimeout(() => button.classList.remove("is-try-again"), 600);
+    return;
+  }
+
+  const slot = document.querySelector("[data-build-slot=\"" + activeGame.buildIndex + "\"]");
+  if (slot) {
+    slot.textContent = letter;
+    slot.classList.add("is-filled");
+  }
+  activeGame.buildIndex += 1;
+  button.disabled = true;
+  button.classList.add("is-used");
+
+  if (activeGame.buildIndex < round.answer.length) {
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback good";
+    feedback.textContent = "Great! Keep building.";
+    return;
+  }
+
+  activeGame.correctThisRound = true;
+  updateSessionScore(1);
+  const feedback = document.getElementById("feedback");
+  feedback.className = "feedback good";
+  feedback.textContent = "You built " + round.word + "! ⭐";
+  document.querySelector(".game-card")?.classList.add("round-success");
+  speak("Brilliant! You built " + round.word + "!");
+
+  setTimeout(() => {
+    const nextRound = roundIndex + 1;
+    if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+    else completeActivity(worldId, activityId);
+  }, 1150);
 }
 
 function handleChoice(choice, button) {
@@ -945,6 +1159,18 @@ document.addEventListener("click", (event) => {
     speakPictureButton.classList.remove("is-speaking");
     void speakPictureButton.offsetWidth;
     speakPictureButton.classList.add("is-speaking");
+    return;
+  }
+
+  const buildResetButton = event.target.closest("[data-build-reset]");
+  if (buildResetButton) {
+    resetBuildWordRound();
+    return;
+  }
+
+  const buildLetterButton = event.target.closest("[data-build-letter]");
+  if (buildLetterButton) {
+    handleBuildLetter(buildLetterButton.dataset.buildLetter, buildLetterButton);
     return;
   }
 
