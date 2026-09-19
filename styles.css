@@ -2107,3 +2107,188 @@ button:focus-visible {
     transform: none !important;
   }
 }
+
+
+/* Start the Word */
+.start-word-setup-header {
+  margin-bottom: 14px;
+}
+
+.start-word-setup-card {
+  padding: 18px;
+}
+
+.start-word-setup-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.start-word-round-section {
+  margin-top: 24px;
+}
+
+.start-word-step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #eef8f1;
+  color: #1f7a4d;
+  font-weight: 900;
+}
+
+.start-word-setup-section h2 {
+  margin: 0 0 4px;
+}
+
+.start-word-letter-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.start-word-letter-button,
+.start-word-round-button {
+  min-height: 58px;
+  border: 2px solid rgba(38, 162, 105, .14);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.start-word-letter-button {
+  display: grid;
+  place-items: center;
+  gap: 1px;
+  font-size: 24px;
+}
+
+.start-word-letter-button span {
+  font-size: 11px;
+}
+
+.start-word-letter-button.is-selected,
+.start-word-round-button.is-selected {
+  border-color: #26a269;
+  background: #eafff2;
+  box-shadow: inset 0 0 0 2px rgba(38, 162, 105, .08);
+}
+
+.start-word-letter-button:focus-visible,
+.start-word-round-button:focus-visible,
+.start-word-start-button:focus-visible {
+  outline: 3px solid rgba(38, 162, 105, .32);
+  outline-offset: 2px;
+}
+
+.start-word-round-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.start-word-round-button {
+  min-height: 70px;
+  padding: 8px 4px;
+}
+
+.start-word-round-button strong,
+.start-word-round-button span {
+  display: block;
+}
+
+.start-word-round-button strong {
+  font-size: 24px;
+}
+
+.start-word-round-button span {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.start-word-setup-summary {
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #f7faf8;
+  text-align: center;
+  font-weight: 800;
+}
+
+.start-word-start-button {
+  width: 100%;
+  margin-top: 12px;
+  background: #26a269;
+  color: #fff;
+}
+
+.start-word-start-button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.start-word-display {
+  margin-top: 8px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: #fff;
+  color: #293552;
+  font-size: clamp(30px, 9vw, 48px);
+  font-weight: 900;
+  letter-spacing: .08em;
+  box-shadow: inset 0 0 0 2px rgba(38, 162, 105, .12);
+}
+
+.start-word-display.is-complete {
+  background: #e7fff4;
+  box-shadow: inset 0 0 0 3px #2cb67d;
+  animation: correctLetterPop .55s cubic-bezier(.2,.9,.25,1) both;
+}
+
+.start-word-choice-grid {
+  margin-top: 14px;
+}
+
+.start-word-choice {
+  position: relative;
+}
+
+.start-word-choice .letter-audio-icon {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+@media (min-width: 640px) {
+  .start-word-letter-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .start-word-setup-card {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 360px) {
+  .start-word-letter-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .start-word-round-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-word-display.is-complete {
+    animation: none;
+  }
+}

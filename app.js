@@ -50,6 +50,13 @@ const activities = {
       icon: "🎵",
       description: "Listen, compare, and find the word that rhymes.",
       rounds: []
+    },
+    {
+      id: "start-word",
+      title: "Start the Word",
+      icon: "🌱",
+      description: "Choose a letter and 5, 10, 15, or 20 rounds. Add the beginning letter to complete each picture word.",
+      rounds: []
     }
   ],
   number: [
@@ -209,6 +216,174 @@ const RHYME_ITEMS = [
 ];
 
 const RHYME_DISTRACTORS = ["Dog","Sun","Fish","Moon","Pig","Ball","Nest","Lion","Van","Apple","Tiger","Rabbit","Queen","Star","Boat","Cake","Mouse","Duck","Bee","Fox"];
+
+
+const START_WORD_POOL = {
+  A: [
+    { word: "Apple", emoji: "🍎" }, { word: "Ant", emoji: "🐜" }, { word: "Arrow", emoji: "➡️" }, { word: "Axe", emoji: "🪓" },
+    { word: "Angel", emoji: "😇" }, { word: "Anchor", emoji: "⚓" }, { word: "Avocado", emoji: "🥑" }, { word: "Airplane", emoji: "✈️" }
+  ],
+  B: [
+    { word: "Ball", emoji: "⚽" }, { word: "Bear", emoji: "🐻" }, { word: "Bee", emoji: "🐝" }, { word: "Boat", emoji: "⛵" },
+    { word: "Book", emoji: "📘" }, { word: "Bus", emoji: "🚌" }, { word: "Banana", emoji: "🍌" }, { word: "Butterfly", emoji: "🦋" }
+  ],
+  C: [
+    { word: "Cat", emoji: "🐱" }, { word: "Car", emoji: "🚗" }, { word: "Cake", emoji: "🎂" }, { word: "Cow", emoji: "🐄" },
+    { word: "Cup", emoji: "🥤" }, { word: "Cookie", emoji: "🍪" }, { word: "Crown", emoji: "👑" }, { word: "Cloud", emoji: "☁️" }
+  ],
+  D: [
+    { word: "Dog", emoji: "🐶" }, { word: "Duck", emoji: "🦆" }, { word: "Door", emoji: "🚪" }, { word: "Drum", emoji: "🥁" },
+    { word: "Dolphin", emoji: "🐬" }, { word: "Donut", emoji: "🍩" }, { word: "Dragon", emoji: "🐉" }, { word: "Dice", emoji: "🎲" }
+  ],
+  E: [
+    { word: "Egg", emoji: "🥚" }, { word: "Elephant", emoji: "🐘" }, { word: "Ear", emoji: "👂" }, { word: "Eye", emoji: "👁️" },
+    { word: "Eagle", emoji: "🦅" }, { word: "Earth", emoji: "🌍" }, { word: "Envelope", emoji: "✉️" }, { word: "Elf", emoji: "🧝" }
+  ],
+  F: [
+    { word: "Fish", emoji: "🐟" }, { word: "Frog", emoji: "🐸" }, { word: "Flower", emoji: "🌼" }, { word: "Fox", emoji: "🦊" },
+    { word: "Fire", emoji: "🔥" }, { word: "Flag", emoji: "🚩" }, { word: "Foot", emoji: "🦶" }, { word: "Fries", emoji: "🍟" }
+  ],
+  G: [
+    { word: "Goat", emoji: "🐐" }, { word: "Grapes", emoji: "🍇" }, { word: "Gift", emoji: "🎁" }, { word: "Ghost", emoji: "👻" },
+    { word: "Glove", emoji: "🧤" }, { word: "Guitar", emoji: "🎸" }, { word: "Gorilla", emoji: "🦍" }, { word: "Game", emoji: "🎮" }
+  ],
+  H: [
+    { word: "Hat", emoji: "🎩" }, { word: "House", emoji: "🏠" }, { word: "Horse", emoji: "🐴" }, { word: "Heart", emoji: "❤️" },
+    { word: "Hammer", emoji: "🔨" }, { word: "Hamburger", emoji: "🍔" }, { word: "Helicopter", emoji: "🚁" }, { word: "Honey", emoji: "🍯" }
+  ],
+  I: [
+    { word: "Ice", emoji: "🧊" }, { word: "Igloo", emoji: "🧊" }, { word: "Island", emoji: "🏝️" }, { word: "Insect", emoji: "🐞" },
+    { word: "Icecream", emoji: "🍦" }, { word: "Ink", emoji: "🖋️" }, { word: "Iron", emoji: "♨️" }, { word: "Iguana", emoji: "🦎" }
+  ],
+  J: [
+    { word: "Jar", emoji: "🫙" }, { word: "Jaguar", emoji: "🐆" }, { word: "Jackfruit", emoji: "🍈" }, { word: "Jacket", emoji: "🧥" },
+    { word: "Jam", emoji: "🍓" }, { word: "Juice", emoji: "🧃" }, { word: "Jet", emoji: "✈️" }, { word: "Jeepney", emoji: "🚌" },
+    { word: "Jeep", emoji: "🚙" }, { word: "Jelly", emoji: "🍮" }, { word: "Jellyfish", emoji: "🪼" }, { word: "Jigsaw", emoji: "🧩" },
+    { word: "Joker", emoji: "🃏" }, { word: "Joystick", emoji: "🕹️" }, { word: "Jumper", emoji: "👕" }, { word: "Jungle", emoji: "🌴" },
+    { word: "Jewel", emoji: "💎" }, { word: "Jug", emoji: "🏺" }, { word: "Judo", emoji: "🥋" }, { word: "Journal", emoji: "📔" }
+  ],
+  K: [
+    { word: "Kite", emoji: "🪁" }, { word: "Key", emoji: "🔑" }, { word: "King", emoji: "🤴" }, { word: "Koala", emoji: "🐨" },
+    { word: "Kiwi", emoji: "🥝" }, { word: "Kitten", emoji: "🐱" }, { word: "Kangaroo", emoji: "🦘" }, { word: "Keyboard", emoji: "⌨️" }
+  ],
+  L: [
+    { word: "Lion", emoji: "🦁" }, { word: "Leaf", emoji: "🍃" }, { word: "Lamp", emoji: "💡" }, { word: "Lemon", emoji: "🍋" },
+    { word: "Ladybug", emoji: "🐞" }, { word: "Lollipop", emoji: "🍭" }, { word: "Lock", emoji: "🔒" }, { word: "Ladder", emoji: "🪜" }
+  ],
+  M: [
+    { word: "Moon", emoji: "🌙" }, { word: "Mouse", emoji: "🐭" }, { word: "Monkey", emoji: "🐒" }, { word: "Milk", emoji: "🥛" },
+    { word: "Mango", emoji: "🥭" }, { word: "Map", emoji: "🗺️" }, { word: "Medal", emoji: "🏅" }, { word: "Mushroom", emoji: "🍄" }
+  ],
+  N: [
+    { word: "Nest", emoji: "🪺" }, { word: "Nose", emoji: "👃" }, { word: "Nail", emoji: "🔩" }, { word: "Net", emoji: "🥅" },
+    { word: "Notebook", emoji: "📓" }, { word: "Nurse", emoji: "🧑‍⚕️" }, { word: "Noodle", emoji: "🍜" }, { word: "Nut", emoji: "🥜" }
+  ],
+  O: [
+    { word: "Orange", emoji: "🍊" }, { word: "Owl", emoji: "🦉" }, { word: "Octopus", emoji: "🐙" }, { word: "Onion", emoji: "🧅" },
+    { word: "Ocean", emoji: "🌊" }, { word: "Otter", emoji: "🦦" }, { word: "Ox", emoji: "🐂" }, { word: "Oyster", emoji: "🦪" }
+  ],
+  P: [
+    { word: "Pig", emoji: "🐷" }, { word: "Pen", emoji: "🖊️" }, { word: "Pizza", emoji: "🍕" }, { word: "Panda", emoji: "🐼" },
+    { word: "Pear", emoji: "🍐" }, { word: "Plane", emoji: "✈️" }, { word: "Penguin", emoji: "🐧" }, { word: "Present", emoji: "🎁" }
+  ],
+  Q: [
+    { word: "Queen", emoji: "👑" }, { word: "Quail", emoji: "🐦" }, { word: "Quilt", emoji: "🛏️" }, { word: "Quarter", emoji: "🪙" },
+    { word: "Question", emoji: "❓" }, { word: "Queue", emoji: "🧍" }, { word: "Quack", emoji: "🦆" }, { word: "Quiet", emoji: "🤫" }
+  ],
+  R: [
+    { word: "Rabbit", emoji: "🐰" }, { word: "Rain", emoji: "🌧️" }, { word: "Rainbow", emoji: "🌈" }, { word: "Rocket", emoji: "🚀" },
+    { word: "Robot", emoji: "🤖" }, { word: "Ring", emoji: "💍" }, { word: "Rose", emoji: "🌹" }, { word: "Radio", emoji: "📻" }
+  ],
+  S: [
+    { word: "Sun", emoji: "☀️" }, { word: "Star", emoji: "⭐" }, { word: "Snake", emoji: "🐍" }, { word: "Sock", emoji: "🧦" },
+    { word: "Spoon", emoji: "🥄" }, { word: "Sheep", emoji: "🐑" }, { word: "Strawberry", emoji: "🍓" }, { word: "Snowman", emoji: "⛄" }
+  ],
+  T: [
+    { word: "Tiger", emoji: "🐯" }, { word: "Tree", emoji: "🌳" }, { word: "Train", emoji: "🚆" }, { word: "Turtle", emoji: "🐢" },
+    { word: "Tomato", emoji: "🍅" }, { word: "Tent", emoji: "⛺" }, { word: "Truck", emoji: "🚚" }, { word: "Tooth", emoji: "🦷" }
+  ],
+  U: [
+    { word: "Umbrella", emoji: "☂️" }, { word: "Unicorn", emoji: "🦄" }, { word: "Uniform", emoji: "👕" }, { word: "Up", emoji: "⬆️" },
+    { word: "UFO", emoji: "🛸" }, { word: "Ukulele", emoji: "🎸" }, { word: "Urchin", emoji: "🦔" }, { word: "Utensil", emoji: "🍴" }
+  ],
+  V: [
+    { word: "Van", emoji: "🚐" }, { word: "Violin", emoji: "🎻" }, { word: "Volcano", emoji: "🌋" }, { word: "Vase", emoji: "🏺" },
+    { word: "Vest", emoji: "🦺" }, { word: "Vegetable", emoji: "🥦" }, { word: "Video", emoji: "📹" }, { word: "Village", emoji: "🏘️" }
+  ],
+  W: [
+    { word: "Whale", emoji: "🐋" }, { word: "Watch", emoji: "⌚" }, { word: "Watermelon", emoji: "🍉" }, { word: "Window", emoji: "🪟" },
+    { word: "Wolf", emoji: "🐺" }, { word: "Worm", emoji: "🪱" }, { word: "Wheel", emoji: "🛞" }, { word: "Water", emoji: "💧" }
+  ],
+  X: [
+    { word: "Xylophone", emoji: "🎵" }, { word: "Xray", emoji: "🩻" }, { word: "Xerus", emoji: "🐿️" }, { word: "Xenops", emoji: "🐦" }
+  ],
+  Y: [
+    { word: "Yoyo", emoji: "🪀" }, { word: "Yak", emoji: "🐂" }, { word: "Yarn", emoji: "🧶" }, { word: "Yacht", emoji: "⛵" },
+    { word: "Yam", emoji: "🍠" }, { word: "Yolk", emoji: "🍳" }, { word: "Yellow", emoji: "🟡" }, { word: "Yogurt", emoji: "🥣" }
+  ],
+  Z: [
+    { word: "Zebra", emoji: "🦓" }, { word: "Zoo", emoji: "🦁" }, { word: "Zero", emoji: "0️⃣" }, { word: "Zipper", emoji: "🤐" },
+    { word: "Zucchini", emoji: "🥒" }, { word: "Zigzag", emoji: "〰️" }, { word: "Zombie", emoji: "🧟" }, { word: "Zebu", emoji: "🐂" }
+  ]
+};
+
+const START_WORD_ROUND_OPTIONS = [5, 10, 15, 20];
+
+function getStartWordChoiceCount(roundIndex, totalRounds) {
+  const progress = (roundIndex + 1) / totalRounds;
+  if (progress <= 0.3) return 3;
+  if (progress <= 0.65) return 4;
+  return 5;
+}
+
+function getStartWordDifficulty(roundIndex, totalRounds) {
+  const progress = (roundIndex + 1) / totalRounds;
+  if (progress <= 0.3) return "Warm-up";
+  if (progress <= 0.65) return "Explorer";
+  return "Super Search";
+}
+
+function buildStartWordRounds(letter, totalRounds) {
+  const source = START_WORD_POOL[letter] || [];
+  if (!source.length) return [];
+
+  const selected = [];
+  let previousWord = "";
+
+  while (selected.length < totalRounds) {
+    const cycle = shuffle(source).filter((item, index, items) => {
+      if (selected.length === 0 || index !== 0) return true;
+      return item.word !== previousWord || items.length === 1;
+    });
+    for (const item of cycle) {
+      if (selected.length >= totalRounds) break;
+      if (item.word === previousWord && source.length > 1) continue;
+      selected.push(item);
+      previousWord = item.word;
+    }
+  }
+
+  return selected.map((target, index) => {
+    const choiceCount = getStartWordChoiceCount(index, totalRounds);
+    const distractors = shuffle(ALPHABET.filter((candidate) => candidate !== letter)).slice(0, choiceCount - 1);
+    return {
+      prompt: `What letter starts ${target.word}?`,
+      stage: target.emoji,
+      choices: shuffle([letter, ...distractors]),
+      answer: letter,
+      speak: `Look at the picture. ${target.word}. What letter starts ${target.word}?`,
+      difficultyLabel: getStartWordDifficulty(index, totalRounds),
+      choiceCount,
+      rewardLabel: "⭐",
+      alphabetRound: true,
+      startWordRound: true,
+      spokenWord: target.word,
+      word: target.word,
+      incompleteWord: "_" + target.word.slice(1).toUpperCase()
+    };
+  });
+}
+
 
 const COUNTING_OBJECTS = [
   { emoji: "⭐", singular: "star", plural: "stars" },
@@ -687,6 +862,7 @@ let pendingFirstSoundChoice = null;
 let pendingNumberChoice = null;
 let pendingCompareChoice = null;
 let pendingCountMatchWordChoice = null;
+let startWordSetup = { letter: null, rounds: 10 };
 
 const screen = document.getElementById("screen");
 const starCount = document.getElementById("star-count");
@@ -883,7 +1059,7 @@ function renderWorld(worldId) {
   setActiveNav("worlds");
   const worldActivities = activities[worldId] || [];
   const worldGameCopy = {
-    word: "Word Forest games use 10 short, child-friendly rounds with fresh randomized challenges.",
+    word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges. Start the Word lets you choose a letter and up to 20 rounds.",
     number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
     puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving."
   };
@@ -921,6 +1097,73 @@ function renderWorld(worldId) {
     </section>
   `;
   screen.focus({ preventScroll: true });
+}
+
+
+function renderStartWordSetup() {
+  currentView = { type: "start-word-setup", worldId: "word", activityId: "start-word" };
+  setActiveNav("worlds");
+  const selectedLetter = startWordSetup.letter;
+  const selectedRounds = startWordSetup.rounds;
+
+  screen.innerHTML = `
+    <div class="back-row"><button class="back-button" type="button" data-action="back-world" data-world-id="word">← Back</button></div>
+    <header class="activity-header start-word-setup-header">
+      <span class="eyebrow">Word Forest</span>
+      <h1>🌱 Start the Word</h1>
+      <p class="helper-text">Choose the letter you want to practise, then choose how many rounds to play.</p>
+    </header>
+
+    <section class="game-card start-word-setup-card game-enter" aria-labelledby="start-word-letter-heading">
+      <div class="start-word-setup-section">
+        <div class="start-word-step-badge">1</div>
+        <div>
+          <h2 id="start-word-letter-heading">Choose a letter</h2>
+          <p class="helper-text">Tap a letter to hear its sound.</p>
+        </div>
+      </div>
+      <div class="start-word-letter-grid" aria-label="Choose a letter from A to Z">
+        ${ALPHABET.map((letter) => `
+          <button class="start-word-letter-button ${selectedLetter === letter ? "is-selected" : ""}" type="button" data-start-word-letter="${letter}" aria-pressed="${selectedLetter === letter}" aria-label="${letter}. Choose this letter.">
+            ${letter}<span aria-hidden="true">🔊</span>
+          </button>
+        `).join("")}
+      </div>
+
+      <div class="start-word-setup-section start-word-round-section">
+        <div class="start-word-step-badge">2</div>
+        <div>
+          <h2>How many rounds?</h2>
+          <p class="helper-text">Choose a short or longer practice session.</p>
+        </div>
+      </div>
+      <div class="start-word-round-grid" aria-label="Choose number of rounds">
+        ${START_WORD_ROUND_OPTIONS.map((count) => `
+          <button class="start-word-round-button ${selectedRounds === count ? "is-selected" : ""}" type="button" data-start-word-rounds="${count}" aria-pressed="${selectedRounds === count}">
+            <strong>${count}</strong><span>rounds</span>
+          </button>
+        `).join("")}
+      </div>
+
+      <div class="start-word-setup-summary" aria-live="polite">
+        ${selectedLetter
+          ? `Practising <strong>${selectedLetter}</strong> for <strong>${selectedRounds}</strong> rounds`
+          : "Choose a letter to continue"}
+      </div>
+      <button class="primary-button start-word-start-button" type="button" data-start-word-start ${selectedLetter ? "" : "disabled"}>▶ Start Game</button>
+    </section>
+  `;
+
+  screen.focus({ preventScroll: true });
+}
+
+function startConfiguredStartWordGame() {
+  const activity = activities.word.find((item) => item.id === "start-word");
+  if (!activity || !startWordSetup.letter) return;
+  activity.rounds = buildStartWordRounds(startWordSetup.letter, startWordSetup.rounds);
+  if (!activity.rounds.length) return;
+  startGameSession("word", "start-word");
+  renderGame("word", "start-word", 0);
 }
 
 function renderGame(worldId, activityId, roundIndex = 0) {
@@ -972,7 +1215,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         <p>${round.prompt}</p>
       </div>
 
-      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound ? "picture-match-stage" : ""}">
+      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound || round.startWordRound ? "picture-match-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
         ${round.countMatchRound
           ? `<div class="counting-stage-content count-match-stage-content">
@@ -1015,7 +1258,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
                </div>
                <button class="count-reset-button" type="button" data-count-reset>↺ Count again</button>
              </div>`
-          : round.pictureMatchRound || round.buildWordRound
+          : round.pictureMatchRound || round.buildWordRound || round.startWordRound
           ? `<button class="picture-speak-button" type="button" data-speak-word="${escapeAttr(round.spokenWord)}" aria-label="Hear ${escapeAttr(round.spokenWord)}">
                <span class="picture-speak-emoji" aria-hidden="true">${round.stage}</span>
                <span class="picture-speak-hint">🔊 Tap to hear</span>
@@ -1023,10 +1266,19 @@ function renderGame(worldId, activityId, roundIndex = 0) {
           : `<div class="${isNumber ? "big-number" : isSequence ? "sequence" : "big-symbol"}">${round.stage}</div>`}
         ${round.phonicsRound ? `<div class="phonics-word" aria-label="Spelling: ${round.spelling}">${round.spelling}</div>` : ""}
         ${round.rhymeRound ? `<div class="phonics-word rhyme-source-word" aria-label="Rhyme word: ${round.displayWord}">${round.displayWord}</div>` : ""}
+        ${round.startWordRound ? `<div class="start-word-display" data-start-word-display aria-label="Incomplete word ${escapeAttr(round.incompleteWord)}">${round.incompleteWord}</div>` : ""}
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-right" aria-hidden="true">⭐</span>' : ""}
       </div>
 
-      ${round.buildWordRound ? `
+      ${round.startWordRound ? `
+        <div class="choice-grid alphabet-choice-grid choices-${round.choiceCount} start-word-choice-grid" aria-label="Beginning letter choices">
+          ${round.choices.map((choice, choiceIndex) => `
+            <button class="choice-button alphabet-choice letter-sound-choice start-word-choice" style="--choice-index:${choiceIndex}" type="button" data-start-word-choice="${escapeAttr(choice)}" aria-label="${escapeAttr(choice)}, tap to hear and try this beginning letter">
+              <span aria-hidden="true">${choice}</span><span class="letter-audio-icon" aria-hidden="true">🔊</span>
+            </button>
+          `).join("")}
+        </div>
+      ` : round.buildWordRound ? `
         <div class="build-word-area">
           <div class="word-slots" aria-label="Word has ${round.answer.length} letters">
             ${round.answer.split("").map((letter, slotIndex) => `<span class="word-slot" data-build-slot="${slotIndex}" aria-hidden="true">_</span>`).join("")}
@@ -1610,6 +1862,59 @@ function resetBuildWordRound() {
   speak("Build the word again.");
 }
 
+
+function handleStartWordChoice(choice, button) {
+  if (!activeGame || activeGame.correctThisRound || activeGame.answerLocked) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId].find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.startWordRound) return;
+
+  activeGame.answerLocked = true;
+  speakLetterSound(choice, button, () => {
+    if (!activeGame || activeGame.roundIndex !== roundIndex || activeGame.correctThisRound) return;
+    const feedback = document.getElementById("feedback");
+
+    if (choice === round.answer) {
+      activeGame.correctThisRound = true;
+      updateSessionScore(1);
+      refreshVisibleSessionScore();
+      button.classList.add("is-correct");
+      document.querySelectorAll("[data-start-word-choice]").forEach((control) => {
+        control.disabled = true;
+      });
+      const wordDisplay = document.querySelector("[data-start-word-display]");
+      if (wordDisplay) {
+        wordDisplay.textContent = round.word.toUpperCase();
+        wordDisplay.classList.add("is-complete");
+        wordDisplay.setAttribute("aria-label", `Completed word ${round.word}`);
+      }
+      feedback.className = "feedback good";
+      feedback.textContent = `${round.word}! ${round.answer} starts ${round.word}. ⭐`;
+      document.querySelector(".game-card")?.classList.add("round-success");
+      speak(`${round.word}. ${round.answer} starts ${round.word}. Brilliant!`);
+
+      setTimeout(() => {
+        const nextRound = roundIndex + 1;
+        if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+        else completeActivity(worldId, activityId);
+      }, 1200);
+      return;
+    }
+
+    updateSessionScore(-1);
+    refreshVisibleSessionScore();
+    button.classList.add("is-try-again");
+    feedback.className = "feedback try";
+    feedback.textContent = "Almost! Listen to the word and try again.";
+    speak("Almost! Listen to the word and try again.");
+    setTimeout(() => {
+      button.classList.remove("is-try-again");
+      if (activeGame && activeGame.roundIndex === roundIndex) activeGame.answerLocked = false;
+    }, 650);
+  });
+}
+
 function handleBuildLetter(letter, button) {
   if (!activeGame || activeGame.correctThisRound || button.disabled || button.dataset.locked === "true") return;
   const { worldId, activityId, roundIndex } = activeGame;
@@ -1858,9 +2163,36 @@ document.addEventListener("click", (event) => {
 
   const activityButton = event.target.closest("[data-activity]");
   if (activityButton) {
+    if (activityButton.dataset.activity === "start-word") {
+      startWordSetup = { letter: null, rounds: 10 };
+      renderStartWordSetup();
+      return;
+    }
     prepareActivityForPlay(activityButton.dataset.worldId, activityButton.dataset.activity);
     startGameSession(activityButton.dataset.worldId, activityButton.dataset.activity);
     renderGame(activityButton.dataset.worldId, activityButton.dataset.activity, 0);
+    return;
+  }
+
+  const startWordLetterButton = event.target.closest("[data-start-word-letter]");
+  if (startWordLetterButton) {
+    startWordSetup.letter = startWordLetterButton.dataset.startWordLetter;
+    speakLetterSound(startWordSetup.letter, startWordLetterButton);
+    renderStartWordSetup();
+    return;
+  }
+
+  const startWordRoundsButton = event.target.closest("[data-start-word-rounds]");
+  if (startWordRoundsButton) {
+    const rounds = Number(startWordRoundsButton.dataset.startWordRounds);
+    if (START_WORD_ROUND_OPTIONS.includes(rounds)) startWordSetup.rounds = rounds;
+    renderStartWordSetup();
+    return;
+  }
+
+  const startWordStartButton = event.target.closest("[data-start-word-start]");
+  if (startWordStartButton) {
+    startConfiguredStartWordGame();
     return;
   }
 
@@ -1966,6 +2298,12 @@ document.addEventListener("click", (event) => {
     speakPictureButton.classList.remove("is-speaking");
     void speakPictureButton.offsetWidth;
     speakPictureButton.classList.add("is-speaking");
+    return;
+  }
+
+  const startWordChoiceButton = event.target.closest("[data-start-word-choice]");
+  if (startWordChoiceButton) {
+    handleStartWordChoice(startWordChoiceButton.dataset.startWordChoice, startWordChoiceButton);
     return;
   }
 

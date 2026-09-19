@@ -1,5 +1,30 @@
 # Adi's World Master Prompt Changelog
 
+## 1.11.0 — 2026-09-20
+
+Added:
+
+- New Word Forest game: Start the Word.
+- Image-derived mechanic based on naming a picture and supplying its missing beginning letter.
+- A pre-game setup screen where the user chooses the practice letter from A–Z.
+- Configurable session length of 5, 10, 15, or 20 rounds, with 10 selected by default.
+- Letter setup buttons speak the existing child-friendly phonics cue.
+- Each round shows a tappable picture/visual, the target word with its first letter missing, and progressively scaled 3/4/5 letter choices.
+- Direct letter-placement interaction: selected letters are spoken immediately and do not use the Yes/No confirmation dialog.
+- Correct answers reveal and lock the complete word, award one session star, speak the word, and advance.
+- Wrong answers subtract one session star without going below zero, keep the child on the same round, and never reveal the answer.
+- A–Z content pools with randomised round ordering, distractors, and answer positions; longer sessions may reuse age-appropriate examples while avoiding immediate repetition.
+- Phone-first setup and gameplay styling with tablet expansion and reduced-motion support.
+
+Changed:
+
+- Word Forest copy now acknowledges configurable Start the Word sessions rather than implying that every Word Forest game has exactly 10 rounds.
+- PWA cache version bumped to v23.
+
+Reason:
+
+- The source worksheet teaches a distinct progression from picture recognition to beginning-sound recognition to completing a printed word. Start the Word preserves that learning mechanic while adapting it into touch-first, audio-supported play and allowing parents or children to deliberately practise a chosen letter.
+
 This changelog tracks durable changes to `PROJECT_MASTER_PROMPT.md`.
 
 ## 1.0.0 — 2026-09-19

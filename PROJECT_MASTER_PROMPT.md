@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.10.1  
+**Version:** 1.11.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -735,3 +735,30 @@ Current canonical project foundation:
 - Master prompt governance: semantic versioning + changelog + Git history
 
 This file is the operating contract for future Adi's World work until explicitly revised.
+
+
+---
+
+## Start the Word — Permanent Word Forest Standard
+
+**Game:** Start the Word  
+**World:** Word Forest  
+**Source learning mechanic:** Image-based worksheet activity where the child names a picture and supplies the missing beginning sound/letter to complete the printed word.
+
+Permanent behavior:
+
+- Opening the activity first shows a setup screen rather than starting a round immediately.
+- The user selects the practice letter from A–Z.
+- Tapping a setup letter speaks the existing child-friendly letter-sound cue.
+- The user then chooses a session length of 5, 10, 15, or 20 rounds; default is 10.
+- Each round uses a picture/visual, a spoken target word, and the word with its first letter removed.
+- The child taps one of progressively scaled 3/4/5 letter choices to supply the missing beginning letter.
+- The selected letter sound is spoken immediately; this direct letter-placement mechanic does not use the Yes/No confirmation dialog.
+- A correct letter completes and locks the full printed word, awards +1 session star, speaks the completed word, and then advances.
+- A wrong letter subtracts one session star without going below zero, keeps the child on the same round, does not reveal the answer, and gives calm retry feedback.
+- Picture/word audio can be replayed with no score effect.
+- Session content is restricted to the selected practice letter. The pool may repeat examples in longer sessions when a letter has fewer distinct age-appropriate words, but immediate repetition should be avoided.
+- Answer positions and distractors randomize each round with no duplicate letter choices.
+- Difficulty scales proportionally through the session: approximately the first 30% uses 3 choices, the middle 35% uses 4, and the final 35% uses 5.
+- The game uses existing British-English speech selection, performance-based star scoring, best-score storage, persistent stars, responsive Word Forest styling, reduced-motion behavior, and localStorage progress.
+- Android phone layout is the primary target, with tablet layouts expanding naturally.
