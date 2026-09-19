@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.11.1  
+**Version:** 1.12.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -762,6 +762,34 @@ Permanent behavior:
 - Difficulty scales proportionally through the session: approximately the first 30% uses 3 choices, the middle 35% uses 4, and the final 35% uses 5.
 - The game uses existing British-English speech selection, performance-based star scoring, best-score storage, persistent stars, responsive Word Forest styling, reduced-motion behavior, and localStorage progress.
 - Android phone layout is the primary target, with tablet layouts expanding naturally.
+
+
+---
+
+## Sound Hunt — Permanent Word Forest Standard
+
+**Game:** Sound Hunt  
+**World:** Word Forest  
+**Source learning mechanic:** Image-based worksheet activity where the child colors every picture whose name begins with a chosen target letter/sound.
+
+Permanent behavior:
+
+- Sound Hunt uses the universal How to Play screen before its game-specific setup flow.
+- The setup screen requires the user to choose exactly one practice letter from A–Z before Start is enabled.
+- The setup screen defaults to 10 rounds and offers 5, 10, 15, or 20 rounds.
+- Tapping a setup letter selects only that letter, shows uppercase/lowercase selected state with a visible check, and speaks the existing child-friendly letter-sound cue. Tapping another letter replaces the selection.
+- The selected letter remains fixed for the entire session.
+- Every round shows at least 5 picture choices; later rounds may show 6 while preserving large phone-friendly touch targets.
+- All picture choices begin visually black and white/desaturated.
+- Tapping a correct picture immediately speaks/reinforces the word, turns that picture to full colour, adds a visible check, disables that picture from being selected again, and keeps it permanently locked for the rest of the round.
+- Tapping an incorrect picture leaves it black and white, applies calm retry feedback, subtracts one session star without going below zero, and keeps the child on the same round.
+- There is no Yes/No confirmation for individual Sound Hunt pictures because each picture is an immediate classification action.
+- A round is complete only after every correct picture for that round has been found. The completed round adds one correct answer/session star total, regardless of how many correct pictures it contained.
+- Correct pictures already found must never be cleared by a later mistake.
+- Each picture provides one separate accessible audio control to hear its name without changing score.
+- Picture positions, correct examples, distractors, and round content randomize while avoiding duplicate visible choices and immediate repeated target combinations where practical.
+- Use the existing British-English speech preference, performance-based star system, persistent stars, best-score storage, localStorage progress, responsive mobile-first layout, accessibility states, and reduced-motion rules.
+- Android phones are the primary layout target, with tablets expanding naturally.
 
 
 ---
