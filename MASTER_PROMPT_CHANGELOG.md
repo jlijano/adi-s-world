@@ -19,7 +19,7 @@ Added:
 Changed:
 
 - Word Forest overview copy now includes Sound Hunt alongside Start the Word as a configurable selected-letter activity.
-- PWA cache version bumped to v25.
+- PWA cache version bumped to v26.
 
 Reason:
 
