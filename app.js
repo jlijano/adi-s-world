@@ -20,12 +20,8 @@ const activities = {
       id: "letter-find",
       title: "Find the Letter",
       icon: "🔤",
-      description: "Spot the letter Adi asks for.",
-      rounds: [
-        { prompt: "Can you find the letter B?", stage: "B", choices: ["A", "B", "D"], answer: "B", speak: "Can you find the letter B?" },
-        { prompt: "Can you find the letter M?", stage: "M", choices: ["N", "M", "W"], answer: "M", speak: "Can you find the letter M?" },
-        { prompt: "Can you find the letter S?", stage: "S", choices: ["C", "S", "Z"], answer: "S", speak: "Can you find the letter S?" }
-      ]
+      description: "Find letters from A to Z as the challenge grows.",
+      rounds: []
     },
     {
       id: "first-sound",
@@ -121,6 +117,53 @@ const activities = {
     }
   ]
 };
+
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const LETTER_FIND_LEVELS = [
+  { choiceCount: 5, label: "Warm-up", reward: "⭐" },
+  { choiceCount: 7, label: "Explorer", reward: "⭐ ⭐" },
+  { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" }
+];
+
+function shuffle(items) {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function buildLetterFindRounds() {
+  const targets = shuffle(ALPHABET).slice(0, LETTER_FIND_LEVELS.length);
+
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const answer = targets[index];
+    const distractors = shuffle(ALPHABET.filter((letter) => letter !== answer))
+      .slice(0, level.choiceCount - 1);
+
+    return {
+      prompt: `Can you find the letter ${answer}?`,
+      stage: answer,
+      choices: shuffle([answer, ...distractors]),
+      answer,
+      speak: `Can you find the letter ${answer}?`,
+      difficultyLabel: level.label,
+      choiceCount: level.choiceCount,
+      rewardLabel: level.reward,
+      alphabetRound: true
+    };
+  });
+}
+
+function prepareActivityForPlay(worldId, activityId) {
+  const activity = (activities[worldId] || []).find((item) => item.id === activityId);
+  if (!activity) return;
+
+  if (activityId === "letter-find") {
+    activity.rounds = buildLetterFindRounds();
+  }
+}
 
 let progress = loadProgress();
 let soundEnabled = localStorage.getItem(SOUND_KEY) !== "off";
@@ -352,33 +395,42 @@ function renderGame(worldId, activityId, roundIndex = 0) {
   setActiveNav("worlds");
 
   const round = activity.rounds[roundIndex];
-  const progressPct = (roundIndex / activity.rounds.length) * 100;
+  const progressPct = ((roundIndex + 1) / activity.rounds.length) * 100;
   const isSequence = /\s{2}|\?/.test(round.stage);
   const isNumber = /^\d$/.test(round.stage);
+  const isAlphabetRound = Boolean(round.alphabetRound);
+  const roundLabel = round.difficultyLabel
+    ? `${round.difficultyLabel} • Round ${roundIndex + 1} of ${activity.rounds.length}`
+    : `Round ${roundIndex + 1} of ${activity.rounds.length}`;
 
   screen.innerHTML = `
     <div class="back-row"><button class="back-button" type="button" data-action="back-world" data-world-id="${worldId}">← Back</button></div>
     <header class="activity-header">
-      <span class="eyebrow">Round ${roundIndex + 1} of ${activity.rounds.length}</span>
+      <div class="round-meta">
+        <span class="eyebrow">${roundLabel}</span>
+        ${isAlphabetRound ? `<span class="round-pill">${round.choiceCount} choices</span>` : ""}
+      </div>
       <h1>${activity.icon} ${activity.title}</h1>
       <div class="progress-track" aria-label="Game progress">
         <div class="progress-fill" style="width:${progressPct}%"></div>
       </div>
     </header>
 
-    <section class="game-card" aria-live="polite">
+    <section class="game-card ${isAlphabetRound ? "alphabet-game" : ""} game-enter" aria-live="polite">
       <div class="adi-prompt">
         <div class="adi-mini" aria-hidden="true">👧🏻</div>
         <p>${round.prompt}</p>
       </div>
 
-      <div class="prompt-stage">
+      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""}">
+        ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
         <div class="${isNumber ? "big-number" : isSequence ? "sequence" : "big-symbol"}">${round.stage}</div>
+        ${isAlphabetRound ? '<span class="target-sparkle sparkle-right" aria-hidden="true">⭐</span>' : ""}
       </div>
 
-      <div class="choice-grid">
-        ${round.choices.map((choice) => `
-          <button class="choice-button" type="button" data-choice="${escapeAttr(choice)}">
+      <div class="choice-grid ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
+        ${round.choices.map((choice, choiceIndex) => `
+          <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}">
             <span aria-hidden="true">${choice}</span>
             ${choice.length > 2 && !containsEmojiOnly(choice) ? `<span class="choice-label">${choice}</span>` : ""}
           </button>
@@ -412,8 +464,12 @@ function handleChoice(choice, button) {
     activeGame.correctThisRound = true;
     button.classList.add("is-correct");
     feedback.className = "feedback good";
-    feedback.textContent = "You found it! ⭐";
-    speak("You found it! Great job!");
+    feedback.textContent = round.alphabetRound
+      ? `Brilliant! ${round.rewardLabel || "⭐"}`
+      : "You found it! ⭐";
+    const gameCard = document.querySelector(".game-card");
+    gameCard?.classList.add("round-success");
+    speak(round.alphabetRound ? "Brilliant! You found it!" : "You found it! Great job!");
 
     setTimeout(() => {
       const nextRound = roundIndex + 1;
@@ -422,7 +478,7 @@ function handleChoice(choice, button) {
       } else {
         completeActivity(worldId, activityId);
       }
-    }, 900);
+    }, round.alphabetRound ? 1050 : 900);
   } else {
     button.classList.add("is-try-again");
     feedback.className = "feedback try";
@@ -568,6 +624,7 @@ document.addEventListener("click", (event) => {
 
   const activityButton = event.target.closest("[data-activity]");
   if (activityButton) {
+    prepareActivityForPlay(activityButton.dataset.worldId, activityButton.dataset.activity);
     renderGame(activityButton.dataset.worldId, activityButton.dataset.activity, 0);
     return;
   }
