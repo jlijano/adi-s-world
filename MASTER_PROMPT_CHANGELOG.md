@@ -364,3 +364,26 @@ Changed:
 Reason:
 
 - A device could remain on the previous v1.8.0 interface while the server was already serving v1.8.1, producing a mixed experience where randomized counting worked but old “Count the Stars” and Word Forest text remained visible. Core UI updates must refresh reliably while preserving offline fallback.
+
+
+## 1.9.0 — 2026-09-19
+
+Added:
+
+- Permanent Number Island standards for Which Has More? and What Comes Next?.
+- Which Has More? now uses 10 randomized comparison rounds with varied familiar objects and progressive quantity ranges.
+- Left and Right choices are spoken before a child confirms the answer with the shared Yes/No dialog.
+- What Comes Next? now uses 10 randomized ascending number-sequence rounds.
+- Number sequences display exactly one missing-number blank.
+- Numeric choices are spoken before the shared Yes/No confirmation dialog and use the established 3/4/5 progressive choice counts.
+
+Changed:
+
+- Which Has More? and What Comes Next? no longer use three fixed questions.
+- Both activities now use the existing performance-based star system and remain on the same round after a confirmed incorrect answer.
+- Added phone/tablet layouts for side-by-side comparison groups and single-blank number sequences.
+- PWA cache version bumped so devices receive the updated Number Island activities.
+
+Reason:
+
+- Number Island’s remaining MVP activities should match the 10-round randomized, intentional-confirmation, replayable quality standard established by Let’s Count! and Word Forest.
