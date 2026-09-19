@@ -147,3 +147,25 @@ Changed:
 Reason:
 
 - Rewards should reflect the child's actual answers rather than grant a fixed number of stars simply for completing a game.
+
+
+## 1.5.0 — 2026-09-19
+
+Added:
+
+- Full A–Z content pool for the First Sound activity.
+- Age-appropriate word and visual examples for every letter from A through Z.
+- Ten randomized First Sound rounds per play session.
+- Randomized target words and randomized answer positions every time the activity opens.
+- The same progressive choice structure used by Find the Letter: 5 choices in rounds 1–3, 7 choices in rounds 4–6, and 10 choices in rounds 7–10.
+- Existing performance-based star scoring now applies to First Sound: +1 for each correct answer and -1 for each incorrect attempt, with no negative session score.
+- Existing alphabet animations, progress feedback, and transitions are reused for a consistent Word Forest experience.
+
+Changed:
+
+- First Sound no longer uses three fixed examples.
+- PWA cache version bumped so devices receive the randomized full-alphabet phonics game.
+
+Reason:
+
+- First Sound should be as replayable and complete as Find the Letter while reinforcing beginning sounds across the full alphabet.
