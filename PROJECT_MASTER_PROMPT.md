@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.13.0  
+**Version:** 1.13.1  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -827,6 +827,7 @@ Permanent behavior:
 - One completed round awards +1 session star only after every picture in that round is matched correctly.
 - A round reset clears that round's matches without affecting score and does not restart the session.
 - Picture sets, letter targets, picture positions, and letter positions are randomized while avoiding duplicate picture words and duplicate letter buttons within a round.
+- After every Match the Sound letter tap, the visible letter buttons automatically reshuffle so their positions change for the next attempt.
 - The interaction is tap-to-match rather than freehand line drawing or precision drag, while preserving the worksheet's connect-picture-to-beginning-sound learning objective.
 - The layout is Android-phone-first, expands naturally on tablets, uses large touch targets and ARIA labels, and respects reduced-motion preferences.
 - The game reuses existing British-English speech, star scoring, persistent progress, best-score tracking, localStorage, world navigation, and PWA infrastructure.

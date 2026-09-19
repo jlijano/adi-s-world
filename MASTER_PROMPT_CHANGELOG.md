@@ -1,5 +1,17 @@
 # Adi's World Master Prompt Changelog
 
+## 1.13.1 — 2026-09-20
+
+Changed:
+
+- Match the Sound letter buttons now automatically reshuffle after every letter tap, including correct and incorrect attempts.
+- PWA cache version bumped to v30.
+
+Reason:
+
+- Prevents children from relying on a fixed button position and keeps the focus on recognising the beginning sound.
+
+
 ## 1.13.0 — 2026-09-20
 
 Added:
