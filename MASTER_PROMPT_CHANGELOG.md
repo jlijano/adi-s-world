@@ -125,3 +125,25 @@ Changed:
 Reason:
 
 - The Find the Letter activity should provide a longer, more complete alphabet-learning session while keeping the difficulty progression capped at 10 visible choices.
+
+
+## 1.4.0 — 2026-09-19
+
+Added:
+
+- Performance-based star scoring across playable activities.
+- Each correct answer adds one session star.
+- Each incorrect attempt subtracts one session star.
+- Session star score is clamped at zero so a young child never finishes with a negative score.
+- Live game score now shows stars, correct answers, and mistakes.
+- Completion summary now shows correct answers, mistakes, and stars earned.
+
+Changed:
+
+- Finishing a game now adds the final session score to the persistent star total every time the activity is completed.
+- Activity progress stores the best score achieved for that activity instead of a fixed three-star completion award.
+- Bumped the PWA cache version so devices receive the new scoring logic.
+
+Reason:
+
+- Rewards should reflect the child's actual answers rather than grant a fixed number of stars simply for completing a game.
