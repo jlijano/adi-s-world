@@ -2012,6 +2012,12 @@ button:focus-visible {
   gap: 12px;
 }
 
+.count-match-word-step[hidden],
+.count-match-selected-number[hidden],
+[data-count-match-number-grid][hidden] {
+  display: none !important;
+}
+
 .count-match-word-grid {
   display: grid;
   grid-template-columns: 1fr;
