@@ -64,6 +64,13 @@ const activities = {
       icon: "🎨",
       description: "Choose a letter and 5, 10, 15, or 20 rounds. Find every black-and-white picture that begins with that sound and bring it to colour.",
       rounds: []
+    },
+    {
+      id: "sound-match",
+      title: "Match the Sound",
+      icon: "🔗",
+      description: "10 rounds. Tap a picture, then match it to the letter that begins its name.",
+      rounds: []
     }
   ],
   number: [
@@ -168,6 +175,11 @@ const GAME_INSTRUCTIONS = {
     intro: "Choose one letter, then find every picture that begins with that sound.",
     steps: ["Choose the letter you want to practise and how many rounds to play.", "Each round starts with at least five black-and-white pictures.", "Tap the pictures that begin with your letter. Correct pictures turn colourful and stay locked."],
     spoken: "Choose one letter and how many rounds to play. Then tap every black and white picture that begins with your letter. Correct pictures turn colourful and stay locked."
+  },
+  "word:sound-match": {
+    intro: "Match each picture to the letter that begins its name.",
+    steps: ["Tap a picture to select it and hear its name.", "Tap the beginning letter that matches the picture.", "Correct matches stay locked. Match every picture to finish the round."],
+    spoken: "Tap a picture to hear its name, then tap the letter that begins that word. Correct matches stay locked. Match every picture to finish the round."
   },
   "number:count-stars": {
     intro: "Count the objects, then choose the matching number.",
@@ -480,6 +492,65 @@ function buildSoundHuntRounds(letter, totalRounds) {
       soundHuntRound: true,
       targetLetter: letter,
       correctCount: selectedCorrect.length
+    };
+  });
+}
+
+
+function getSoundMatchLayout(roundIndex) {
+  if (roundIndex < 3) return { pictureCount: 3, letterCount: 3, label: "Warm-up" };
+  if (roundIndex < 6) return { pictureCount: 4, letterCount: 4, label: "Sound Matcher" };
+  return { pictureCount: 5, letterCount: 4, label: "Super Matcher" };
+}
+
+function buildSoundMatchRounds() {
+  const eligible = Object.entries(START_WORD_POOL).filter(([, items]) => Array.isArray(items) && items.length >= 2);
+
+  return Array.from({ length: 10 }, (_, roundIndex) => {
+    const layout = getSoundMatchLayout(roundIndex);
+    const selectedEntries = shuffle(eligible).slice(0, layout.letterCount);
+    const letters = selectedEntries.map(([letter]) => letter);
+    const pictures = [];
+    const usedWords = new Set();
+    const usedEmojis = new Set();
+
+    selectedEntries.forEach(([letter, items]) => {
+      const candidate = shuffle(items).find((item) =>
+        !usedWords.has(item.word.toLowerCase()) && !usedEmojis.has(item.emoji)
+      ) || shuffle(items)[0];
+
+      if (candidate) {
+        pictures.push({ ...candidate, letter });
+        usedWords.add(candidate.word.toLowerCase());
+        usedEmojis.add(candidate.emoji);
+      }
+    });
+
+    if (layout.pictureCount > layout.letterCount) {
+      for (const [letter, items] of shuffle(selectedEntries)) {
+        if (pictures.length >= layout.pictureCount) break;
+        const candidate = shuffle(items).find((item) =>
+          !usedWords.has(item.word.toLowerCase()) && !usedEmojis.has(item.emoji)
+        );
+        if (candidate) {
+          pictures.push({ ...candidate, letter });
+          usedWords.add(candidate.word.toLowerCase());
+          usedEmojis.add(candidate.emoji);
+        }
+      }
+    }
+
+    return {
+      prompt: "Match each picture to its beginning sound.",
+      stage: "",
+      choices: [],
+      answer: "",
+      speak: "Tap a picture to hear its name. Then tap the letter that begins that word.",
+      difficultyLabel: layout.label,
+      choiceCount: letters.length,
+      soundMatchRound: true,
+      soundMatchPictures: shuffle(pictures.slice(0, layout.pictureCount)),
+      soundMatchLetters: shuffle(letters)
     };
   });
 }
@@ -968,6 +1039,10 @@ function prepareActivityForPlay(worldId, activityId) {
     activity.rounds = buildRhymeRounds();
   }
 
+  if (activityId === "sound-match") {
+    activity.rounds = buildSoundMatchRounds();
+  }
+
   if (activityId === "count-stars") {
     activity.rounds = buildCountStarsRounds();
   }
@@ -1215,7 +1290,7 @@ function renderWorld(worldId) {
   setActiveNav("worlds");
   const worldActivities = activities[worldId] || [];
   const worldGameCopy = {
-    word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges. Start the Word and Sound Hunt let you choose a letter and up to 20 rounds.",
+    word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges, including sound matching, word building, and selected-letter practice.",
     number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
     puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving.",
     discovery: "Discovery Lab explores science, nature, senses, weather, animals, and cause-and-effect through simple child-friendly experiments and challenges."
@@ -1423,7 +1498,9 @@ function renderGame(worldId, activityId, roundIndex = 0) {
     countedIds: new Set(),
     answerLocked: false,
     countMatchNumberCorrect: false,
-    soundHuntFoundIndexes: new Set()
+    soundHuntFoundIndexes: new Set(),
+    soundMatchSelectedPicture: null,
+    soundMatchMatchedIndexes: new Set()
   };
   currentView = { type: "game", worldId, activityId };
   setActiveNav("worlds");
@@ -1503,6 +1580,8 @@ function renderGame(worldId, activityId, roundIndex = 0) {
                </div>
                <button class="count-reset-button" type="button" data-count-reset>↺ Count again</button>
              </div>`
+          : round.soundMatchRound
+          ? `<div class="sound-match-stage-note" aria-label="Tap a picture first, then tap its beginning letter"><span aria-hidden="true">👆</span><strong>Picture first</strong><span aria-hidden="true">→</span><strong>Letter next</strong></div>`
           : round.soundHuntRound
           ? `<div class="sound-hunt-target" aria-label="Target letter ${escapeAttr(round.targetLetter)}"><strong>${round.targetLetter}</strong><span>${round.targetLetter.toLowerCase()}</span><small>🔊 ${round.targetLetter} sound</small></div>`
           : round.pictureMatchRound || round.buildWordRound || round.startWordRound
@@ -1517,7 +1596,28 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-right" aria-hidden="true">⭐</span>' : ""}
       </div>
 
-      ${round.soundHuntRound ? `
+      ${round.soundMatchRound ? `
+        <div class="sound-match-board">
+          <div class="sound-match-picture-grid" aria-label="Picture choices. Tap one picture first.">
+            ${round.soundMatchPictures.map((picture, pictureIndex) => `
+              <article class="sound-match-picture-card" data-sound-match-picture-card="${pictureIndex}">
+                <button class="sound-match-picture-button" type="button" data-sound-match-picture="${pictureIndex}" aria-pressed="false" aria-label="${escapeAttr(picture.word)}. Tap to select this picture.">
+                  <span class="sound-match-emoji" aria-hidden="true">${picture.emoji}</span>
+                  <span class="sound-match-word">${picture.word}</span>
+                  <span class="sound-match-linked-letter" data-sound-match-linked-letter="${pictureIndex}" aria-hidden="true"></span>
+                </button>
+              </article>`).join("")}
+          </div>
+          <div class="sound-match-divider" aria-hidden="true">Match to</div>
+          <div class="sound-match-letter-grid" aria-label="Beginning letter choices">
+            ${round.soundMatchLetters.map((letter) => `
+              <button class="sound-match-letter-button letter-sound-choice" type="button" data-sound-match-letter="${letter}" aria-label="Letter ${letter}. Tap to match the selected picture.">
+                <strong>${letter}</strong>
+              </button>`).join("")}
+          </div>
+          <button class="sound-match-reset-button" type="button" data-sound-match-reset>↺ Reset this round</button>
+        </div>
+      ` : round.soundHuntRound ? `
         <div class="sound-hunt-grid choices-${round.choiceCount}" aria-label="Black and white picture choices">
           ${round.choices.map((choice, choiceIndex) => `
             <article class="sound-hunt-choice-card" data-sound-hunt-card="${choiceIndex}">
@@ -2120,6 +2220,122 @@ function resetBuildWordRound() {
 }
 
 
+
+function resetSoundMatchRound() {
+  if (!activeGame) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId]?.find((item) => item.id === activityId);
+  if (!activity?.rounds?.[roundIndex]?.soundMatchRound) return;
+  renderGame(worldId, activityId, roundIndex);
+  speak("Round reset. Tap a picture, then tap its beginning letter.");
+}
+
+function handleSoundMatchPicture(pictureIndex, button) {
+  if (!activeGame || activeGame.correctThisRound) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId]?.find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.soundMatchRound || activeGame.soundMatchMatchedIndexes.has(pictureIndex)) return;
+
+  activeGame.soundMatchSelectedPicture = pictureIndex;
+
+  document.querySelectorAll("[data-sound-match-picture]").forEach((control) => {
+    const index = Number(control.dataset.soundMatchPicture);
+    const selected = index === pictureIndex;
+    control.classList.toggle("is-selected", selected);
+    control.setAttribute("aria-pressed", selected ? "true" : "false");
+  });
+
+  const picture = round.soundMatchPictures[pictureIndex];
+  if (!picture) return;
+  const feedback = document.getElementById("feedback");
+  feedback.className = "feedback";
+  feedback.textContent = `${picture.word}. Now choose its beginning letter.`;
+  speak(`${picture.word}. Which letter starts ${picture.word}?`);
+}
+
+function handleSoundMatchLetter(letter, button) {
+  if (!activeGame || activeGame.correctThisRound) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId]?.find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.soundMatchRound) return;
+
+  if (activeGame.soundMatchSelectedPicture === null) {
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback try";
+    feedback.textContent = "Pick a picture first.";
+    speak("Pick a picture first, then choose its beginning letter.");
+    return;
+  }
+
+  const pictureIndex = activeGame.soundMatchSelectedPicture;
+  const picture = round.soundMatchPictures[pictureIndex];
+  if (!picture || activeGame.soundMatchMatchedIndexes.has(pictureIndex)) return;
+
+  speakLetterSound(letter, button);
+
+  if (letter !== picture.letter) {
+    updateSessionScore(-1);
+    refreshVisibleSessionScore();
+    button.classList.add("is-try-again");
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback try";
+    feedback.textContent = `Almost! ${picture.word} starts with a different sound.`;
+    speak(`Almost. Listen again. ${picture.word}.`);
+    setTimeout(() => button.classList.remove("is-try-again"), 600);
+    return;
+  }
+
+  activeGame.soundMatchMatchedIndexes.add(pictureIndex);
+  activeGame.soundMatchSelectedPicture = null;
+
+  const pictureButton = document.querySelector(`[data-sound-match-picture="${pictureIndex}"]`);
+  const pictureCard = document.querySelector(`[data-sound-match-picture-card="${pictureIndex}"]`);
+  const linkedLetter = document.querySelector(`[data-sound-match-linked-letter="${pictureIndex}"]`);
+
+  if (pictureButton) {
+    pictureButton.classList.remove("is-selected");
+    pictureButton.classList.add("is-matched");
+    pictureButton.disabled = true;
+    pictureButton.setAttribute("aria-pressed", "false");
+    pictureButton.setAttribute("aria-label", `${picture.word}. Matched to ${letter}.`);
+  }
+
+  pictureCard?.classList.add("is-matched");
+  if (linkedLetter) linkedLetter.textContent = `✓ ${letter}`;
+
+  button.classList.add("is-match-hit");
+  setTimeout(() => button.classList.remove("is-match-hit"), 450);
+
+  const remaining = round.soundMatchPictures.length - activeGame.soundMatchMatchedIndexes.size;
+  const feedback = document.getElementById("feedback");
+
+  if (remaining > 0) {
+    feedback.className = "feedback good";
+    feedback.textContent = `${picture.word} starts with ${letter}! Match ${remaining} more.`;
+    speak(`${picture.word} starts with ${letter}. Great match!`);
+    return;
+  }
+
+  activeGame.correctThisRound = true;
+  updateSessionScore(1);
+  refreshVisibleSessionScore();
+  document.querySelector(".game-card")?.classList.add("round-success");
+  document.querySelectorAll("[data-sound-match-letter], [data-sound-match-reset]").forEach((control) => {
+    control.disabled = true;
+  });
+  feedback.className = "feedback good";
+  feedback.textContent = "Brilliant! You matched every picture! ⭐";
+  speak("Brilliant! You matched every picture to its beginning sound.");
+
+  setTimeout(() => {
+    const nextRound = roundIndex + 1;
+    if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+    else completeActivity(worldId, activityId);
+  }, 1250);
+}
+
 function handleSoundHuntChoice(choiceIndex, button) {
   if (!activeGame || activeGame.correctThisRound || button.disabled) return;
   const { worldId, activityId, roundIndex } = activeGame;
@@ -2517,6 +2733,24 @@ document.addEventListener("click", (event) => {
   const startWordStartButton = event.target.closest("[data-start-word-start]");
   if (startWordStartButton) {
     startConfiguredStartWordGame();
+    return;
+  }
+
+  const soundMatchResetButton = event.target.closest("[data-sound-match-reset]");
+  if (soundMatchResetButton) {
+    resetSoundMatchRound();
+    return;
+  }
+
+  const soundMatchPictureButton = event.target.closest("[data-sound-match-picture]");
+  if (soundMatchPictureButton) {
+    handleSoundMatchPicture(Number(soundMatchPictureButton.dataset.soundMatchPicture), soundMatchPictureButton);
+    return;
+  }
+
+  const soundMatchLetterButton = event.target.closest("[data-sound-match-letter]");
+  if (soundMatchLetterButton) {
+    handleSoundMatchLetter(soundMatchLetterButton.dataset.soundMatchLetter, soundMatchLetterButton);
     return;
   }
 
