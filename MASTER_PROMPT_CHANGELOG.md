@@ -89,3 +89,24 @@ Changed:
 Reason:
 
 - The previous default browser voice sounded too robotic. The new standard aims for a calmer, clearer, more natural voice for young learners.
+
+
+## 1.3.0 — 2026-09-19
+
+Added:
+
+- Full A–Z letter pool for Find the Letter.
+- Fresh random target letters and answer positions every time the activity is opened.
+- Progressive challenge sizes: 5 choices in Round 1, 7 in Round 2, and 10 in Round 3.
+- Difficulty labels, choice-count badges, improved progress feedback, animated letter stage, staggered choice entrances, correct-answer pop, gentle retry wiggle, and star-burst celebration.
+- Reduced-motion fallback for the new game animations.
+
+Changed:
+
+- Find the Letter now generates each play session dynamically instead of using three fixed letter questions.
+- The round progress bar now reflects the current round immediately.
+- PWA cache version bumped so deployed devices receive the updated game logic and styling.
+
+Reason:
+
+- The activity should cover the complete alphabet over repeated play while feeling progressively more game-like and replayable on phones and tablets.
