@@ -868,6 +868,76 @@ function showPictureChoiceConfirmation(choice, button) {
   speak(choice, openDialog);
 }
 
+function resetBuildWordRound() {
+  if (!activeGame) return;
+  activeGame.buildIndex = 0;
+  document.querySelectorAll("[data-build-slot]").forEach((slot) => {
+    slot.textContent = "_";
+    slot.classList.remove("is-filled");
+  });
+  document.querySelectorAll("[data-build-letter]").forEach((button) => {
+    button.disabled = false;
+    button.classList.remove("is-used", "is-try-again");
+  });
+  const feedback = document.getElementById("feedback");
+  if (feedback) {
+    feedback.className = "feedback";
+    feedback.textContent = "";
+  }
+  speak("Build the word again.");
+}
+
+function handleBuildLetter(letter, button) {
+  if (!activeGame || activeGame.correctThisRound) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId].find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.buildWordRound) return;
+
+  const expectedLetter = round.answer[activeGame.buildIndex];
+  speakLetterSound(letter, button);
+
+  if (letter !== expectedLetter) {
+    updateSessionScore(-1);
+    button.classList.add("is-try-again");
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback try";
+    feedback.textContent = "Almost! Try a different letter.";
+    setTimeout(() => button.classList.remove("is-try-again"), 600);
+    return;
+  }
+
+  const slot = document.querySelector("[data-build-slot=\"" + activeGame.buildIndex + "\"]");
+  if (slot) {
+    slot.textContent = letter;
+    slot.classList.add("is-filled");
+  }
+  activeGame.buildIndex += 1;
+  button.disabled = true;
+  button.classList.add("is-used");
+
+  if (activeGame.buildIndex < round.answer.length) {
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback good";
+    feedback.textContent = "Great! Keep building.";
+    return;
+  }
+
+  activeGame.correctThisRound = true;
+  updateSessionScore(1);
+  const feedback = document.getElementById("feedback");
+  feedback.className = "feedback good";
+  feedback.textContent = "You built " + round.word + "! ⭐";
+  document.querySelector(".game-card")?.classList.add("round-success");
+  speak("Brilliant! You built " + round.word + "!");
+
+  setTimeout(() => {
+    const nextRound = roundIndex + 1;
+    if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+    else completeActivity(worldId, activityId);
+  }, 1150);
+}
+
 function handleChoice(choice, button) {
   if (!activeGame || activeGame.correctThisRound) return;
   const { worldId, activityId, roundIndex } = activeGame;
@@ -1089,6 +1159,18 @@ document.addEventListener("click", (event) => {
     speakPictureButton.classList.remove("is-speaking");
     void speakPictureButton.offsetWidth;
     speakPictureButton.classList.add("is-speaking");
+    return;
+  }
+
+  const buildResetButton = event.target.closest("[data-build-reset]");
+  if (buildResetButton) {
+    resetBuildWordRound();
+    return;
+  }
+
+  const buildLetterButton = event.target.closest("[data-build-letter]");
+  if (buildLetterButton) {
+    handleBuildLetter(buildLetterButton.dataset.buildLetter, buildLetterButton);
     return;
   }
 
