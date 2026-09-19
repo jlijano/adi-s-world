@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.11.0  
+**Version:** 1.11.1  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -762,3 +762,20 @@ Permanent behavior:
 - Difficulty scales proportionally through the session: approximately the first 30% uses 3 choices, the middle 35% uses 4, and the final 35% uses 5.
 - The game uses existing British-English speech selection, performance-based star scoring, best-score storage, persistent stars, responsive Word Forest styling, reduced-motion behavior, and localStorage progress.
 - Android phone layout is the primary target, with tablet layouts expanding naturally.
+
+
+---
+
+## Universal Pre-Game Instruction Standard
+
+Every playable activity must show a short, child-friendly **How to Play** screen before gameplay begins.
+
+Requirements:
+
+- The instruction screen appears after selecting a game and before the first round or any game-specific setup.
+- It includes the game title, a concise explanation, and simple numbered/checked steps appropriate for ages 3–5.
+- Instructions are also read aloud using the existing British-English speech standard.
+- The child starts only after pressing a large, clear **Let's Play** button.
+- For games with their own setup flow, such as Start the Word, the instruction screen appears first, followed by that setup screen.
+- Instruction screens must be mobile-first, accessible, readable without audio, and compatible with reduced-motion preferences.
+- Existing scoring, progress, randomization, and game logic must not begin until the child starts the game from the instruction screen.
