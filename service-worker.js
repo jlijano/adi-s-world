@@ -1,15 +1,17 @@
-const CACHE_NAME = "adis-world-v26";
+const CACHE_NAME = "adis-world-v27";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
+  "./drawing-garden.css",
   "./app.js",
+  "./drawing-garden.js",
   "./manifest.json",
   "./assets/icons/icon.svg",
   "./assets/icons/adis-world-splash.jpg"
 ];
 
-const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/app.js"]);
+const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/drawing-garden.css", "/app.js", "/drawing-garden.js"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
