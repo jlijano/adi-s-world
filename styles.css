@@ -1409,3 +1409,37 @@ button:focus-visible {
     animation: none !important;
   }
 }
+
+
+/* First Sound letter-audio choices */
+.letter-sound-choice {
+  position: relative;
+  overflow: hidden;
+}
+
+.letter-sound-choice::after {
+  content: "🔊";
+  position: absolute;
+  right: 7px;
+  bottom: 6px;
+  font-size: 13px;
+  opacity: .7;
+}
+
+.letter-sound-choice.is-speaking-letter {
+  animation: letterSoundPulse .55s ease;
+  box-shadow: 0 0 0 5px rgba(108,92,231,.10), 0 10px 22px rgba(57,43,128,.12);
+}
+
+@keyframes letterSoundPulse {
+  0% { transform: scale(1); }
+  42% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter-sound-choice.is-speaking-letter {
+    animation: none !important;
+    transform: none !important;
+  }
+}
