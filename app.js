@@ -328,6 +328,63 @@ function buildPictureMatchRounds() {
   });
 }
 
+function buildBuildWordRounds() {
+  const picked = [];
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const pool = BUILD_WORD_POOL.filter((item) => {
+      const length = item.word.length;
+      if (index < 3) return length >= 3 && length <= 4;
+      if (index < 6) return length >= 4 && length <= 5;
+      return length >= 5 && length <= 7;
+    });
+    const available = pool.filter((item) => !picked.some((chosen) => chosen.word === item.word));
+    const fallback = BUILD_WORD_POOL.filter((item) => !picked.some((chosen) => chosen.word === item.word));
+    const target = shuffle(available.length ? available : fallback)[0];
+    picked.push(target);
+    const answer = target.word.toUpperCase();
+    const letters = answer.split("").map((letter, tileId) => ({ letter, tileId }));
+    return {
+      prompt: "Build the word. Tap the picture to hear it, then tap the letters in order.",
+      stage: target.emoji,
+      answer,
+      speak: "Build the word. Tap the picture to hear it, then tap the letters in order.",
+      difficultyLabel: level.label,
+      rewardLabel: level.reward,
+      alphabetRound: true,
+      buildWordRound: true,
+      spokenWord: target.word,
+      word: target.word,
+      letters: shuffle(letters),
+      choiceCount: answer.length
+    };
+  });
+}
+
+function buildRhymeRounds() {
+  const targets = shuffle(RHYME_ITEMS).slice(0, LETTER_FIND_LEVELS.length);
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const target = targets[index];
+    const blocked = new Set([target.word.toLowerCase(), target.rhyme.toLowerCase()]);
+    const distractors = shuffle(RHYME_DISTRACTORS.filter((word) => !blocked.has(word.toLowerCase())))
+      .slice(0, level.choiceCount - 1);
+    return {
+      prompt: "Which word rhymes with " + target.word + "? Tap the picture to hear it.",
+      stage: target.emoji,
+      choices: shuffle([target.rhyme, ...distractors]),
+      answer: target.rhyme,
+      speak: "Which word rhymes with " + target.word + "?",
+      difficultyLabel: level.label,
+      choiceCount: level.choiceCount,
+      rewardLabel: level.reward,
+      alphabetRound: true,
+      pictureMatchRound: true,
+      rhymeRound: true,
+      spokenWord: target.word,
+      displayWord: target.word
+    };
+  });
+}
+
 function prepareActivityForPlay(worldId, activityId) {
   const activity = (activities[worldId] || []).find((item) => item.id === activityId);
   if (!activity) return;
@@ -342,6 +399,14 @@ function prepareActivityForPlay(worldId, activityId) {
 
   if (activityId === "picture-word") {
     activity.rounds = buildPictureMatchRounds();
+  }
+
+  if (activityId === "build-word") {
+    activity.rounds = buildBuildWordRounds();
+  }
+
+  if (activityId === "rhyme-time") {
+    activity.rounds = buildRhymeRounds();
   }
 }
 
