@@ -647,7 +647,7 @@ function renderWorld(worldId) {
       <div class="section-heading">
         <div>
           <h2 id="activity-heading">Pick a game</h2>
-          <p>Games use short, child-friendly rounds. Find the Letter now has 10.</p>
+          <p>Word Forest games use 10 short, child-friendly rounds with fresh randomized challenges.</p>
         </div>
       </div>
       <div class="activity-list">
