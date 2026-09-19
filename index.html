@@ -11,7 +11,29 @@
   <title>Adi's World</title>
 </head>
 <body>
-  <div id="app" class="app-shell">
+  <div id="app-splash" class="app-splash" aria-label="Adi's World is loading" role="status">
+    <div class="splash-sky" aria-hidden="true">
+      <span class="splash-cloud cloud-a">☁️</span>
+      <span class="splash-cloud cloud-b">☁️</span>
+      <span class="splash-star star-a">⭐</span>
+      <span class="splash-star star-b">✨</span>
+      <span class="splash-star star-c">⭐</span>
+    </div>
+    <div class="splash-content">
+      <div class="splash-logo-wrap">
+        <img class="splash-logo" src="assets/icons/icon.svg" alt="Adi's World">
+        <span class="splash-sparkle sparkle-one" aria-hidden="true">✨</span>
+        <span class="splash-sparkle sparkle-two" aria-hidden="true">⭐</span>
+      </div>
+      <h1>Adi's World</h1>
+      <p>Getting your adventure ready…</p>
+      <div class="splash-loader" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="app" class="app-shell is-loading">
     <header class="topbar" aria-label="Adi's World header">
       <button class="brand-button" data-action="go-home" aria-label="Go to Adi's World home">
         <span class="brand-mark" aria-hidden="true">🌎</span>
