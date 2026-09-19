@@ -949,3 +949,215 @@ button:focus-visible {
     animation: none !important;
   }
 }
+
+
+/* Gamified alphabet activity */
+.round-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.round-pill {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fff3c7;
+  color: #7a5700;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .02em;
+  box-shadow: 0 4px 12px rgba(122, 87, 0, .08);
+}
+
+.game-enter {
+  animation: gameCardIn .42s cubic-bezier(.2,.8,.2,1);
+}
+
+.alphabet-game {
+  position: relative;
+  overflow: hidden;
+}
+
+.alphabet-game::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 8%, rgba(255,123,189,.08), transparent 18%),
+    radial-gradient(circle at 92% 18%, rgba(108,92,231,.08), transparent 18%);
+}
+
+.alphabet-stage {
+  position: relative;
+  min-height: 140px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255,255,255,.95), rgba(247,245,255,.82) 54%, rgba(255,240,248,.72));
+  border: 2px solid rgba(108, 92, 231, .08);
+}
+
+.alphabet-stage .big-symbol {
+  position: relative;
+  z-index: 2;
+  min-width: 94px;
+  min-height: 94px;
+  display: grid;
+  place-items: center;
+  border-radius: 30px;
+  background: white;
+  color: #293552;
+  font-size: clamp(62px, 17vw, 88px);
+  font-weight: 900;
+  box-shadow: 0 14px 30px rgba(70, 55, 140, .12);
+  animation: targetLetterFloat 2s ease-in-out infinite;
+}
+
+.target-sparkle {
+  position: absolute;
+  z-index: 1;
+  font-size: 26px;
+  animation: alphabetTwinkle 1.35s ease-in-out infinite;
+}
+
+.sparkle-left {
+  left: 14%;
+  top: 24%;
+}
+
+.sparkle-right {
+  right: 14%;
+  bottom: 22%;
+  animation-delay: .5s;
+}
+
+.alphabet-choice-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.alphabet-choice-grid.choices-10 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.alphabet-choice {
+  min-height: 74px;
+  padding: 8px;
+  font-size: clamp(25px, 8vw, 38px);
+  background: linear-gradient(180deg, #ffffff, #f7f5ff);
+  border: 2px solid rgba(108,92,231,.08);
+  box-shadow: 0 7px 16px rgba(57, 43, 128, .08);
+  opacity: 0;
+  transform: translateY(14px) scale(.96);
+  animation: choiceTileIn .34s cubic-bezier(.2,.8,.2,1) forwards;
+  animation-delay: calc(var(--choice-index) * 45ms + 80ms);
+}
+
+.alphabet-choice:active {
+  transform: scale(.94);
+}
+
+.alphabet-choice.is-correct {
+  animation: correctLetterPop .55s cubic-bezier(.2,.9,.25,1) both;
+}
+
+.alphabet-choice.is-try-again {
+  animation: gentleWiggle .42s ease;
+}
+
+.round-success::after {
+  content: "⭐  ✨  ⭐";
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  z-index: 8;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  pointer-events: none;
+  animation: starBurst .75s ease forwards;
+}
+
+@keyframes gameCardIn {
+  from { opacity: 0; transform: translateY(16px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes choiceTileIn {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes targetLetterFloat {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-6px) rotate(1deg); }
+}
+
+@keyframes alphabetTwinkle {
+  0%, 100% { opacity: .45; transform: scale(.8) rotate(-8deg); }
+  50% { opacity: 1; transform: scale(1.16) rotate(7deg); }
+}
+
+@keyframes correctLetterPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.12) rotate(-2deg); }
+  70% { transform: scale(.98) rotate(1deg); }
+  100% { transform: scale(1.03); }
+}
+
+@keyframes gentleWiggle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes starBurst {
+  0% { opacity: 0; transform: translate(-50%, -25%) scale(.5); }
+  30% { opacity: 1; transform: translate(-50%, -60%) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%, -115%) scale(1.35); }
+}
+
+@media (max-width: 420px) {
+  .alphabet-choice-grid.choices-10 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .alphabet-choice-grid.choices-10 .alphabet-choice {
+    min-height: 62px;
+    font-size: 24px;
+    border-radius: 16px;
+  }
+}
+
+@media (min-width: 700px) {
+  .alphabet-choice-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .alphabet-choice-grid.choices-7 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .alphabet-choice-grid.choices-10 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .alphabet-choice {
+    min-height: 88px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-enter,
+  .alphabet-stage .big-symbol,
+  .target-sparkle,
+  .alphabet-choice,
+  .alphabet-choice.is-correct,
+  .alphabet-choice.is-try-again,
+  .round-success::after {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
