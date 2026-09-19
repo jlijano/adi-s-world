@@ -2429,3 +2429,182 @@ button:focus-visible {
 .sound-hunt-picture-button:focus-visible,.sound-hunt-audio-button:focus-visible,.sound-hunt-setup-audio:focus-visible{outline:4px solid rgba(38,162,105,.25);outline-offset:3px}
 @media(min-width:700px){.sound-hunt-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.sound-hunt-picture-button{min-height:132px}.sound-hunt-emoji{font-size:76px}}
 @media(prefers-reduced-motion:reduce){.sound-hunt-choice-card,.sound-hunt-emoji,.sound-hunt-check,.sound-hunt-picture-button.is-try-again,.sound-hunt-audio-button.is-speaking{animation:none!important;transition:none!important;transform:none!important}}
+
+
+/* Word Forest — Match the Sound */
+.sound-match-stage {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.sound-match-stage-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: #f7f5ff;
+  color: #4f478b;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.sound-match-board {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.sound-match-picture-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sound-match-picture-card {
+  min-width: 0;
+}
+
+.sound-match-picture-button {
+  width: 100%;
+  min-height: 118px;
+  padding: 10px;
+  display: grid;
+  place-items: center;
+  gap: 5px;
+  border: 3px solid transparent;
+  border-radius: 20px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(90,84,144,.08), 0 8px 18px rgba(57,43,128,.06);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.sound-match-picture-button.is-selected {
+  border-color: #6c5ce7;
+  background: #f3f0ff;
+  transform: scale(1.02);
+}
+
+.sound-match-picture-button.is-matched {
+  border-color: #2cb67d;
+  background: #eafff2;
+}
+
+.sound-match-picture-button:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.sound-match-emoji {
+  font-size: clamp(48px, 15vw, 70px);
+  line-height: 1;
+}
+
+.sound-match-word {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.sound-match-linked-letter {
+  min-height: 20px;
+  color: #1f7a4d;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.sound-match-divider {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.sound-match-letter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.sound-match-letter-button {
+  min-height: 66px;
+  border: 2px solid rgba(108,92,231,.12);
+  border-radius: 17px;
+  background: #faf9ff;
+  color: var(--ink);
+  font-size: clamp(24px, 8vw, 34px);
+  font-weight: 900;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.sound-match-letter-button.is-match-hit {
+  border-color: #2cb67d;
+  background: #eafff2;
+  animation: correctLetterPop .45s cubic-bezier(.2,.9,.25,1) both;
+}
+
+.sound-match-letter-button.is-try-again {
+  animation: gentleWiggle .42s ease;
+}
+
+.sound-match-reset-button {
+  justify-self: center;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #f4f2ff;
+  color: #5f55b8;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.sound-match-picture-button:focus-visible,
+.sound-match-letter-button:focus-visible,
+.sound-match-reset-button:focus-visible {
+  outline: 4px solid rgba(108,92,231,.25);
+  outline-offset: 3px;
+}
+
+@media (min-width: 700px) {
+  .sound-match-picture-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sound-match-picture-button {
+    min-height: 140px;
+  }
+
+  .sound-match-letter-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 360px) {
+  .sound-match-letter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sound-match-picture-button,
+  .sound-match-letter-button,
+  .sound-match-letter-button.is-match-hit,
+  .sound-match-letter-button.is-try-again {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
