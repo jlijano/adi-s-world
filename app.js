@@ -534,3 +534,36 @@ if ("serviceWorker" in navigator) {
 
 updateStarCount();
 renderHome();
+
+
+function finishAppSplash() {
+  const splash = document.getElementById("app-splash");
+  const app = document.getElementById("app");
+
+  if (!splash || !app) return;
+
+  const minimumSplashMs = 1450;
+  const startedAt = performance.now();
+
+  const reveal = () => {
+    const elapsed = performance.now() - startedAt;
+    const wait = Math.max(0, minimumSplashMs - elapsed);
+
+    window.setTimeout(() => {
+      app.classList.remove("is-loading");
+      splash.classList.add("is-hiding");
+
+      window.setTimeout(() => {
+        splash.remove();
+      }, 500);
+    }, wait);
+  };
+
+  if (document.readyState === "complete") {
+    reveal();
+  } else {
+    window.addEventListener("load", reveal, { once: true });
+  }
+}
+
+finishAppSplash();
