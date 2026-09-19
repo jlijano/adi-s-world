@@ -1290,7 +1290,7 @@ function renderWorld(worldId) {
   setActiveNav("worlds");
   const worldActivities = activities[worldId] || [];
   const worldGameCopy = {
-    word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges. Start the Word and Sound Hunt let you choose a letter and up to 20 rounds.",
+    word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges, including sound matching, word building, and selected-letter practice.",
     number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
     puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving.",
     discovery: "Discovery Lab explores science, nature, senses, weather, animals, and cause-and-effect through simple child-friendly experiments and challenges."
