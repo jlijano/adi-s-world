@@ -280,6 +280,7 @@ let soundEnabled = localStorage.getItem(SOUND_KEY) !== "off";
 let currentView = { type: "home" };
 let activeGame = null;
 let gameSession = null;
+let pendingPictureChoice = null;
 
 const screen = document.getElementById("screen");
 const starCount = document.getElementById("star-count");
@@ -346,8 +347,11 @@ if ("speechSynthesis" in window) {
   window.speechSynthesis.onvoiceschanged = refreshPreferredBritishVoice;
 }
 
-function speak(text) {
-  if (!soundEnabled || !("speechSynthesis" in window)) return;
+function speak(text, onDone) {
+  if (!soundEnabled || !("speechSynthesis" in window)) {
+    if (typeof onDone === "function") onDone();
+    return;
+  }
 
   refreshPreferredBritishVoice();
   window.speechSynthesis.cancel();
@@ -364,6 +368,17 @@ function speak(text) {
   utterance.rate = 0.82;
   utterance.pitch = 1.0;
   utterance.volume = 1.0;
+
+  if (typeof onDone === "function") {
+    let finished = false;
+    const finishOnce = () => {
+      if (finished) return;
+      finished = true;
+      onDone();
+    };
+    utterance.onend = finishOnce;
+    utterance.onerror = finishOnce;
+  }
 
   window.speechSynthesis.speak(utterance);
 }
@@ -575,6 +590,50 @@ function containsEmojiOnly(value) {
   return String(value).length <= 4 && /[^A-Za-z0-9 ]/.test(value);
 }
 
+function closePictureChoiceConfirmation() {
+  const overlay = document.getElementById("picture-confirm-overlay");
+  overlay?.remove();
+  pendingPictureChoice = null;
+}
+
+function showPictureChoiceConfirmation(choice, button) {
+  if (!activeGame || activeGame.correctThisRound) return;
+
+  pendingPictureChoice = { choice, button };
+
+  const openDialog = () => {
+    if (!pendingPictureChoice || pendingPictureChoice.choice !== choice) return;
+
+    document.getElementById("picture-confirm-overlay")?.remove();
+
+    const overlay = document.createElement("div");
+    overlay.id = "picture-confirm-overlay";
+    overlay.className = "picture-confirm-overlay";
+    overlay.innerHTML = `
+      <div class="picture-confirm-card" role="dialog" aria-modal="true" aria-labelledby="picture-confirm-title">
+        <span class="picture-confirm-heard">🔊 You chose</span>
+        <strong class="picture-confirm-word">${choice}</strong>
+        <h2 id="picture-confirm-title">Is this the answer you want?</h2>
+        <div class="picture-confirm-actions">
+          <button class="picture-confirm-button yes" type="button" data-picture-confirm="yes" aria-label="Yes, choose ${escapeAttr(choice)}">
+            <span class="picture-confirm-symbol" aria-hidden="true">✓</span>
+            <span>Yes</span>
+          </button>
+          <button class="picture-confirm-button no" type="button" data-picture-confirm="no" aria-label="No, choose another word">
+            <span class="picture-confirm-symbol" aria-hidden="true">✕</span>
+            <span>No</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector("[data-picture-confirm='yes']")?.focus();
+  };
+
+  speak(choice, openDialog);
+}
+
 function handleChoice(choice, button) {
   if (!activeGame || activeGame.correctThisRound) return;
   const { worldId, activityId, roundIndex } = activeGame;
@@ -764,6 +823,19 @@ document.addEventListener("click", (event) => {
     return;
   }
 
+  const confirmButton = event.target.closest("[data-picture-confirm]");
+  if (confirmButton) {
+    if (confirmButton.dataset.pictureConfirm === "yes" && pendingPictureChoice) {
+      const { choice, button } = pendingPictureChoice;
+      closePictureChoiceConfirmation();
+      handleChoice(choice, button);
+    } else {
+      closePictureChoiceConfirmation();
+      speak("Okay. Choose another word.");
+    }
+    return;
+  }
+
   const speakPictureButton = event.target.closest("[data-speak-word]");
   if (speakPictureButton) {
     speak(speakPictureButton.dataset.speakWord);
@@ -775,7 +847,16 @@ document.addEventListener("click", (event) => {
 
   const choiceButton = event.target.closest("[data-choice]");
   if (choiceButton) {
-    handleChoice(choiceButton.dataset.choice, choiceButton);
+    const activity = activeGame
+      ? (activities[activeGame.worldId] || []).find((item) => item.id === activeGame.activityId)
+      : null;
+    const round = activity && activeGame ? activity.rounds[activeGame.roundIndex] : null;
+
+    if (round?.pictureMatchRound) {
+      showPictureChoiceConfirmation(choiceButton.dataset.choice, choiceButton);
+    } else {
+      handleChoice(choiceButton.dataset.choice, choiceButton);
+    }
   }
 });
 
