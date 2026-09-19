@@ -64,23 +64,15 @@ const activities = {
       id: "more-or-less",
       title: "Which Has More?",
       icon: "⚖️",
-      description: "Compare two groups.",
-      rounds: [
-        { prompt: "Which group has more?", stage: "🍓🍓   |   🍓🍓🍓🍓", choices: ["Left", "Right"], answer: "Right", speak: "Which group has more?" },
-        { prompt: "Which group has more?", stage: "🐟🐟🐟   |   🐟", choices: ["Left", "Right"], answer: "Left", speak: "Which group has more?" },
-        { prompt: "Which group has more?", stage: "🌼🌼   |   🌼🌼🌼", choices: ["Left", "Right"], answer: "Right", speak: "Which group has more?" }
-      ]
+      description: "10 randomized rounds. Compare two groups, hear your choice, then confirm it.",
+      rounds: []
     },
     {
       id: "number-order",
       title: "What Comes Next?",
       icon: "➡️",
-      description: "Continue the number sequence.",
-      rounds: [
-        { prompt: "What number comes next?", stage: "1  2  3  __", choices: ["4", "5", "6"], answer: "4", speak: "What number comes next? One, two, three." },
-        { prompt: "What number comes next?", stage: "2  3  4  __", choices: ["3", "4", "5"], answer: "5", speak: "What number comes next? Two, three, four." },
-        { prompt: "What number comes next?", stage: "4  5  6  __", choices: ["7", "8", "9"], answer: "7", speak: "What number comes next? Four, five, six." }
-      ]
+      description: "10 randomized rounds. Find the one number that comes next, hear it, then confirm.",
+      rounds: []
     }
   ],
   puzzle: [
@@ -327,6 +319,80 @@ function buildCountStarsRounds() {
   });
 }
 
+function buildCompareRounds() {
+  const used = new Set();
+  let previousObject = null;
+
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const range = index < 3 ? [1, 4] : index < 6 ? [2, 7] : [4, 10];
+    const objectPool = COUNTING_OBJECTS.filter((item) => item.emoji !== previousObject);
+    const object = shuffle(objectPool.length ? objectPool : COUNTING_OBJECTS)[0];
+    let leftQuantity;
+    let rightQuantity;
+    let key;
+    let attempts = 0;
+
+    do {
+      leftQuantity = range[0] + Math.floor(Math.random() * (range[1] - range[0] + 1));
+      rightQuantity = range[0] + Math.floor(Math.random() * (range[1] - range[0] + 1));
+      key = `${object.emoji}:${leftQuantity}:${rightQuantity}`;
+      attempts += 1;
+    } while ((leftQuantity === rightQuantity || used.has(key)) && attempts < 40);
+
+    if (leftQuantity === rightQuantity) {
+      rightQuantity = leftQuantity === range[1] ? leftQuantity - 1 : leftQuantity + 1;
+      key = `${object.emoji}:${leftQuantity}:${rightQuantity}`;
+    }
+
+    used.add(key);
+    previousObject = object.emoji;
+
+    return {
+      prompt: "Which group has more?",
+      stage: "",
+      choices: ["Left", "Right"],
+      answer: leftQuantity > rightQuantity ? "Left" : "Right",
+      speak: "Which group has more?",
+      difficultyLabel: level.label,
+      choiceCount: 2,
+      compareRound: true,
+      leftQuantity,
+      rightQuantity,
+      objectEmoji: object.emoji,
+      objectPlural: object.plural
+    };
+  });
+}
+
+function buildNumberOrderRounds() {
+  const candidates = [];
+  [2, 3].forEach((shownCount) => {
+    for (let answer = shownCount + 1; answer <= 10; answer += 1) {
+      const sequence = Array.from({ length: shownCount }, (_, offset) => answer - shownCount + offset);
+      candidates.push({ answer, sequence });
+    }
+  });
+
+  const ordered = shuffle(candidates).slice(0, LETTER_FIND_LEVELS.length);
+
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const item = ordered[index] || shuffle(candidates)[0];
+    const spokenSequence = item.sequence.map((value) => numberWord(value).toLowerCase()).join(", ");
+
+    return {
+      prompt: "What number comes next?",
+      stage: item.sequence.join(" "),
+      choices: buildCountingChoices(item.answer, level.choiceCount),
+      answer: String(item.answer),
+      speak: `What number comes next? ${spokenSequence}.`,
+      difficultyLabel: level.label,
+      choiceCount: level.choiceCount,
+      numberSequenceRound: true,
+      sequenceNumbers: item.sequence
+    };
+  });
+}
+
 function buildLetterFindRounds() {
   const targets = shuffle(ALPHABET).slice(0, LETTER_FIND_LEVELS.length);
 
@@ -486,6 +552,14 @@ function prepareActivityForPlay(worldId, activityId) {
   if (activityId === "count-stars") {
     activity.rounds = buildCountStarsRounds();
   }
+
+  if (activityId === "more-or-less") {
+    activity.rounds = buildCompareRounds();
+  }
+
+  if (activityId === "number-order") {
+    activity.rounds = buildNumberOrderRounds();
+  }
 }
 
 function startGameSession(worldId, activityId) {
@@ -518,6 +592,7 @@ let gameSession = null;
 let pendingPictureChoice = null;
 let pendingFirstSoundChoice = null;
 let pendingNumberChoice = null;
+let pendingCompareChoice = null;
 
 const screen = document.getElementById("screen");
 const starCount = document.getElementById("star-count");
@@ -804,7 +879,24 @@ function renderGame(worldId, activityId, roundIndex = 0) {
 
       <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound ? "picture-match-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
-        ${round.countingRound
+        ${round.compareRound
+          ? `<div class="compare-stage" aria-label="Compare the left and right groups">
+               <div class="compare-group" aria-label="Left group: ${round.leftQuantity} ${escapeAttr(round.objectPlural)}">
+                 <span class="compare-side-label">Left</span>
+                 <div class="compare-objects" aria-hidden="true">${Array.from({ length: round.leftQuantity }, () => `<span>${round.objectEmoji}</span>`).join("")}</div>
+               </div>
+               <div class="compare-divider" aria-hidden="true">|</div>
+               <div class="compare-group" aria-label="Right group: ${round.rightQuantity} ${escapeAttr(round.objectPlural)}">
+                 <span class="compare-side-label">Right</span>
+                 <div class="compare-objects" aria-hidden="true">${Array.from({ length: round.rightQuantity }, () => `<span>${round.objectEmoji}</span>`).join("")}</div>
+               </div>
+             </div>`
+          : round.numberSequenceRound
+          ? `<div class="number-sequence-stage" aria-label="Number sequence with one missing answer">
+               ${round.sequenceNumbers.map((value) => `<span class="sequence-number">${value}</span>`).join("")}
+               <span class="sequence-blank" aria-label="one missing number">_</span>
+             </div>`
+          : round.countingRound
           ? `<div class="counting-stage-content">
                <div class="counting-object-grid count-${round.quantity}" aria-label="${round.quantity} ${escapeAttr(round.objectPlural)}. Tap each object once to count it.">
                  ${Array.from({ length: round.quantity }, (_, objectIndex) => `
@@ -841,7 +933,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
           </div>
           <button class="build-reset-button" type="button" data-build-reset>↺ Start this word again</button>
         </div>
-      ` : round.countingRound ? `
+      ` : round.countingRound || round.numberSequenceRound ? `
         <div class="choice-grid count-number-grid choices-${round.choiceCount}" aria-label="Number choices">
           ${round.choices.map((choice, choiceIndex) => `
             <button class="choice-button count-number-choice" style="--choice-index:${choiceIndex}" type="button" data-number-choice="${choice}" aria-label="${NUMBER_WORDS[Number(choice)] || choice}. Tap to hear and choose this number.">
@@ -850,9 +942,9 @@ function renderGame(worldId, activityId, roundIndex = 0) {
           `).join("")}
         </div>
       ` : `
-        <div class="choice-grid ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
+        <div class="choice-grid ${round.compareRound ? "compare-choice-grid" : ""} ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
           ${round.choices.map((choice, choiceIndex) => `
-            <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""} ${round.pictureMatchRound ? "picture-word-choice" : ""} ${round.letterSoundRound ? "letter-sound-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" ${round.letterSoundRound ? `aria-label="${escapeAttr(choice)}, tap to hear the letter sound"` : ""}>
+            <button class="choice-button ${round.compareRound ? "compare-choice" : ""} ${isAlphabetRound ? "alphabet-choice" : ""} ${round.pictureMatchRound ? "picture-word-choice" : ""} ${round.letterSoundRound ? "letter-sound-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" ${round.compareRound ? `aria-label="${escapeAttr(choice)}. Tap to hear and choose this side."` : ""} ${round.letterSoundRound ? `aria-label="${escapeAttr(choice)}, tap to hear the letter sound"` : ""}>
               ${choice.length > 2 && !containsEmojiOnly(choice)
                 ? `<span class="${round.pictureMatchRound ? "picture-choice-word" : "choice-label"}">${choice}</span>`
                 : `<span aria-hidden="true">${choice}</span>`}
@@ -894,6 +986,54 @@ function refreshVisibleSessionScore() {
   if (scoreDetail && gameSession) {
     scoreDetail.textContent = `${gameSession.correctAnswers} correct • ${gameSession.mistakes} mistakes`;
   }
+}
+
+function closeCompareChoiceConfirmation() {
+  document.getElementById("compare-confirm-overlay")?.remove();
+  pendingCompareChoice = null;
+  document.querySelectorAll(".compare-choice").forEach((button) => {
+    if (!activeGame?.correctThisRound) button.disabled = false;
+  });
+}
+
+function showCompareChoiceConfirmation(choice, button) {
+  if (!activeGame || activeGame.correctThisRound || pendingCompareChoice) return;
+
+  pendingCompareChoice = { choice, button };
+  document.querySelectorAll(".compare-choice").forEach((choiceButton) => {
+    choiceButton.disabled = true;
+  });
+
+  const openDialog = () => {
+    if (!pendingCompareChoice || pendingCompareChoice.choice !== choice || activeGame?.correctThisRound) return;
+
+    document.getElementById("compare-confirm-overlay")?.remove();
+    const overlay = document.createElement("div");
+    overlay.id = "compare-confirm-overlay";
+    overlay.className = "picture-confirm-overlay";
+    overlay.innerHTML = `
+      <div class="picture-confirm-card" role="dialog" aria-modal="true" aria-labelledby="compare-confirm-title">
+        <span class="picture-confirm-heard">🔊 You chose</span>
+        <strong class="picture-confirm-word">${choice}</strong>
+        <h2 id="compare-confirm-title">Is this the answer you want?</h2>
+        <div class="picture-confirm-actions">
+          <button class="picture-confirm-button yes" type="button" data-compare-confirm="yes" aria-label="Yes, choose ${escapeAttr(choice)}">
+            <span class="picture-confirm-symbol" aria-hidden="true">✓</span>
+            <span>Yes</span>
+          </button>
+          <button class="picture-confirm-button no" type="button" data-compare-confirm="no" aria-label="No, choose another side">
+            <span class="picture-confirm-symbol" aria-hidden="true">✕</span>
+            <span>No</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector("[data-compare-confirm='yes']")?.focus();
+  };
+
+  speak(choice, openDialog);
 }
 
 function closeNumberChoiceConfirmation() {
@@ -984,6 +1124,49 @@ function handleCountObject(button) {
   button.setAttribute("aria-pressed", "true");
   button.setAttribute("aria-label", `${round.objectSingular} ${objectId + 1}, counted as ${numberWord(count)}`);
   speak(numberWord(count));
+}
+
+function handleNumberSequenceChoice(choice, button) {
+  if (!activeGame || activeGame.correctThisRound || activeGame.answerLocked) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId].find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.numberSequenceRound) return;
+
+  activeGame.answerLocked = true;
+  const feedback = document.getElementById("feedback");
+
+  if (choice === round.answer) {
+    activeGame.correctThisRound = true;
+    updateSessionScore(1);
+    refreshVisibleSessionScore();
+    button.classList.add("is-correct");
+    feedback.className = "feedback good";
+    feedback.textContent = `Brilliant! ${numberWord(choice)} comes next! ⭐`;
+    document.querySelector(".game-card")?.classList.add("round-success");
+    document.querySelectorAll("[data-number-choice]").forEach((control) => {
+      control.disabled = true;
+    });
+    speak(`Brilliant! ${numberWord(choice)} comes next!`);
+
+    setTimeout(() => {
+      const nextRound = roundIndex + 1;
+      if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+      else completeActivity(worldId, activityId);
+    }, 1050);
+    return;
+  }
+
+  updateSessionScore(-1);
+  refreshVisibleSessionScore();
+  button.classList.add("is-try-again");
+  feedback.className = "feedback try";
+  feedback.textContent = "Almost! Look at the numbers and try again.";
+  speak("Almost! Look at the numbers and try again.");
+  setTimeout(() => {
+    button.classList.remove("is-try-again");
+    activeGame.answerLocked = false;
+  }, 650);
 }
 
 function handleCountStarsChoice(choice, button) {
@@ -1158,6 +1341,7 @@ function handleBuildLetter(letter, button) {
 
   if (letter !== expectedLetter) {
     updateSessionScore(-1);
+    refreshVisibleSessionScore();
     button.classList.add("is-try-again");
     const feedback = document.getElementById("feedback");
     feedback.className = "feedback try";
@@ -1210,6 +1394,7 @@ function handleChoice(choice, button) {
   if (choice === round.answer) {
     activeGame.correctThisRound = true;
     updateSessionScore(1);
+    refreshVisibleSessionScore();
     button.classList.add("is-correct");
     feedback.className = "feedback good";
     feedback.textContent = round.alphabetRound
@@ -1395,12 +1580,31 @@ document.addEventListener("click", (event) => {
     return;
   }
 
+  const compareConfirmButton = event.target.closest("[data-compare-confirm]");
+  if (compareConfirmButton) {
+    if (compareConfirmButton.dataset.compareConfirm === "yes" && pendingCompareChoice) {
+      const { choice, button } = pendingCompareChoice;
+      closeCompareChoiceConfirmation();
+      handleChoice(choice, button);
+    } else {
+      closeCompareChoiceConfirmation();
+      speak("Okay. Choose another side.");
+    }
+    return;
+  }
+
   const numberConfirmButton = event.target.closest("[data-number-confirm]");
   if (numberConfirmButton) {
     if (numberConfirmButton.dataset.numberConfirm === "yes" && pendingNumberChoice) {
       const { choice, button } = pendingNumberChoice;
+      const activity = activeGame
+        ? (activities[activeGame.worldId] || []).find((item) => item.id === activeGame.activityId)
+        : null;
+      const round = activity && activeGame ? activity.rounds[activeGame.roundIndex] : null;
       closeNumberChoiceConfirmation();
-      handleCountStarsChoice(choice, button);
+
+      if (round?.numberSequenceRound) handleNumberSequenceChoice(choice, button);
+      else handleCountStarsChoice(choice, button);
     } else {
       closeNumberChoiceConfirmation();
       speak("Okay. Choose another number.");
@@ -1480,7 +1684,9 @@ document.addEventListener("click", (event) => {
       : null;
     const round = activity && activeGame ? activity.rounds[activeGame.roundIndex] : null;
 
-    if (round?.pictureMatchRound) {
+    if (round?.compareRound) {
+      showCompareChoiceConfirmation(choiceButton.dataset.choice, choiceButton);
+    } else if (round?.pictureMatchRound) {
       showPictureChoiceConfirmation(choiceButton.dataset.choice, choiceButton);
     } else if (round?.letterSoundRound) {
       showFirstSoundConfirmation(choiceButton.dataset.choice, choiceButton);
