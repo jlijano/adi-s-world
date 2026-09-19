@@ -1,5 +1,31 @@
 # Adi's World Master Prompt Changelog
 
+## 1.12.0 — 2026-09-20
+
+Added:
+
+- New Word Forest game: **Sound Hunt**, derived from the worksheet mechanic of coloring every picture whose name begins with a target letter.
+- A pre-game setup where one A–Z practice letter is selected and remains fixed for the full session.
+- Configurable 5, 10, 15, or 20 round sessions, with 10 selected by default.
+- At least five randomized picture choices per round, scaling to six later in the session.
+- Black-and-white/desaturated starting state for every picture; only correctly selected target-sound pictures transition to full colour.
+- Sticky correct progress: correctly identified pictures remain coloured, checked, locked, and cannot be scored twice.
+- Immediate classification feedback rather than a Yes/No confirmation dialog for each picture.
+- One independent audio control per picture for hearing its name without affecting score.
+- Round completion only after all correct pictures are found; one completed round awards one correct answer/session star.
+- Calm wrong-answer behavior: wrong pictures remain black and white, the child stays on the same round, and the existing score penalty applies without going below zero.
+- Phone-first two-column picture layout with tablet expansion, focus states, ARIA labels, and reduced-motion behavior.
+
+Changed:
+
+- Word Forest overview copy now includes Sound Hunt alongside Start the Word as a configurable selected-letter activity.
+- PWA cache version bumped to v25.
+
+Reason:
+
+- The source worksheet teaches beginning-sound categorization by coloring all matching pictures. Sound Hunt preserves that mechanic digitally: the child chooses a target letter, scans several picture choices, and makes only correct beginning-sound matches become colourful.
+
+
 ## 1.11.1 — 2026-09-20
 
 Added:
