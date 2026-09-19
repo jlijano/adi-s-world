@@ -167,6 +167,54 @@ const LETTER_SOUND_CUES = {
   Z: "Zed. zzz. zzz."
 };
 
+const BUILD_WORD_POOL = [
+  { word: "Cat", emoji: "🐱" },
+  { word: "Dog", emoji: "🐶" },
+  { word: "Sun", emoji: "☀️" },
+  { word: "Hat", emoji: "🎩" },
+  { word: "Pig", emoji: "🐷" },
+  { word: "Van", emoji: "🚐" },
+  { word: "Fish", emoji: "🐟" },
+  { word: "Goat", emoji: "🐐" },
+  { word: "Kite", emoji: "🪁" },
+  { word: "Lion", emoji: "🦁" },
+  { word: "Moon", emoji: "🌙" },
+  { word: "Nest", emoji: "🪺" },
+  { word: "Apple", emoji: "🍎" },
+  { word: "Queen", emoji: "👑" },
+  { word: "Tiger", emoji: "🐯" },
+  { word: "Whale", emoji: "🐋" },
+  { word: "Zebra", emoji: "🦓" },
+  { word: "Rabbit", emoji: "🐰" },
+  { word: "Orange", emoji: "🍊" },
+  { word: "Banana", emoji: "🍌" },
+  { word: "Flower", emoji: "🌼" },
+  { word: "Rocket", emoji: "🚀" },
+  { word: "Turtle", emoji: "🐢" },
+  { word: "Planet", emoji: "🪐" },
+  { word: "Rainbow", emoji: "🌈" }
+];
+
+const RHYME_ITEMS = [
+  { word: "Cat", emoji: "🐱", rhyme: "Hat" },
+  { word: "Dog", emoji: "🐶", rhyme: "Frog" },
+  { word: "Sun", emoji: "☀️", rhyme: "Fun" },
+  { word: "Bee", emoji: "🐝", rhyme: "Tree" },
+  { word: "Star", emoji: "⭐", rhyme: "Car" },
+  { word: "Cake", emoji: "🎂", rhyme: "Snake" },
+  { word: "Moon", emoji: "🌙", rhyme: "Spoon" },
+  { word: "Fox", emoji: "🦊", rhyme: "Box" },
+  { word: "Light", emoji: "💡", rhyme: "Kite" },
+  { word: "Bear", emoji: "🐻", rhyme: "Chair" },
+  { word: "Boat", emoji: "⛵", rhyme: "Goat" },
+  { word: "Ring", emoji: "💍", rhyme: "King" },
+  { word: "Mouse", emoji: "🐭", rhyme: "House" },
+  { word: "Duck", emoji: "🦆", rhyme: "Truck" },
+  { word: "Snail", emoji: "🐌", rhyme: "Whale" }
+];
+
+const RHYME_DISTRACTORS = ["Dog","Sun","Fish","Moon","Pig","Ball","Nest","Lion","Van","Apple","Tiger","Rabbit","Queen","Star","Boat","Cake","Mouse","Duck","Bee","Fox"];
+
 const FIRST_SOUND_WORDS = [
   { letter: "A", word: "Apple", emoji: "🍎" },
   { letter: "B", word: "Ball", emoji: "⚽" },
