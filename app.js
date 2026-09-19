@@ -496,6 +496,65 @@ function buildSoundHuntRounds(letter, totalRounds) {
   });
 }
 
+
+function getSoundMatchLayout(roundIndex) {
+  if (roundIndex < 3) return { pictureCount: 3, letterCount: 3, label: "Warm-up" };
+  if (roundIndex < 6) return { pictureCount: 4, letterCount: 4, label: "Sound Matcher" };
+  return { pictureCount: 5, letterCount: 4, label: "Super Matcher" };
+}
+
+function buildSoundMatchRounds() {
+  const eligible = Object.entries(START_WORD_POOL).filter(([, items]) => Array.isArray(items) && items.length >= 2);
+
+  return Array.from({ length: 10 }, (_, roundIndex) => {
+    const layout = getSoundMatchLayout(roundIndex);
+    const selectedEntries = shuffle(eligible).slice(0, layout.letterCount);
+    const letters = selectedEntries.map(([letter]) => letter);
+    const pictures = [];
+    const usedWords = new Set();
+    const usedEmojis = new Set();
+
+    selectedEntries.forEach(([letter, items]) => {
+      const candidate = shuffle(items).find((item) =>
+        !usedWords.has(item.word.toLowerCase()) && !usedEmojis.has(item.emoji)
+      ) || shuffle(items)[0];
+
+      if (candidate) {
+        pictures.push({ ...candidate, letter });
+        usedWords.add(candidate.word.toLowerCase());
+        usedEmojis.add(candidate.emoji);
+      }
+    });
+
+    if (layout.pictureCount > layout.letterCount) {
+      for (const [letter, items] of shuffle(selectedEntries)) {
+        if (pictures.length >= layout.pictureCount) break;
+        const candidate = shuffle(items).find((item) =>
+          !usedWords.has(item.word.toLowerCase()) && !usedEmojis.has(item.emoji)
+        );
+        if (candidate) {
+          pictures.push({ ...candidate, letter });
+          usedWords.add(candidate.word.toLowerCase());
+          usedEmojis.add(candidate.emoji);
+        }
+      }
+    }
+
+    return {
+      prompt: "Match each picture to its beginning sound.",
+      stage: "",
+      choices: [],
+      answer: "",
+      speak: "Tap a picture to hear its name. Then tap the letter that begins that word.",
+      difficultyLabel: layout.label,
+      choiceCount: letters.length,
+      soundMatchRound: true,
+      soundMatchPictures: shuffle(pictures.slice(0, layout.pictureCount)),
+      soundMatchLetters: shuffle(letters)
+    };
+  });
+}
+
 function getStartWordChoiceCount(roundIndex, totalRounds) {
   const progress = (roundIndex + 1) / totalRounds;
   if (progress <= 0.3) return 3;
@@ -980,6 +1039,10 @@ function prepareActivityForPlay(worldId, activityId) {
     activity.rounds = buildRhymeRounds();
   }
 
+  if (activityId === "sound-match") {
+    activity.rounds = buildSoundMatchRounds();
+  }
+
   if (activityId === "count-stars") {
     activity.rounds = buildCountStarsRounds();
   }
@@ -1435,7 +1498,9 @@ function renderGame(worldId, activityId, roundIndex = 0) {
     countedIds: new Set(),
     answerLocked: false,
     countMatchNumberCorrect: false,
-    soundHuntFoundIndexes: new Set()
+    soundHuntFoundIndexes: new Set(),
+    soundMatchSelectedPicture: null,
+    soundMatchMatchedIndexes: new Set()
   };
   currentView = { type: "game", worldId, activityId };
   setActiveNav("worlds");
