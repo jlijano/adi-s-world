@@ -27,12 +27,8 @@ const activities = {
       id: "first-sound",
       title: "First Sound",
       icon: "🐻",
-      description: "Match a word to its first letter.",
-      rounds: [
-        { prompt: "Bear starts with which letter?", stage: "🐻", choices: ["B", "C", "D"], answer: "B", speak: "Bear starts with which letter?" },
-        { prompt: "Apple starts with which letter?", stage: "🍎", choices: ["A", "E", "O"], answer: "A", speak: "Apple starts with which letter?" },
-        { prompt: "Sun starts with which letter?", stage: "☀️", choices: ["F", "S", "T"], answer: "S", speak: "Sun starts with which letter?" }
-      ]
+      description: "10 randomized rounds covering beginning sounds from A to Z.",
+      rounds: []
     },
     {
       id: "picture-word",
@@ -132,6 +128,35 @@ const LETTER_FIND_LEVELS = [
   { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" }
 ];
 
+const FIRST_SOUND_WORDS = [
+  { letter: "A", word: "Apple", emoji: "🍎" },
+  { letter: "B", word: "Ball", emoji: "⚽" },
+  { letter: "C", word: "Cat", emoji: "🐱" },
+  { letter: "D", word: "Dog", emoji: "🐶" },
+  { letter: "E", word: "Egg", emoji: "🥚" },
+  { letter: "F", word: "Fish", emoji: "🐟" },
+  { letter: "G", word: "Goat", emoji: "🐐" },
+  { letter: "H", word: "Hat", emoji: "🎩" },
+  { letter: "I", word: "Ice cream", emoji: "🍦" },
+  { letter: "J", word: "Jam", emoji: "🍓" },
+  { letter: "K", word: "Kite", emoji: "🪁" },
+  { letter: "L", word: "Lion", emoji: "🦁" },
+  { letter: "M", word: "Moon", emoji: "🌙" },
+  { letter: "N", word: "Nest", emoji: "🪺" },
+  { letter: "O", word: "Orange", emoji: "🍊" },
+  { letter: "P", word: "Pig", emoji: "🐷" },
+  { letter: "Q", word: "Queen", emoji: "👑" },
+  { letter: "R", word: "Rabbit", emoji: "🐰" },
+  { letter: "S", word: "Sun", emoji: "☀️" },
+  { letter: "T", word: "Tiger", emoji: "🐯" },
+  { letter: "U", word: "Umbrella", emoji: "☂️" },
+  { letter: "V", word: "Van", emoji: "🚐" },
+  { letter: "W", word: "Whale", emoji: "🐋" },
+  { letter: "X", word: "Xylophone", emoji: "🎵" },
+  { letter: "Y", word: "Yo-yo", emoji: "🪀" },
+  { letter: "Z", word: "Zebra", emoji: "🦓" }
+];
+
 function shuffle(items) {
   const copy = [...items];
   for (let i = copy.length - 1; i > 0; i -= 1) {
@@ -163,12 +188,40 @@ function buildLetterFindRounds() {
   });
 }
 
+function buildFirstSoundRounds() {
+  const targets = shuffle(FIRST_SOUND_WORDS).slice(0, LETTER_FIND_LEVELS.length);
+
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const target = targets[index];
+    const distractors = shuffle(ALPHABET.filter((letter) => letter !== target.letter))
+      .slice(0, level.choiceCount - 1);
+
+    return {
+      prompt: `${target.word} starts with which letter?`,
+      stage: target.emoji,
+      choices: shuffle([target.letter, ...distractors]),
+      answer: target.letter,
+      speak: `${target.word} starts with which letter?`,
+      difficultyLabel: level.label,
+      choiceCount: level.choiceCount,
+      rewardLabel: level.reward,
+      alphabetRound: true,
+      phonicsRound: true,
+      word: target.word
+    };
+  });
+}
+
 function prepareActivityForPlay(worldId, activityId) {
   const activity = (activities[worldId] || []).find((item) => item.id === activityId);
   if (!activity) return;
 
   if (activityId === "letter-find") {
     activity.rounds = buildLetterFindRounds();
+  }
+
+  if (activityId === "first-sound") {
+    activity.rounds = buildFirstSoundRounds();
   }
 }
 
