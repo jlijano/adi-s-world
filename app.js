@@ -7,6 +7,7 @@ const worlds = [
   { id: "number", name: "Number Island", icon: "🏝️", note: "Counting & early math", status: "open" },
   { id: "drawing", name: "Drawing Garden", icon: "🎨", note: "Tracing & creativity", status: "soon" },
   { id: "discovery", name: "Discovery Lab", icon: "🔬", note: "Science & curiosity", status: "open" },
+  { id: "blessing", name: "Blessing Garden", icon: "🕊️", note: "Bible verses, stories & faith questions", status: "open" },
   { id: "robot", name: "Robot Road", icon: "🤖", note: "Sequences & coding", status: "soon" },
   { id: "puzzle", name: "Puzzle Mountain", icon: "🧩", note: "Logic & problem-solving", status: "open" },
   { id: "memory", name: "Memory Castle", icon: "🏰", note: "Memory & attention", status: "soon" },
@@ -71,6 +72,47 @@ const activities = {
       icon: "🔗",
       description: "10 rounds. Tap a picture, then match it to the letter that begins its name.",
       rounds: []
+    }
+  ],
+  blessing: [
+    {
+      id: "verse-time",
+      title: "Verse Time",
+      icon: "📖",
+      description: "Listen, look, and complete 5 short Bible verses.",
+      rounds: [
+        { prompt: "Complete the Bible verse.", stage: "God is ___. — 1 John 4:8", choices: ["love", "rain", "stone"], answer: "love", speak: "God is blank. First John chapter four, verse eight. Which word completes the verse?" },
+        { prompt: "Complete the Bible verse.", stage: "The LORD is my ___. — Psalm 23:1", choices: ["shepherd", "boat", "house"], answer: "shepherd", speak: "The Lord is my blank. Psalm twenty three, verse one. Which word completes the verse?" },
+        { prompt: "Complete the Bible verse.", stage: "Be ye ___ one to another. — Ephesians 4:32", choices: ["kind", "loud", "fast"], answer: "kind", speak: "Be ye blank one to another. Ephesians chapter four, verse thirty two. Which word completes the verse?" },
+        { prompt: "Complete the Bible verse.", stage: "In the beginning God ___. — Genesis 1:1", choices: ["created", "slept", "hid"], answer: "created", speak: "In the beginning God blank. Genesis chapter one, verse one. Which word completes the verse?" },
+        { prompt: "Complete the Bible verse.", stage: "We love him, because he first ___ us. — 1 John 4:19", choices: ["loved", "called", "found"], answer: "loved", speak: "We love him, because he first blank us. First John chapter four, verse nineteen. Which word completes the verse?" }
+      ]
+    },
+    {
+      id: "story-garden",
+      title: "Story Garden",
+      icon: "🌈",
+      description: "Look at 5 picture-story scenes and choose the Bible story.",
+      rounds: [
+        { prompt: "Which Bible story does this picture show?", stage: "🌧️  🚢  🦒  🐘  🌈", choices: ["Noah's Ark", "David and Goliath", "Jonah"], answer: "Noah's Ark", speak: "Rain, an ark, animals, and a rainbow. Which Bible story is this?" },
+        { prompt: "Which Bible story does this picture show?", stage: "👦  🪨  🛡️  🗡️", choices: ["David and Goliath", "Daniel and the Lions", "Creation"], answer: "David and Goliath", speak: "A young boy, a stone, and a giant warrior. Which Bible story is this?" },
+        { prompt: "Which Bible story does this picture show?", stage: "🌊  🐋  🙏", choices: ["Jonah and the Big Fish", "Noah's Ark", "The Lost Sheep"], answer: "Jonah and the Big Fish", speak: "The sea, a great fish, and a man praying. Which Bible story is this?" },
+        { prompt: "Which Bible story does this picture show?", stage: "🦁  🦁  🙏  👨", choices: ["Daniel and the Lions", "David and Goliath", "The Good Samaritan"], answer: "Daniel and the Lions", speak: "Lions and a man praying to God. Which Bible story is this?" },
+        { prompt: "Which Bible story does this picture show?", stage: "🐑  🔎  😊", choices: ["The Lost Sheep", "Creation", "Jonah and the Big Fish"], answer: "The Lost Sheep", speak: "A sheep was lost, searched for, and found. Which Bible story is this?" }
+      ]
+    },
+    {
+      id: "bible-questions",
+      title: "Bible Questions",
+      icon: "❓",
+      description: "Answer 5 simple questions based on Bible verses and stories.",
+      rounds: [
+        { prompt: "According to 1 John 4:8, what is God?", stage: "📖 God is love.", choices: ["Love", "A mountain", "A boat"], answer: "Love", speak: "According to First John chapter four, verse eight, what is God?" },
+        { prompt: "Who built the ark?", stage: "🌧️  🚢  🐘  🌈", choices: ["Noah", "David", "Daniel"], answer: "Noah", speak: "Who built the ark?" },
+        { prompt: "What did David use when he faced Goliath?", stage: "👦  🪨  🛡️", choices: ["A stone", "A crown", "A boat"], answer: "A stone", speak: "What did David use when he faced Goliath?" },
+        { prompt: "Who was in the lions' den?", stage: "🦁  🦁  🙏", choices: ["Daniel", "Jonah", "Noah"], answer: "Daniel", speak: "Who was in the lions den?" },
+        { prompt: "Ephesians 4:32 tells us to be what to one another?", stage: "📖 Be ye kind one to another.", choices: ["Kind", "Angry", "Rough"], answer: "Kind", speak: "Ephesians chapter four, verse thirty two tells us to be what to one another?" }
+      ]
     }
   ],
   number: [
@@ -180,6 +222,21 @@ const GAME_INSTRUCTIONS = {
     intro: "Match each picture to the letter that begins its name.",
     steps: ["Tap a picture to select it and hear its name.", "Tap the beginning letter that matches the picture.", "Correct matches stay locked. Match every picture to finish the round."],
     spoken: "Tap a picture to hear its name, then tap the letter that begins that word. Correct matches stay locked. Match every picture to finish the round."
+  },
+  "blessing:verse-time": {
+    intro: "Listen to a short Bible verse and choose the missing word.",
+    steps: ["Listen to the verse.", "Look at the missing word.", "Tap the word that completes the verse."],
+    spoken: "Listen to the Bible verse, then tap the word that completes it."
+  },
+  "blessing:story-garden": {
+    intro: "Look at the picture clues and find the Bible story.",
+    steps: ["Look at the picture-story scene.", "Listen to the clue.", "Tap the Bible story that matches."],
+    spoken: "Look at the picture clues, listen carefully, then choose the Bible story they show."
+  },
+  "blessing:bible-questions": {
+    intro: "Answer simple questions about Bible verses and stories.",
+    steps: ["Listen to the question.", "Look at the verse or picture clue.", "Tap the correct answer."],
+    spoken: "Listen to the Bible question, look at the clue, then tap the correct answer."
   },
   "number:count-stars": {
     intro: "Count the objects, then choose the matching number.",
@@ -1237,7 +1294,7 @@ function renderHome() {
       <div class="section-heading">
         <div>
           <h2 id="continue-heading">Choose an adventure</h2>
-          <p>Four worlds are ready to play.</p>
+          <p>Five worlds are ready to play.</p>
         </div>
         <button class="text-button" type="button" data-action="show-worlds">See all</button>
       </div>
@@ -1293,7 +1350,8 @@ function renderWorld(worldId) {
     word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges, including sound matching, word building, and selected-letter practice.",
     number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
     puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving.",
-    discovery: "Discovery Lab explores science, nature, senses, weather, animals, and cause-and-effect through simple child-friendly experiments and challenges."
+    discovery: "Discovery Lab explores science, nature, senses, weather, animals, and cause-and-effect through simple child-friendly experiments and challenges.",
+    blessing: "Blessing Garden introduces short Bible verses, illustrated story clues, and simple faith-based questions for young learners."
   };
 
   screen.innerHTML = `
