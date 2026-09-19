@@ -1,5 +1,27 @@
 # Adi's World Master Prompt Changelog
 
+## 1.11.1 — 2026-09-20
+
+Added:
+
+- Universal pre-game **How to Play** screen for every currently playable activity across Word Forest, Number Island, and Puzzle Mountain.
+- Each instruction screen provides short child-friendly steps plus spoken instructions before gameplay begins.
+- A large **Let's Play** button now explicitly starts the selected game.
+- Start the Word now shows the instruction screen before its letter/round setup flow.
+
+Fixed:
+
+- Removed the duplicate speaker icon shown on Start the Word letter choices. The existing shared letter-audio indicator remains, so each letter now shows only one speaker icon.
+
+Changed:
+
+- PWA cache version bumped to v24.
+
+Reason:
+
+- Young children should receive clear instructions before every game begins, and the Start the Word answer buttons should have one consistent audio indicator rather than duplicate speaker icons.
+
+
 ## 1.11.0 — 2026-09-20
 
 Added:

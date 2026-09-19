@@ -126,6 +126,74 @@ const activities = {
   ]
 };
 
+const GAME_INSTRUCTIONS = {
+  "word:letter-find": {
+    intro: "Listen for the letter Adi asks you to find.",
+    steps: ["Look at the target letter.", "Tap the matching letter from the choices.", "If you miss, try again until you find it."],
+    spoken: "Look at the target letter, then tap the same letter from the choices. If you miss, try again."
+  },
+  "word:first-sound": {
+    intro: "Listen to the picture word and find its beginning sound.",
+    steps: ["Look at the picture and word.", "Tap a letter to hear its sound.", "Confirm the letter that starts the word."],
+    spoken: "Look at the picture and word. Tap a letter to hear its sound, then confirm the letter that starts the word."
+  },
+  "word:picture-word": {
+    intro: "Match each picture to the correct written word.",
+    steps: ["Tap the picture if you want to hear its name.", "Tap a written word to hear it.", "Confirm the word that matches the picture."],
+    spoken: "Tap the picture to hear its name. Choose a written word, listen to it, then confirm the word that matches."
+  },
+  "word:build-word": {
+    intro: "Build the picture word one letter at a time.",
+    steps: ["Tap the picture to hear the word.", "Tap the letters in the correct order.", "Correct letters stay locked in place. Use reset only if you want to start the word again."],
+    spoken: "Tap the picture to hear the word, then tap the letters in order. Correct letters stay in place."
+  },
+  "word:rhyme-time": {
+    intro: "Find the word that rhymes with the picture word.",
+    steps: ["Tap the picture to hear the first word.", "Tap an answer to hear it.", "Confirm the word that sounds like it rhymes."],
+    spoken: "Listen to the picture word, then choose and confirm the word that rhymes with it."
+  },
+  "word:start-word": {
+    intro: "Choose a letter to practise, then complete words that begin with it.",
+    steps: ["First choose the letter you want to practise and the number of rounds.", "Look at the picture and the word with its first letter missing.", "Tap the correct beginning letter to complete the word."],
+    spoken: "First choose a letter and how many rounds to play. Then complete each picture word by tapping its missing beginning letter."
+  },
+  "number:count-stars": {
+    intro: "Count the objects, then choose the matching number.",
+    steps: ["Tap each object once to count it.", "Tap a number to hear your choice.", "Confirm the number that matches how many objects you counted."],
+    spoken: "Tap each object once to count. Then choose and confirm the number that matches."
+  },
+  "number:more-or-less": {
+    intro: "Compare two groups and find which side has more.",
+    steps: ["Look at the objects on the left and right.", "Tap Left or Right to hear your choice.", "Confirm the side with more objects."],
+    spoken: "Compare the left and right groups. Choose and confirm the side that has more objects."
+  },
+  "number:number-order": {
+    intro: "Look at the number pattern and find what comes next.",
+    steps: ["Read or listen to the number sequence.", "Tap a number to hear it.", "Confirm the number that should come next."],
+    spoken: "Look at the number sequence, then choose and confirm the number that comes next."
+  },
+  "number:count-match": {
+    intro: "Count, choose the numeral, then match its number word.",
+    steps: ["Tap each object once to count it.", "Choose and confirm the matching numeral.", "Then choose and confirm the written number word."],
+    spoken: "Count the objects, choose the matching number, then match that number to its written number word."
+  },
+  "puzzle:odd-one-out": {
+    intro: "Find the one item that is different from the others.",
+    steps: ["Look carefully at all the choices.", "Find the one that does not match.", "Tap it to answer."],
+    spoken: "Look carefully and tap the one item that is different from the others."
+  },
+  "puzzle:pattern": {
+    intro: "Work out the pattern and choose what comes next.",
+    steps: ["Look at the order of the pictures or shapes.", "Notice what repeats.", "Tap the choice that should come next."],
+    spoken: "Look at the pattern, notice what repeats, then tap what should come next."
+  },
+  "puzzle:shape-match": {
+    intro: "Find the shape Adi asks you to match.",
+    steps: ["Look at the target shape.", "Compare it with the choices.", "Tap the matching shape."],
+    spoken: "Look at the target shape, compare the choices, then tap the matching shape."
+  }
+};
+
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const LETTER_FIND_LEVELS = [
   { choiceCount: 3, label: "Warm-up", reward: "⭐" },
@@ -1100,6 +1168,42 @@ function renderWorld(worldId) {
 }
 
 
+function renderGameInstructions(worldId, activityId) {
+  const activity = (activities[worldId] || []).find((item) => item.id === activityId);
+  if (!activity) return renderWorld(worldId);
+
+  const instructions = GAME_INSTRUCTIONS[`${worldId}:${activityId}`] || {
+    intro: "Here is how to play this game.",
+    steps: ["Look carefully at the challenge.", "Tap the answer you think is correct.", "Keep trying until you complete the round."],
+    spoken: "Look carefully, choose your answer, and keep trying until you complete the round."
+  };
+
+  currentView = { type: "instructions", worldId, activityId };
+  setActiveNav("worlds");
+
+  screen.innerHTML = `
+    <div class="back-row"><button class="back-button" type="button" data-action="back-world" data-world-id="${worldId}">← Back</button></div>
+    <header class="activity-header instruction-header">
+      <span class="eyebrow">How to play</span>
+      <h1>${activity.icon} ${activity.title}</h1>
+    </header>
+
+    <section class="game-card instruction-card game-enter" aria-labelledby="instruction-title">
+      <div class="instruction-hero-icon" aria-hidden="true">${activity.icon}</div>
+      <h2 id="instruction-title">Before you start</h2>
+      <p class="instruction-intro">${instructions.intro}</p>
+      <ol class="instruction-steps">
+        ${instructions.steps.map((step) => `<li><span aria-hidden="true">✓</span><p>${step}</p></li>`).join("")}
+      </ol>
+      <div class="instruction-audio-note">🔊 Adi will also read the instructions aloud.</div>
+      <button class="primary-button instruction-start-button" type="button" data-start-instructed-game data-world-id="${worldId}" data-activity-id="${activityId}">▶ Let's Play</button>
+    </section>
+  `;
+
+  screen.focus({ preventScroll: true });
+  setTimeout(() => speak(`${activity.title}. ${instructions.spoken}`), 250);
+}
+
 function renderStartWordSetup() {
   currentView = { type: "start-word-setup", worldId: "word", activityId: "start-word" };
   setActiveNav("worlds");
@@ -1274,7 +1378,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         <div class="choice-grid alphabet-choice-grid choices-${round.choiceCount} start-word-choice-grid" aria-label="Beginning letter choices">
           ${round.choices.map((choice, choiceIndex) => `
             <button class="choice-button alphabet-choice letter-sound-choice start-word-choice" style="--choice-index:${choiceIndex}" type="button" data-start-word-choice="${escapeAttr(choice)}" aria-label="${escapeAttr(choice)}, tap to hear and try this beginning letter">
-              <span aria-hidden="true">${choice}</span><span class="letter-audio-icon" aria-hidden="true">🔊</span>
+              <span aria-hidden="true">${choice}</span>
             </button>
           `).join("")}
         </div>
@@ -2163,14 +2267,24 @@ document.addEventListener("click", (event) => {
 
   const activityButton = event.target.closest("[data-activity]");
   if (activityButton) {
-    if (activityButton.dataset.activity === "start-word") {
+    renderGameInstructions(activityButton.dataset.worldId, activityButton.dataset.activity);
+    return;
+  }
+
+  const instructedStartButton = event.target.closest("[data-start-instructed-game]");
+  if (instructedStartButton) {
+    const worldId = instructedStartButton.dataset.worldId;
+    const activityId = instructedStartButton.dataset.activityId;
+
+    if (activityId === "start-word") {
       startWordSetup = { letter: null, rounds: 10 };
       renderStartWordSetup();
       return;
     }
-    prepareActivityForPlay(activityButton.dataset.worldId, activityButton.dataset.activity);
-    startGameSession(activityButton.dataset.worldId, activityButton.dataset.activity);
-    renderGame(activityButton.dataset.worldId, activityButton.dataset.activity, 0);
+
+    prepareActivityForPlay(worldId, activityId);
+    startGameSession(worldId, activityId);
+    renderGame(worldId, activityId, 0);
     return;
   }
 
