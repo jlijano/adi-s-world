@@ -360,38 +360,38 @@ const BIBLE_STORIES = [
     reference: "Mark 10:13–16",
     summary: "Jesus welcomes children and shows that they are important to Him.",
     maxStars: 5,
-    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
     coverAlt: "Bible illustration of Jesus warmly welcoming children.",
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:JesuswithChildren.jpg",
-    credits: "O. A. Stemler, Jesus with Children, via Wikimedia Commons",
-    license: "Public Domain (United States)",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Jesus_Blessing_the_Children.jpg",
+    credits: "Bernard Plockhorst, Christ Blessing the Children, via Wikimedia Commons",
+    license: "Public Domain",
     scenes: [
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
         title: "Families Come to Jesus",
         text: "Families brought their children to Jesus. They wanted Jesus to bless them.",
         alt: "Bible illustration of families bringing children to Jesus."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
         title: "The Disciples Try to Stop Them",
         text: "Some disciples tried to send the families away. Jesus wanted the children to come to Him.",
         alt: "Bible illustration representing children coming to Jesus."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
         title: "Jesus Says Come",
         text: "Jesus said, \"Let the little children come to me.\" He welcomed them with love.",
         alt: "Bible illustration of Jesus inviting children to come close."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
         title: "Jesus Welcomes the Children",
         text: "The children came close to Jesus. He showed everyone that children are important to God.",
         alt: "Bible illustration of Jesus warmly welcoming children."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/JesuswithChildren.jpg",
+        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
         title: "Jesus Blesses Them",
         text: "Jesus took the children in His arms and blessed them. He showed them kindness and love.",
         alt: "Bible illustration of Jesus blessing children."
@@ -1455,6 +1455,24 @@ function renderStoryStars(stars, maxStars = 5) {
 
 function stopStorySpeech() {
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+}
+
+function afterCurrentStorySpeech(callback) {
+  if (typeof callback !== "function") return;
+  if (!soundEnabled || !("speechSynthesis" in window) || !window.speechSynthesis.speaking) {
+    callback();
+    return;
+  }
+
+  const waitUntilDone = () => {
+    if (window.speechSynthesis.speaking) {
+      window.setTimeout(waitUntilDone, 60);
+      return;
+    }
+    callback();
+  };
+
+  waitUntilDone();
 }
 
 function updateStarCount() {
@@ -3169,29 +3187,28 @@ document.addEventListener("click", (event) => {
 
   const bibleStoryLibraryButton = event.target.closest("[data-bible-story-library]");
   if (bibleStoryLibraryButton) {
-    stopStorySpeech();
-    renderBibleStoryLibrary();
+    afterCurrentStorySpeech(() => renderBibleStoryLibrary());
     return;
   }
 
   const bibleStoryPrevButton = event.target.closest("[data-bible-story-prev]");
   if (bibleStoryPrevButton && currentView.type === "bible-story") {
-    stopStorySpeech();
-    renderBibleStory(currentView.storyId, currentView.sceneIndex - 1);
+    const { storyId, sceneIndex } = currentView;
+    afterCurrentStorySpeech(() => renderBibleStory(storyId, sceneIndex - 1));
     return;
   }
 
   const bibleStoryNextButton = event.target.closest("[data-bible-story-next]");
   if (bibleStoryNextButton && currentView.type === "bible-story") {
-    stopStorySpeech();
-    renderBibleStory(currentView.storyId, currentView.sceneIndex + 1);
+    const { storyId, sceneIndex } = currentView;
+    afterCurrentStorySpeech(() => renderBibleStory(storyId, sceneIndex + 1));
     return;
   }
 
   const bibleStoryFinishButton = event.target.closest("[data-bible-story-finish]");
   if (bibleStoryFinishButton && currentView.type === "bible-story") {
-    stopStorySpeech();
-    renderBibleStoryCompletion(currentView.storyId);
+    const { storyId } = currentView;
+    afterCurrentStorySpeech(() => renderBibleStoryCompletion(storyId));
     return;
   }
 
