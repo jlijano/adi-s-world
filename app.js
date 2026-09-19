@@ -2267,14 +2267,24 @@ document.addEventListener("click", (event) => {
 
   const activityButton = event.target.closest("[data-activity]");
   if (activityButton) {
-    if (activityButton.dataset.activity === "start-word") {
+    renderGameInstructions(activityButton.dataset.worldId, activityButton.dataset.activity);
+    return;
+  }
+
+  const instructedStartButton = event.target.closest("[data-start-instructed-game]");
+  if (instructedStartButton) {
+    const worldId = instructedStartButton.dataset.worldId;
+    const activityId = instructedStartButton.dataset.activityId;
+
+    if (activityId === "start-word") {
       startWordSetup = { letter: null, rounds: 10 };
       renderStartWordSetup();
       return;
     }
-    prepareActivityForPlay(activityButton.dataset.worldId, activityButton.dataset.activity);
-    startGameSession(activityButton.dataset.worldId, activityButton.dataset.activity);
-    renderGame(activityButton.dataset.worldId, activityButton.dataset.activity, 0);
+
+    prepareActivityForPlay(worldId, activityId);
+    startGameSession(worldId, activityId);
+    renderGame(worldId, activityId, 0);
     return;
   }
 
