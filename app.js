@@ -64,6 +64,13 @@ const activities = {
       icon: "🎨",
       description: "Choose a letter and 5, 10, 15, or 20 rounds. Find every black-and-white picture that begins with that sound and bring it to colour.",
       rounds: []
+    },
+    {
+      id: "sound-match",
+      title: "Match the Sound",
+      icon: "🔗",
+      description: "10 rounds. Tap a picture, then match it to the letter that begins its name.",
+      rounds: []
     }
   ],
   number: [
@@ -168,6 +175,11 @@ const GAME_INSTRUCTIONS = {
     intro: "Choose one letter, then find every picture that begins with that sound.",
     steps: ["Choose the letter you want to practise and how many rounds to play.", "Each round starts with at least five black-and-white pictures.", "Tap the pictures that begin with your letter. Correct pictures turn colourful and stay locked."],
     spoken: "Choose one letter and how many rounds to play. Then tap every black and white picture that begins with your letter. Correct pictures turn colourful and stay locked."
+  },
+  "word:sound-match": {
+    intro: "Match each picture to the letter that begins its name.",
+    steps: ["Tap a picture to select it and hear its name.", "Tap the beginning letter that matches the picture.", "Correct matches stay locked. Match every picture to finish the round."],
+    spoken: "Tap a picture to hear its name, then tap the letter that begins that word. Correct matches stay locked. Match every picture to finish the round."
   },
   "number:count-stars": {
     intro: "Count the objects, then choose the matching number.",
