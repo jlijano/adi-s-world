@@ -311,6 +311,7 @@ let currentView = { type: "home" };
 let activeGame = null;
 let gameSession = null;
 let pendingPictureChoice = null;
+let pendingFirstSoundChoice = null;
 
 const screen = document.getElementById("screen");
 const starCount = document.getElementById("star-count");
@@ -641,6 +642,50 @@ function speakLetterSound(letter, button, onDone) {
   });
 }
 
+function closeFirstSoundConfirmation() {
+  const overlay = document.getElementById("first-sound-confirm-overlay");
+  overlay?.remove();
+  pendingFirstSoundChoice = null;
+}
+
+function showFirstSoundConfirmation(choice, button) {
+  if (!activeGame || activeGame.correctThisRound) return;
+
+  pendingFirstSoundChoice = { choice, button };
+
+  const openDialog = () => {
+    if (!pendingFirstSoundChoice || pendingFirstSoundChoice.choice !== choice) return;
+
+    document.getElementById("first-sound-confirm-overlay")?.remove();
+
+    const overlay = document.createElement("div");
+    overlay.id = "first-sound-confirm-overlay";
+    overlay.className = "picture-confirm-overlay";
+    overlay.innerHTML = `
+      <div class="picture-confirm-card" role="dialog" aria-modal="true" aria-labelledby="first-sound-confirm-title">
+        <span class="picture-confirm-heard">🔊 You chose</span>
+        <strong class="picture-confirm-word">${choice}</strong>
+        <h2 id="first-sound-confirm-title">Is this the answer you want?</h2>
+        <div class="picture-confirm-actions">
+          <button class="picture-confirm-button yes" type="button" data-first-sound-confirm="yes" aria-label="Yes, choose ${escapeAttr(choice)}">
+            <span class="picture-confirm-symbol" aria-hidden="true">✓</span>
+            <span>Yes</span>
+          </button>
+          <button class="picture-confirm-button no" type="button" data-first-sound-confirm="no" aria-label="No, choose another letter">
+            <span class="picture-confirm-symbol" aria-hidden="true">✕</span>
+            <span>No</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector("[data-first-sound-confirm='yes']")?.focus();
+  };
+
+  speakLetterSound(choice, button, openDialog);
+}
+
 function showPictureChoiceConfirmation(choice, button) {
   if (!activeGame || activeGame.correctThisRound) return;
 
@@ -868,6 +913,19 @@ document.addEventListener("click", (event) => {
     return;
   }
 
+  const firstSoundConfirmButton = event.target.closest("[data-first-sound-confirm]");
+  if (firstSoundConfirmButton) {
+    if (firstSoundConfirmButton.dataset.firstSoundConfirm === "yes" && pendingFirstSoundChoice) {
+      const { choice, button } = pendingFirstSoundChoice;
+      closeFirstSoundConfirmation();
+      handleChoice(choice, button);
+    } else {
+      closeFirstSoundConfirmation();
+      speak("Okay. Choose another letter.");
+    }
+    return;
+  }
+
   const confirmButton = event.target.closest("[data-picture-confirm]");
   if (confirmButton) {
     if (confirmButton.dataset.pictureConfirm === "yes" && pendingPictureChoice) {
@@ -900,11 +958,7 @@ document.addEventListener("click", (event) => {
     if (round?.pictureMatchRound) {
       showPictureChoiceConfirmation(choiceButton.dataset.choice, choiceButton);
     } else if (round?.letterSoundRound) {
-      const selectedLetter = choiceButton.dataset.choice;
-      speakLetterSound(selectedLetter, choiceButton, () => {
-        if (!activeGame || activeGame.correctThisRound) return;
-        handleChoice(selectedLetter, choiceButton);
-      });
+      showFirstSoundConfirmation(choiceButton.dataset.choice, choiceButton);
     } else {
       handleChoice(choiceButton.dataset.choice, choiceButton);
     }
