@@ -57,6 +57,13 @@ const activities = {
       icon: "🌱",
       description: "Choose a letter and 5, 10, 15, or 20 rounds. Add the beginning letter to complete each picture word.",
       rounds: []
+    },
+    {
+      id: "sound-hunt",
+      title: "Sound Hunt",
+      icon: "🎨",
+      description: "Choose a letter and 5, 10, 15, or 20 rounds. Find every black-and-white picture that begins with that sound and bring it to colour.",
+      rounds: []
     }
   ],
   number: [
@@ -156,6 +163,11 @@ const GAME_INSTRUCTIONS = {
     intro: "Choose a letter to practise, then complete words that begin with it.",
     steps: ["First choose the letter you want to practise and the number of rounds.", "Look at the picture and the word with its first letter missing.", "Tap the correct beginning letter to complete the word."],
     spoken: "First choose a letter and how many rounds to play. Then complete each picture word by tapping its missing beginning letter."
+  },
+  "word:sound-hunt": {
+    intro: "Choose one letter, then find every picture that begins with that sound.",
+    steps: ["Choose the letter you want to practise and how many rounds to play.", "Each round starts with at least five black-and-white pictures.", "Tap the pictures that begin with your letter. Correct pictures turn colourful and stay locked."],
+    spoken: "Choose one letter and how many rounds to play. Then tap every black and white picture that begins with your letter. Correct pictures turn colourful and stay locked."
   },
   "number:count-stars": {
     intro: "Count the objects, then choose the matching number.",
@@ -396,6 +408,77 @@ const START_WORD_POOL = {
 };
 
 const START_WORD_ROUND_OPTIONS = [5, 10, 15, 20];
+const SOUND_HUNT_ROUND_OPTIONS = [5, 10, 15, 20];
+
+function getSoundHuntChoiceCount(roundIndex, totalRounds) {
+  const progress = (roundIndex + 1) / totalRounds;
+  return progress <= 0.5 ? 5 : 6;
+}
+
+function getSoundHuntCorrectCount(roundIndex, totalRounds) {
+  const progress = (roundIndex + 1) / totalRounds;
+  return progress <= 0.45 ? 2 : 3;
+}
+
+function buildSoundHuntRounds(letter, totalRounds) {
+  const correctPool = START_WORD_POOL[letter] || [];
+  if (!correctPool.length) return [];
+
+  const distractorPool = Object.entries(START_WORD_POOL)
+    .filter(([candidateLetter]) => candidateLetter !== letter)
+    .flatMap(([candidateLetter, items]) => items.map((item) => ({ ...item, letter: candidateLetter })));
+
+  let previousSignature = "";
+
+  return Array.from({ length: totalRounds }, (_, roundIndex) => {
+    const choiceCount = getSoundHuntChoiceCount(roundIndex, totalRounds);
+    const requestedCorrectCount = Math.min(getSoundHuntCorrectCount(roundIndex, totalRounds), correctPool.length);
+
+    let selectedCorrect = [];
+    let attempts = 0;
+    do {
+      selectedCorrect = shuffle(correctPool).slice(0, requestedCorrectCount);
+      attempts += 1;
+    } while (
+      selectedCorrect.map((item) => item.word).sort().join("|") === previousSignature &&
+      attempts < 12 &&
+      correctPool.length > requestedCorrectCount
+    );
+
+    previousSignature = selectedCorrect.map((item) => item.word).sort().join("|");
+    const usedWords = new Set(selectedCorrect.map((item) => item.word.toLowerCase()));
+    const usedEmojis = new Set(selectedCorrect.map((item) => item.emoji));
+
+    const distractors = [];
+    for (const candidate of shuffle(distractorPool)) {
+      if (distractors.length >= choiceCount - selectedCorrect.length) break;
+      const wordKey = candidate.word.toLowerCase();
+      if (usedWords.has(wordKey) || usedEmojis.has(candidate.emoji)) continue;
+      distractors.push(candidate);
+      usedWords.add(wordKey);
+      usedEmojis.add(candidate.emoji);
+    }
+
+    const choices = shuffle([
+      ...selectedCorrect.map((item) => ({ ...item, isCorrect: true, letter })),
+      ...distractors.map((item) => ({ ...item, isCorrect: false }))
+    ]);
+
+    return {
+      prompt: `Find all the pictures that start with ${letter}.`,
+      stage: letter,
+      choices,
+      answer: letter,
+      speak: `Find all the pictures that start with ${letter}. ${LETTER_SOUND_CUES[letter] || letter}`,
+      difficultyLabel: roundIndex < Math.ceil(totalRounds * 0.5) ? "Sound Scout" : "Super Listener",
+      choiceCount: choices.length,
+      alphabetRound: true,
+      soundHuntRound: true,
+      targetLetter: letter,
+      correctCount: selectedCorrect.length
+    };
+  });
+}
 
 function getStartWordChoiceCount(roundIndex, totalRounds) {
   const progress = (roundIndex + 1) / totalRounds;
@@ -931,6 +1014,7 @@ let pendingNumberChoice = null;
 let pendingCompareChoice = null;
 let pendingCountMatchWordChoice = null;
 let startWordSetup = { letter: null, rounds: 10 };
+let soundHuntSetup = { letter: null, rounds: 10 };
 
 const screen = document.getElementById("screen");
 const starCount = document.getElementById("star-count");
@@ -1127,7 +1211,7 @@ function renderWorld(worldId) {
   setActiveNav("worlds");
   const worldActivities = activities[worldId] || [];
   const worldGameCopy = {
-    word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges. Start the Word lets you choose a letter and up to 20 rounds.",
+    word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges. Start the Word and Sound Hunt let you choose a letter and up to 20 rounds.",
     number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
     puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving."
   };
@@ -1270,6 +1354,74 @@ function startConfiguredStartWordGame() {
   renderGame("word", "start-word", 0);
 }
 
+function renderSoundHuntSetup() {
+  currentView = { type: "sound-hunt-setup", worldId: "word", activityId: "sound-hunt" };
+  setActiveNav("worlds");
+  const selectedLetter = soundHuntSetup.letter;
+  const selectedRounds = soundHuntSetup.rounds;
+
+  screen.innerHTML = `
+    <div class="back-row"><button class="back-button" type="button" data-action="back-world" data-world-id="word">← Back</button></div>
+    <header class="activity-header start-word-setup-header">
+      <span class="eyebrow">Word Forest</span>
+      <h1>🎨 Sound Hunt</h1>
+      <p class="helper-text">Choose one letter to practise, then choose how many rounds to play.</p>
+      <button class="sound-hunt-setup-audio" type="button" data-sound-hunt-setup-audio aria-label="Hear the Sound Hunt setup instruction">🔊 Listen</button>
+    </header>
+
+    <section class="game-card start-word-setup-card sound-hunt-setup-card game-enter" aria-labelledby="sound-hunt-letter-heading">
+      <div class="start-word-setup-section">
+        <div class="start-word-step-badge">1</div>
+        <div>
+          <h2 id="sound-hunt-letter-heading">Choose a letter</h2>
+          <p class="helper-text">Tap a letter to select it and hear its sound.</p>
+        </div>
+      </div>
+      <div class="start-word-letter-grid" aria-label="Choose one letter from A to Z">
+        ${ALPHABET.map((letter) => `
+          <button class="start-word-letter-button sound-hunt-letter-button ${selectedLetter === letter ? "is-selected" : ""}" type="button" data-sound-hunt-letter="${letter}" aria-pressed="${selectedLetter === letter}" aria-label="${letter}. ${selectedLetter === letter ? "Selected." : "Choose this letter."}">
+            <strong aria-hidden="true">${letter}</strong>
+            <span class="sound-hunt-lower" aria-hidden="true">${letter.toLowerCase()}</span>
+          </button>
+        `).join("")}
+      </div>
+
+      <div class="start-word-setup-section start-word-round-section">
+        <div class="start-word-step-badge">2</div>
+        <div>
+          <h2>How many rounds?</h2>
+          <p class="helper-text">Choose how long you want to practise.</p>
+        </div>
+      </div>
+      <div class="start-word-round-grid" aria-label="Choose number of rounds">
+        ${SOUND_HUNT_ROUND_OPTIONS.map((count) => `
+          <button class="start-word-round-button ${selectedRounds === count ? "is-selected" : ""}" type="button" data-sound-hunt-rounds="${count}" aria-pressed="${selectedRounds === count}">
+            <strong>${count}</strong><span>rounds</span>
+          </button>
+        `).join("")}
+      </div>
+
+      <div class="start-word-setup-summary" aria-live="polite">
+        ${selectedLetter
+          ? `Letter <strong>${selectedLetter} ${selectedLetter.toLowerCase()}</strong> • <strong>${selectedRounds}</strong> rounds`
+          : "Choose a letter to continue"}
+      </div>
+      <button class="primary-button start-word-start-button" type="button" data-sound-hunt-start ${selectedLetter ? "" : "disabled"} aria-label="${selectedLetter ? `Start Sound Hunt with letter ${selectedLetter} for ${selectedRounds} rounds` : "Choose a letter before starting Sound Hunt"}">▶ Start Sound Hunt</button>
+    </section>
+  `;
+
+  screen.focus({ preventScroll: true });
+}
+
+function startConfiguredSoundHuntGame() {
+  const activity = activities.word.find((item) => item.id === "sound-hunt");
+  if (!activity || !soundHuntSetup.letter) return;
+  activity.rounds = buildSoundHuntRounds(soundHuntSetup.letter, soundHuntSetup.rounds);
+  if (!activity.rounds.length) return;
+  startGameSession("word", "sound-hunt");
+  renderGame("word", "sound-hunt", 0);
+}
+
 function renderGame(worldId, activityId, roundIndex = 0) {
   const activity = (activities[worldId] || []).find((item) => item.id === activityId);
   if (!activity) return renderWorld(worldId);
@@ -1282,7 +1434,8 @@ function renderGame(worldId, activityId, roundIndex = 0) {
     buildIndex: 0,
     countedIds: new Set(),
     answerLocked: false,
-    countMatchNumberCorrect: false
+    countMatchNumberCorrect: false,
+    soundHuntFoundIndexes: new Set()
   };
   currentView = { type: "game", worldId, activityId };
   setActiveNav("worlds");
@@ -1319,7 +1472,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         <p>${round.prompt}</p>
       </div>
 
-      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound || round.startWordRound ? "picture-match-stage" : ""}">
+      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound || round.startWordRound ? "picture-match-stage" : ""} ${round.soundHuntRound ? "sound-hunt-target-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
         ${round.countMatchRound
           ? `<div class="counting-stage-content count-match-stage-content">
@@ -1362,6 +1515,11 @@ function renderGame(worldId, activityId, roundIndex = 0) {
                </div>
                <button class="count-reset-button" type="button" data-count-reset>↺ Count again</button>
              </div>`
+          : round.soundHuntRound
+          ? `<div class="sound-hunt-target" aria-label="Target letter ${escapeAttr(round.targetLetter)}">
+               <strong>${round.targetLetter}</strong><span>${round.targetLetter.toLowerCase()}</span>
+               <small>🔊 ${round.targetLetter} sound</small>
+             </div>`
           : round.pictureMatchRound || round.buildWordRound || round.startWordRound
           ? `<button class="picture-speak-button" type="button" data-speak-word="${escapeAttr(round.spokenWord)}" aria-label="Hear ${escapeAttr(round.spokenWord)}">
                <span class="picture-speak-emoji" aria-hidden="true">${round.stage}</span>
@@ -1374,7 +1532,21 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-right" aria-hidden="true">⭐</span>' : ""}
       </div>
 
-      ${round.startWordRound ? `
+      ${round.soundHuntRound ? `
+        <div class="sound-hunt-grid choices-${round.choiceCount}" aria-label="Black and white picture choices">
+          ${round.choices.map((choice, choiceIndex) => `
+            <article class="sound-hunt-choice-card" data-sound-hunt-card="${choiceIndex}">
+              <button class="sound-hunt-picture-button" type="button" data-sound-hunt-choice="${choiceIndex}" aria-label="${escapeAttr(choice.word)}. Tap if it begins with ${escapeAttr(round.targetLetter)}.">
+                <span class="sound-hunt-emoji" aria-hidden="true">${choice.emoji}</span>
+                <span class="sound-hunt-check" aria-hidden="true">✓</span>
+              </button>
+              <button class="sound-hunt-audio-button" type="button" data-sound-hunt-audio="${choiceIndex}" aria-label="Hear ${escapeAttr(choice.word)}">
+                <span aria-hidden="true">🔊</span><span>Hear name</span>
+              </button>
+            </article>
+          `).join("")}
+        </div>
+      ` : round.startWordRound ? `
         <div class="choice-grid alphabet-choice-grid choices-${round.choiceCount} start-word-choice-grid" aria-label="Beginning letter choices">
           ${round.choices.map((choice, choiceIndex) => `
             <button class="choice-button alphabet-choice letter-sound-choice start-word-choice" style="--choice-index:${choiceIndex}" type="button" data-start-word-choice="${escapeAttr(choice)}" aria-label="${escapeAttr(choice)}, tap to hear and try this beginning letter">
@@ -1967,6 +2139,63 @@ function resetBuildWordRound() {
 }
 
 
+function handleSoundHuntChoice(choiceIndex, button) {
+  if (!activeGame || activeGame.correctThisRound || button.disabled) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId].find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.soundHuntRound) return;
+
+  const choice = round.choices[choiceIndex];
+  if (!choice) return;
+
+  const feedback = document.getElementById("feedback");
+  const card = button.closest("[data-sound-hunt-card]");
+
+  if (!choice.isCorrect) {
+    updateSessionScore(-1);
+    refreshVisibleSessionScore();
+    button.classList.add("is-try-again");
+    feedback.className = "feedback try";
+    feedback.textContent = `${choice.word}. Good try! Listen for ${round.targetLetter}.`;
+    speak(`${choice.word}. Good try. Listen for ${round.targetLetter}. ${LETTER_SOUND_CUES[round.targetLetter] || round.targetLetter}`);
+    setTimeout(() => button.classList.remove("is-try-again"), 600);
+    return;
+  }
+
+  activeGame.soundHuntFoundIndexes.add(choiceIndex);
+  button.disabled = true;
+  button.setAttribute("aria-disabled", "true");
+  button.setAttribute("aria-label", `${choice.word}. Correct and coloured.`);
+  card?.classList.add("is-found");
+  feedback.className = "feedback good";
+
+  const foundCount = activeGame.soundHuntFoundIndexes.size;
+  const remaining = Math.max(0, round.correctCount - foundCount);
+
+  if (remaining > 0) {
+    feedback.textContent = `${choice.word}! Great listening. Find ${remaining} more.`;
+    speak(`${choice.word}. ${choice.word} starts with ${round.targetLetter}. Great listening.`);
+    return;
+  }
+
+  activeGame.correctThisRound = true;
+  updateSessionScore(1);
+  refreshVisibleSessionScore();
+  document.querySelector(".game-card")?.classList.add("round-success");
+  document.querySelectorAll("[data-sound-hunt-choice]").forEach((control) => {
+    control.disabled = true;
+  });
+  feedback.textContent = `Brilliant! You found all the ${round.targetLetter} pictures! ⭐`;
+  speak(`Brilliant! You found all the pictures that start with ${round.targetLetter}!`);
+
+  setTimeout(() => {
+    const nextRound = roundIndex + 1;
+    if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+    else completeActivity(worldId, activityId);
+  }, 1200);
+}
+
 function handleStartWordChoice(choice, button) {
   if (!activeGame || activeGame.correctThisRound || activeGame.answerLocked) return;
   const { worldId, activityId, roundIndex } = activeGame;
@@ -2282,6 +2511,12 @@ document.addEventListener("click", (event) => {
       return;
     }
 
+    if (activityId === "sound-hunt") {
+      soundHuntSetup = { letter: null, rounds: 10 };
+      renderSoundHuntSetup();
+      return;
+    }
+
     prepareActivityForPlay(worldId, activityId);
     startGameSession(worldId, activityId);
     renderGame(worldId, activityId, 0);
@@ -2307,6 +2542,35 @@ document.addEventListener("click", (event) => {
   const startWordStartButton = event.target.closest("[data-start-word-start]");
   if (startWordStartButton) {
     startConfiguredStartWordGame();
+    return;
+  }
+
+  const soundHuntSetupAudioButton = event.target.closest("[data-sound-hunt-setup-audio]");
+  if (soundHuntSetupAudioButton) {
+    speak("Choose the letter you want to practise. Then choose how many rounds to play.");
+    return;
+  }
+
+  const soundHuntLetterButton = event.target.closest("[data-sound-hunt-letter]");
+  if (soundHuntLetterButton) {
+    soundHuntSetup.letter = soundHuntLetterButton.dataset.soundHuntLetter;
+    renderSoundHuntSetup();
+    const selectedButton = document.querySelector(`[data-sound-hunt-letter="${soundHuntSetup.letter}"]`);
+    speakLetterSound(soundHuntSetup.letter, selectedButton);
+    return;
+  }
+
+  const soundHuntRoundsButton = event.target.closest("[data-sound-hunt-rounds]");
+  if (soundHuntRoundsButton) {
+    const rounds = Number(soundHuntRoundsButton.dataset.soundHuntRounds);
+    if (SOUND_HUNT_ROUND_OPTIONS.includes(rounds)) soundHuntSetup.rounds = rounds;
+    renderSoundHuntSetup();
+    return;
+  }
+
+  const soundHuntStartButton = event.target.closest("[data-sound-hunt-start]");
+  if (soundHuntStartButton) {
+    startConfiguredSoundHuntGame();
     return;
   }
 
@@ -2403,6 +2667,29 @@ document.addEventListener("click", (event) => {
       closePictureChoiceConfirmation();
       speak("Okay. Choose another word.");
     }
+    return;
+  }
+
+  const soundHuntAudioButton = event.target.closest("[data-sound-hunt-audio]");
+  if (soundHuntAudioButton) {
+    const index = Number(soundHuntAudioButton.dataset.soundHuntAudio);
+    const activity = activeGame
+      ? (activities[activeGame.worldId] || []).find((item) => item.id === activeGame.activityId)
+      : null;
+    const round = activity && activeGame ? activity.rounds[activeGame.roundIndex] : null;
+    const choice = round?.soundHuntRound ? round.choices[index] : null;
+    if (choice) {
+      soundHuntAudioButton.classList.remove("is-speaking");
+      void soundHuntAudioButton.offsetWidth;
+      soundHuntAudioButton.classList.add("is-speaking");
+      speak(choice.word, () => soundHuntAudioButton.classList.remove("is-speaking"));
+    }
+    return;
+  }
+
+  const soundHuntChoiceButton = event.target.closest("[data-sound-hunt-choice]");
+  if (soundHuntChoiceButton) {
+    handleSoundHuntChoice(Number(soundHuntChoiceButton.dataset.soundHuntChoice), soundHuntChoiceButton);
     return;
   }
 
