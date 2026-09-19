@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.4.0  
+**Version:** 1.5.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -722,6 +722,7 @@ Current canonical project foundation:
 - Voice standard: use a neutral British English (en-GB) voice when available, with clear enunciation, natural pitch, and a slightly slower child-friendly speaking pace; gracefully fall back to the best available English voice when the device lacks a British voice
 - Find the Letter standard: support the full A–Z alphabet, randomize targets and answer positions every time the activity is opened, and use 10 total rounds per play session. Rounds 1–3 use 5 visible choices, rounds 4–6 use 7 choices, and rounds 7–10 use 10 choices; use 10 distinct target letters per session when possible; keep the interaction playful with gentle motion, clear progress, and positive feedback
 - Star scoring standard: calculate stars from actual game performance. Each correct answer adds 1 session star and each incorrect attempt removes 1 session star. Session stars must never go below 0. When the activity is completed, add the final session-star total to the child's persistent star total. Store the best score for each activity for display, while still allowing new stars to be earned on later completed sessions.
+- First Sound standard: cover all letters A–Z using age-appropriate example words and visual cues, randomize the 10 target letters and answer positions every time the activity is opened, and use the same 10-round difficulty progression as Find the Letter: rounds 1–3 show 5 letter choices, rounds 4–6 show 7, and rounds 7–10 show 10. Apply the same performance-based star scoring and playful transitions.
 - Master prompt governance: semantic versioning + changelog + Git history
 
 This file is the operating contract for future Adi's World work until explicitly revised.
