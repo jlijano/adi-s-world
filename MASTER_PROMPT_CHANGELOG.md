@@ -309,3 +309,28 @@ Changed:
 Reason:
 
 - Children should be able to build a word progressively and keep the correct parts they have already learned, while wrong taps remain temporary and non-destructive.
+
+
+## 1.8.0 — 2026-09-19
+
+Added:
+
+- Permanent Number Island standard for Count the Stars.
+- Ten randomized Count the Stars rounds per session with progressive quantity ranges from 1 through 10.
+- Varied familiar counting objects instead of stars only.
+- Tap-to-count interaction where each object can be counted only once, remains visibly marked, and speaks the next counting number.
+- No-penalty “Count again” reset for the current round.
+- Progressive 3/4/5 numeric answer choices with unique, nearby distractors and randomized answer positions.
+- Spoken number preview followed by the existing child-friendly Yes/No confirmation before scoring.
+- Wrong confirmed answers keep the child on the same round, subtract one session star without going below zero, and encourage recounting instead of revealing the answer.
+- Phone/tablet touch styling, short animations, accessible counted states, and reduced-motion behavior.
+
+Changed:
+
+- Count the Stars no longer uses three fixed questions.
+- Count the Stars now uses the project’s performance-based session-star and persistent best-score systems for a complete 10-round activity.
+- PWA cache version bumped so existing devices receive the updated Number Island game.
+
+Reason:
+
+- Number Island needs a replayable, developmentally appropriate counting-and-number-recognition activity that teaches one-to-one counting through direct touch interaction rather than worksheet-style selection.
