@@ -1580,6 +1580,8 @@ function renderGame(worldId, activityId, roundIndex = 0) {
                </div>
                <button class="count-reset-button" type="button" data-count-reset>↺ Count again</button>
              </div>`
+          : round.soundMatchRound
+          ? `<div class="sound-match-stage-note" aria-label="Tap a picture first, then tap its beginning letter"><span aria-hidden="true">👆</span><strong>Picture first</strong><span aria-hidden="true">→</span><strong>Letter next</strong></div>`
           : round.soundHuntRound
           ? `<div class="sound-hunt-target" aria-label="Target letter ${escapeAttr(round.targetLetter)}"><strong>${round.targetLetter}</strong><span>${round.targetLetter.toLowerCase()}</span><small>🔊 ${round.targetLetter} sound</small></div>`
           : round.pictureMatchRound || round.buildWordRound || round.startWordRound
@@ -1594,7 +1596,28 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-right" aria-hidden="true">⭐</span>' : ""}
       </div>
 
-      ${round.soundHuntRound ? `
+      ${round.soundMatchRound ? `
+        <div class="sound-match-board">
+          <div class="sound-match-picture-grid" aria-label="Picture choices. Tap one picture first.">
+            ${round.soundMatchPictures.map((picture, pictureIndex) => `
+              <article class="sound-match-picture-card" data-sound-match-picture-card="${pictureIndex}">
+                <button class="sound-match-picture-button" type="button" data-sound-match-picture="${pictureIndex}" aria-pressed="false" aria-label="${escapeAttr(picture.word)}. Tap to select this picture.">
+                  <span class="sound-match-emoji" aria-hidden="true">${picture.emoji}</span>
+                  <span class="sound-match-word">${picture.word}</span>
+                  <span class="sound-match-linked-letter" data-sound-match-linked-letter="${pictureIndex}" aria-hidden="true"></span>
+                </button>
+              </article>`).join("")}
+          </div>
+          <div class="sound-match-divider" aria-hidden="true">Match to</div>
+          <div class="sound-match-letter-grid" aria-label="Beginning letter choices">
+            ${round.soundMatchLetters.map((letter) => `
+              <button class="sound-match-letter-button letter-sound-choice" type="button" data-sound-match-letter="${letter}" aria-label="Letter ${letter}. Tap to match the selected picture.">
+                <strong>${letter}</strong>
+              </button>`).join("")}
+          </div>
+          <button class="sound-match-reset-button" type="button" data-sound-match-reset>↺ Reset this round</button>
+        </div>
+      ` : round.soundHuntRound ? `
         <div class="sound-hunt-grid choices-${round.choiceCount}" aria-label="Black and white picture choices">
           ${round.choices.map((choice, choiceIndex) => `
             <article class="sound-hunt-choice-card" data-sound-hunt-card="${choiceIndex}">
