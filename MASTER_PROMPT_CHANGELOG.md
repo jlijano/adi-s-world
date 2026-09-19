@@ -20,3 +20,26 @@ Established:
 - Self-improving master-prompt protocol.
 - Semantic versioning rules for future updates.
 - Requirement that durable project decisions be recorded in the repository.
+
+
+## 1.1.0 — 2026-09-19
+
+Added:
+
+- First playable mobile-first MVP implementation.
+- Responsive phone/tablet interface and bottom navigation.
+- Word Forest, Number Island, and Puzzle Mountain with three activities each.
+- Three rounds per activity with gentle retry feedback.
+- Local star/progress tracking with localStorage.
+- Optional browser speech instructions.
+- PWA manifest, offline app-shell service worker, and app icon.
+- README with local run instructions and MVP architecture notes.
+
+Changed:
+
+- Current baseline now records the implemented mobile-first PWA MVP.
+- Phone-first and tablet-second UI priority is now explicit.
+
+Reason:
+
+- The project moved from planning into a working product baseline that future features should build on rather than replace.

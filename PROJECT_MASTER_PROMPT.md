@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -716,6 +716,8 @@ Current canonical project foundation:
 - Primary device target: Android phone/tablet
 - Core worlds: 10
 - Initial MVP direction: World Map + Word Forest + Number Island + Puzzle Mountain
+- Implemented MVP baseline: mobile-first responsive PWA shell with Word Forest, Number Island, and Puzzle Mountain playable activities; local star/progress tracking; optional browser speech; offline app-shell caching
+- Primary UI targets: Android phones first, tablets second, with responsive desktop compatibility
 - Master prompt governance: semantic versioning + changelog + Git history
 
 This file is the operating contract for future Adi's World work until explicitly revised.

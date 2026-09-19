@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Adi's World app icon">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#6C5CE7"/>
+      <stop offset="0.6" stop-color="#8E7DF4"/>
+      <stop offset="1" stop-color="#FF7BBD"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <circle cx="256" cy="282" r="148" fill="#5BC5FF" opacity=".95"/>
+  <path d="M116 298c58-72 119-99 173-73 44 21 80 12 109-15 11 29 15 61 11 94-11 92-90 162-184 162-94 0-173-71-183-164 28 9 52 8 74-4z" fill="#68D391"/>
+  <circle cx="256" cy="194" r="88" fill="#F6C9A8"/>
+  <circle cx="182" cy="164" r="46" fill="#5A3628"/>
+  <circle cx="330" cy="164" r="46" fill="#5A3628"/>
+  <path d="M180 156c17-58 136-75 153 5-23-13-46-20-74-20-29 0-54 5-79 15z" fill="#5A3628"/>
+  <circle cx="224" cy="194" r="9" fill="#2D2A3E"/>
+  <circle cx="288" cy="194" r="9" fill="#2D2A3E"/>
+  <path d="M228 225c19 18 38 18 57 0" fill="none" stroke="#C86878" stroke-width="8" stroke-linecap="round"/>
+  <path d="M149 128l28-23 18 32-29 16zM363 128l-28-23-18 32 29 16z" fill="#FF7BBD"/>
+  <text x="256" y="446" text-anchor="middle" font-family="Arial Rounded MT Bold, Arial, sans-serif" font-size="54" font-weight="700" fill="#fff">ADI</text>
+</svg>

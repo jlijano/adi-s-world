@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#6C5CE7">
+  <meta name="description" content="Adi's World — playful learning adventures for young children.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>Adi's World</title>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar" aria-label="Adi's World header">
+      <button class="brand-button" data-action="go-home" aria-label="Go to Adi's World home">
+        <span class="brand-mark" aria-hidden="true">🌎</span>
+        <span class="brand-copy">
+          <strong>Adi's World</strong>
+          <small>Play • Learn • Explore</small>
+        </span>
+      </button>
+      <div class="topbar-actions">
+        <div class="star-pill" aria-label="Stars earned">
+          <span aria-hidden="true">⭐</span>
+          <strong id="star-count">0</strong>
+        </div>
+        <button id="sound-button" class="icon-button" type="button" aria-label="Toggle sound">🔊</button>
+      </div>
+    </header>
+
+    <main id="screen" class="screen" tabindex="-1"></main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-button is-active" data-nav="home" type="button">
+        <span aria-hidden="true">🏠</span>
+        <span>Home</span>
+      </button>
+      <button class="nav-button" data-nav="worlds" type="button">
+        <span aria-hidden="true">🗺️</span>
+        <span>Worlds</span>
+      </button>
+      <button class="nav-button" data-nav="progress" type="button">
+        <span aria-hidden="true">⭐</span>
+        <span>Progress</span>
+      </button>
+    </nav>
+  </div>
+
+  <div id="celebration" class="celebration" aria-hidden="true">
+    <div class="celebration-card">
+      <div class="celebration-stars" aria-hidden="true">⭐ ✨ ⭐</div>
+      <h2>Great job!</h2>
+      <p>You helped Adi learn something new.</p>
+    </div>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
