@@ -1600,6 +1600,8 @@ button:focus-visible {
 }
 
 .build-letter-button.is-locked-choice {
+  pointer-events: none;
+  cursor: default;
   opacity: .18;
   transform: scale(.9);
 }
