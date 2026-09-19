@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.12.0  
+**Version:** 1.13.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -803,3 +803,30 @@ Requirements:
 - For games with their own setup flow, such as Start the Word, the instruction screen appears first, followed by that setup screen.
 - Instruction screens must be mobile-first, accessible, readable without audio, and compatible with reduced-motion preferences.
 - Existing scoring, progress, randomization, and game logic must not begin until the child starts the game from the instruction screen.
+
+
+---
+
+## Match the Sound — Permanent Word Forest Standard
+
+**Game:** Match the Sound  
+**World:** Word Forest  
+**Source learning mechanic:** Image-based worksheet where several pictures are connected to the beginning-sound letters of their names.
+
+Permanent behavior:
+
+- The universal How to Play screen appears before gameplay begins.
+- A session uses 10 randomized rounds.
+- Rounds 1–3 use 3 pictures and 3 beginning-letter targets.
+- Rounds 4–6 use 4 pictures and 4 letter targets.
+- Rounds 7–10 use 5 pictures and 4 letter targets, allowing more than one picture to share a target letter.
+- The child taps a picture first; the app speaks the picture name and keeps the picture visibly selected.
+- The child then taps the beginning letter that matches the selected picture.
+- A correct match stays locked, shows the matched letter on the picture card, and cannot be scored twice.
+- A wrong match subtracts one session star without going below zero, keeps all previous correct matches intact, and gives calm retry feedback without revealing the answer.
+- One completed round awards +1 session star only after every picture in that round is matched correctly.
+- A round reset clears that round's matches without affecting score and does not restart the session.
+- Picture sets, letter targets, picture positions, and letter positions are randomized while avoiding duplicate picture words and duplicate letter buttons within a round.
+- The interaction is tap-to-match rather than freehand line drawing or precision drag, while preserving the worksheet's connect-picture-to-beginning-sound learning objective.
+- The layout is Android-phone-first, expands naturally on tablets, uses large touch targets and ARIA labels, and respects reduced-motion preferences.
+- The game reuses existing British-English speech, star scoring, persistent progress, best-score tracking, localStorage, world navigation, and PWA infrastructure.
