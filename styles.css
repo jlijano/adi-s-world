@@ -2261,11 +2261,6 @@ button:focus-visible {
   position: relative;
 }
 
-.start-word-choice .letter-audio-icon {
-  display: block;
-  margin-top: 2px;
-  font-size: 12px;
-}
 
 @media (min-width: 640px) {
   .start-word-letter-grid {
@@ -2290,5 +2285,99 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .start-word-display.is-complete {
     animation: none;
+  }
+}
+
+
+/* Universal pre-game instructions */
+.instruction-header {
+  margin-bottom: 14px;
+}
+
+.instruction-card {
+  padding: 20px;
+  text-align: center;
+}
+
+.instruction-hero-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+  background: #f4f2ff;
+  font-size: 42px;
+}
+
+.instruction-card h2 {
+  margin: 0 0 8px;
+}
+
+.instruction-intro {
+  margin: 0 auto 18px;
+  max-width: 520px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.instruction-steps {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  text-align: left;
+}
+
+.instruction-steps li {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 16px;
+  background: #fafaff;
+  box-shadow: inset 0 0 0 1px rgba(90,84,144,.07);
+}
+
+.instruction-steps li > span {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #eafff2;
+  color: #1f7a4d;
+  font-weight: 900;
+}
+
+.instruction-steps p {
+  margin: 3px 0 0;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.instruction-audio-note {
+  margin-top: 14px;
+  color: #6558c9;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.instruction-start-button {
+  width: 100%;
+  margin-top: 16px;
+  background: #6c5ce7;
+  color: #fff;
+}
+
+@media (min-width: 640px) {
+  .instruction-card {
+    padding: 24px;
+  }
+
+  .instruction-steps {
+    grid-template-columns: 1fr;
   }
 }
