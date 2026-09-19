@@ -20,7 +20,7 @@ const activities = {
       id: "letter-find",
       title: "Find the Letter",
       icon: "🔤",
-      description: "Find letters from A to Z as the challenge grows.",
+      description: "10 randomized rounds using letters from A to Z.",
       rounds: []
     },
     {
@@ -121,7 +121,14 @@ const activities = {
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const LETTER_FIND_LEVELS = [
   { choiceCount: 5, label: "Warm-up", reward: "⭐" },
+  { choiceCount: 5, label: "Warm-up", reward: "⭐" },
+  { choiceCount: 5, label: "Warm-up", reward: "⭐" },
   { choiceCount: 7, label: "Explorer", reward: "⭐ ⭐" },
+  { choiceCount: 7, label: "Explorer", reward: "⭐ ⭐" },
+  { choiceCount: 7, label: "Explorer", reward: "⭐ ⭐" },
+  { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" },
+  { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" },
+  { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" },
   { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" }
 ];
 
@@ -356,14 +363,14 @@ function renderWorld(worldId) {
     <section class="world-hero ${worldId}">
       <span class="eyebrow">Learning world</span>
       <h1>${world.icon} ${world.name}</h1>
-      <p>${world.note}. Pick a short game and help Adi complete three little challenges.</p>
+      <p>${world.note}. Pick a short game and help Adi complete fun learning challenges.</p>
     </section>
 
     <section class="section" aria-labelledby="activity-heading">
       <div class="section-heading">
         <div>
           <h2 id="activity-heading">Pick a game</h2>
-          <p>Each game has 3 quick rounds.</p>
+          <p>Games use short, child-friendly rounds. Find the Letter now has 10.</p>
         </div>
       </div>
       <div class="activity-list">
