@@ -1824,3 +1824,149 @@ button:focus-visible {
     transform: none !important;
   }
 }
+
+
+/* Number Island — Which Has More? and What Comes Next? */
+.compare-stage {
+  width: min(100%, 620px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: 10px;
+}
+
+.compare-group {
+  min-height: 146px;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.88);
+  border: 2px solid rgba(42,143,227,.10);
+  box-shadow: 0 8px 20px rgba(31,102,158,.08);
+}
+
+.compare-side-label {
+  justify-self: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #eef7ff;
+  color: #236da7;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.compare-objects {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 5px;
+  min-height: 86px;
+}
+
+.compare-objects span {
+  font-size: clamp(28px, 8vw, 44px);
+  line-height: 1;
+}
+
+.compare-divider {
+  display: grid;
+  place-items: center;
+  color: rgba(42,143,227,.38);
+  font-size: 42px;
+  font-weight: 900;
+}
+
+.compare-choice-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.compare-choice {
+  min-height: 86px;
+  font-size: clamp(22px, 6vw, 30px);
+  background: linear-gradient(180deg, #ffffff, #f2f9ff);
+  border: 2px solid rgba(42,143,227,.10);
+}
+
+.number-sequence-stage {
+  width: min(100%, 560px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sequence-number,
+.sequence-blank {
+  width: clamp(58px, 17vw, 86px);
+  min-height: clamp(66px, 18vw, 92px);
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #293552;
+  font-size: clamp(34px, 10vw, 50px);
+  font-weight: 900;
+  box-shadow: 0 8px 20px rgba(57,43,128,.08);
+}
+
+.sequence-blank {
+  border: 3px dashed rgba(108,92,231,.30);
+  background: #f7f5ff;
+  color: #6558c9;
+}
+
+@media (max-width: 390px) {
+  .compare-stage {
+    gap: 6px;
+  }
+
+  .compare-group {
+    min-height: 130px;
+    padding: 9px;
+  }
+
+  .compare-objects {
+    gap: 3px;
+    min-height: 76px;
+  }
+
+  .compare-objects span {
+    font-size: clamp(25px, 7.5vw, 36px);
+  }
+
+  .compare-divider {
+    font-size: 32px;
+  }
+
+  .compare-choice {
+    min-height: 76px;
+  }
+}
+
+@media (min-width: 700px) {
+  .compare-group {
+    min-height: 180px;
+    padding: 18px;
+  }
+
+  .compare-objects span {
+    font-size: 48px;
+  }
+
+  .compare-choice {
+    min-height: 96px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compare-choice,
+  .sequence-number,
+  .sequence-blank {
+    animation: none !important;
+    transition: none !important;
+  }
+}
