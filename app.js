@@ -674,7 +674,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
   const activity = (activities[worldId] || []).find((item) => item.id === activityId);
   if (!activity) return renderWorld(worldId);
 
-  activeGame = { worldId, activityId, roundIndex, correctThisRound: false };
+  activeGame = { worldId, activityId, roundIndex, correctThisRound: false, buildIndex: 0 };
   currentView = { type: "game", worldId, activityId };
   setActiveNav("worlds");
 
@@ -710,27 +710,44 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         <p>${round.prompt}</p>
       </div>
 
-      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound ? "picture-match-stage" : ""}">
+      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound ? "picture-match-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
-        ${round.pictureMatchRound
+        ${round.pictureMatchRound || round.buildWordRound
           ? `<button class="picture-speak-button" type="button" data-speak-word="${escapeAttr(round.spokenWord)}" aria-label="Hear ${escapeAttr(round.spokenWord)}">
                <span class="picture-speak-emoji" aria-hidden="true">${round.stage}</span>
                <span class="picture-speak-hint">🔊 Tap to hear</span>
              </button>`
           : `<div class="${isNumber ? "big-number" : isSequence ? "sequence" : "big-symbol"}">${round.stage}</div>`}
         ${round.phonicsRound ? `<div class="phonics-word" aria-label="Spelling: ${round.spelling}">${round.spelling}</div>` : ""}
+        ${round.rhymeRound ? `<div class="phonics-word rhyme-source-word" aria-label="Rhyme word: ${round.displayWord}">${round.displayWord}</div>` : ""}
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-right" aria-hidden="true">⭐</span>' : ""}
       </div>
 
-      <div class="choice-grid ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
-        ${round.choices.map((choice, choiceIndex) => `
-          <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""} ${round.pictureMatchRound ? "picture-word-choice" : ""} ${round.letterSoundRound ? "letter-sound-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" ${round.letterSoundRound ? `aria-label="${escapeAttr(choice)}, tap to hear the letter sound"` : ""}>
-            ${choice.length > 2 && !containsEmojiOnly(choice)
-              ? `<span class="${round.pictureMatchRound ? "picture-choice-word" : "choice-label"}">${choice}</span>`
-              : `<span aria-hidden="true">${choice}</span>`}
-          </button>
-        `).join("")}
-      </div>
+      ${round.buildWordRound ? `
+        <div class="build-word-area">
+          <div class="word-slots" aria-label="Word has ${round.answer.length} letters">
+            ${round.answer.split("").map((letter, slotIndex) => `<span class="word-slot" data-build-slot="${slotIndex}" aria-hidden="true">_</span>`).join("")}
+          </div>
+          <div class="build-letter-tray" aria-label="Letter choices">
+            ${round.letters.map((tile, choiceIndex) => `
+              <button class="build-letter-button" type="button" data-build-letter="${escapeAttr(tile.letter)}" data-build-tile="${tile.tileId}" style="--choice-index:${choiceIndex}" aria-label="${escapeAttr(tile.letter)}, tap to add this letter">
+                ${tile.letter}<span aria-hidden="true" class="build-letter-speaker">🔊</span>
+              </button>
+            `).join("")}
+          </div>
+          <button class="build-reset-button" type="button" data-build-reset>↺ Start this word again</button>
+        </div>
+      ` : `
+        <div class="choice-grid ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
+          ${round.choices.map((choice, choiceIndex) => `
+            <button class="choice-button ${isAlphabetRound ? "alphabet-choice" : ""} ${round.pictureMatchRound ? "picture-word-choice" : ""} ${round.letterSoundRound ? "letter-sound-choice" : ""}" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" ${round.letterSoundRound ? `aria-label="${escapeAttr(choice)}, tap to hear the letter sound"` : ""}>
+              ${choice.length > 2 && !containsEmojiOnly(choice)
+                ? `<span class="${round.pictureMatchRound ? "picture-choice-word" : "choice-label"}">${choice}</span>`
+                : `<span aria-hidden="true">${choice}</span>`}
+            </button>
+          `).join("")}
+        </div>
+      `}
 
       <div id="feedback" class="feedback" aria-live="assertive"></div>
     </section>
