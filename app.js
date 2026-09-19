@@ -116,16 +116,16 @@ const activities = {
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const LETTER_FIND_LEVELS = [
-  { choiceCount: 5, label: "Warm-up", reward: "⭐" },
-  { choiceCount: 5, label: "Warm-up", reward: "⭐" },
-  { choiceCount: 5, label: "Warm-up", reward: "⭐" },
-  { choiceCount: 7, label: "Explorer", reward: "⭐ ⭐" },
-  { choiceCount: 7, label: "Explorer", reward: "⭐ ⭐" },
-  { choiceCount: 7, label: "Explorer", reward: "⭐ ⭐" },
-  { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" },
-  { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" },
-  { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" },
-  { choiceCount: 10, label: "Super Search", reward: "⭐ ⭐ ⭐" }
+  { choiceCount: 3, label: "Warm-up", reward: "⭐" },
+  { choiceCount: 3, label: "Warm-up", reward: "⭐" },
+  { choiceCount: 3, label: "Warm-up", reward: "⭐" },
+  { choiceCount: 4, label: "Explorer", reward: "⭐ ⭐" },
+  { choiceCount: 4, label: "Explorer", reward: "⭐ ⭐" },
+  { choiceCount: 4, label: "Explorer", reward: "⭐ ⭐" },
+  { choiceCount: 5, label: "Super Search", reward: "⭐ ⭐ ⭐" },
+  { choiceCount: 5, label: "Super Search", reward: "⭐ ⭐ ⭐" },
+  { choiceCount: 5, label: "Super Search", reward: "⭐ ⭐ ⭐" },
+  { choiceCount: 5, label: "Super Search", reward: "⭐ ⭐ ⭐" }
 ];
 
 const FIRST_SOUND_WORDS = [
@@ -207,7 +207,8 @@ function buildFirstSoundRounds() {
       rewardLabel: level.reward,
       alphabetRound: true,
       phonicsRound: true,
-      word: target.word
+      word: target.word,
+      spelling: target.word
     };
   });
 }
@@ -509,9 +510,10 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         <p>${round.prompt}</p>
       </div>
 
-      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""}">
+      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
         <div class="${isNumber ? "big-number" : isSequence ? "sequence" : "big-symbol"}">${round.stage}</div>
+        ${round.phonicsRound ? `<div class="phonics-word" aria-label="Spelling: ${round.spelling}">${round.spelling}</div>` : ""}
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-right" aria-hidden="true">⭐</span>' : ""}
       </div>
 

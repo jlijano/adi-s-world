@@ -169,3 +169,18 @@ Changed:
 Reason:
 
 - First Sound should be as replayable and complete as Find the Letter while reinforcing beginning sounds across the full alphabet.
+
+
+## 1.5.1 — 2026-09-19
+
+Changed:
+
+- Reduced alphabet-game choice counts to a minimum of 3 and maximum of 5.
+- New progression for both Find the Letter and First Sound: rounds 1–3 use 3 choices, rounds 4–6 use 4, and rounds 7–10 use 5.
+- First Sound now displays the spelling of the pictured word directly beneath the visual cue, such as 🍎 with “Apple”.
+- Added responsive styling for 4-choice and 5-choice layouts on phones and tablets.
+- Bumped the PWA cache version so devices receive the updated choice limits and phonics spelling display.
+
+Reason:
+
+- The activities should remain visually manageable for ages 3–5 while still increasing difficulty gradually, and First Sound should connect the image, spoken prompt, printed word, and starting letter more clearly.

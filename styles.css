@@ -1161,3 +1161,40 @@ button:focus-visible {
     transform: none !important;
   }
 }
+
+
+.phonics-stage {
+  gap: 10px;
+}
+
+.phonics-word {
+  position: relative;
+  z-index: 2;
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.9);
+  color: #293552;
+  font-size: clamp(20px, 6vw, 30px);
+  font-weight: 900;
+  letter-spacing: .02em;
+  box-shadow: 0 8px 18px rgba(70,55,140,.08);
+}
+
+.alphabet-choice-grid.choices-4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.alphabet-choice-grid.choices-5 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (min-width: 700px) {
+  .alphabet-choice-grid.choices-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .alphabet-choice-grid.choices-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
