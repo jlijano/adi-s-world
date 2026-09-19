@@ -1,11 +1,12 @@
-const CACHE_NAME = "adis-world-v2";
+const CACHE_NAME = "adis-world-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
   "./manifest.json",
-  "./assets/icons/icon.svg"
+  "./assets/icons/icon.svg",
+  "./assets/icons/adis-world-splash.jpg"
 ];
 
 self.addEventListener("install", (event) => {
