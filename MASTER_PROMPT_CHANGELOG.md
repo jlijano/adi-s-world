@@ -248,3 +248,23 @@ Changed:
 Reason:
 
 - The activity should train phonemic familiarity as well as visual letter recognition and word-picture association.
+
+
+## 1.6.3 — 2026-09-19
+
+Added:
+
+- First Sound now uses the same child-friendly Yes/No confirmation step as Picture Match.
+- Tapping a letter first plays its letter-sound cue, then opens the confirmation dialog.
+- The dialog shows the selected letter with large Yes/check and No/X controls.
+- Choosing No returns to the letter choices with no score change.
+- Choosing Yes submits the letter to the existing correct/wrong scoring logic.
+
+Changed:
+
+- First Sound scoring now occurs only after the child confirms the selected letter.
+- PWA cache version bumped so devices receive the new confirmation flow.
+
+Reason:
+
+- The confirmation step gives the child time to hear the phonics cue, visually review the selected letter, and intentionally commit to an answer before scoring.
