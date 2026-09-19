@@ -57,12 +57,8 @@ const activities = {
       id: "count-stars",
       title: "Count the Stars",
       icon: "⭐",
-      description: "Count objects and choose the number.",
-      rounds: [
-        { prompt: "How many stars do you see?", stage: "⭐ ⭐ ⭐", choices: ["2", "3", "4"], answer: "3", speak: "How many stars do you see?" },
-        { prompt: "How many apples do you see?", stage: "🍎 🍎 🍎 🍎", choices: ["3", "4", "5"], answer: "4", speak: "How many apples do you see?" },
-        { prompt: "How many ducks do you see?", stage: "🦆 🦆 🦆 🦆 🦆", choices: ["4", "5", "6"], answer: "5", speak: "How many ducks do you see?" }
-      ]
+      description: "Tap each object to count, then choose and confirm the matching number.",
+      rounds: []
     },
     {
       id: "more-or-less",
@@ -215,6 +211,23 @@ const RHYME_ITEMS = [
 
 const RHYME_DISTRACTORS = ["Dog","Sun","Fish","Moon","Pig","Ball","Nest","Lion","Van","Apple","Tiger","Rabbit","Queen","Star","Boat","Cake","Mouse","Duck","Bee","Fox"];
 
+const COUNTING_OBJECTS = [
+  { emoji: "⭐", singular: "star", plural: "stars" },
+  { emoji: "🍎", singular: "apple", plural: "apples" },
+  { emoji: "🦆", singular: "duck", plural: "ducks" },
+  { emoji: "🐟", singular: "fish", plural: "fish" },
+  { emoji: "🌼", singular: "flower", plural: "flowers" },
+  { emoji: "🎈", singular: "balloon", plural: "balloons" },
+  { emoji: "🐞", singular: "ladybug", plural: "ladybugs" },
+  { emoji: "🍓", singular: "strawberry", plural: "strawberries" },
+  { emoji: "🐸", singular: "frog", plural: "frogs" },
+  { emoji: "🚗", singular: "car", plural: "cars" },
+  { emoji: "🦋", singular: "butterfly", plural: "butterflies" },
+  { emoji: "🍪", singular: "cookie", plural: "cookies" }
+];
+
+const NUMBER_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+
 const FIRST_SOUND_WORDS = [
   { letter: "A", word: "Apple", emoji: "🍎" },
   { letter: "B", word: "Ball", emoji: "⚽" },
@@ -251,6 +264,65 @@ function shuffle(items) {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+}
+
+function buildCountingChoices(answer, choiceCount) {
+  const nearOffsets = shuffle([1, -1, 2, -2, 3, -3, 4, -4, 5, -5]);
+  const distractors = [];
+
+  nearOffsets.forEach((offset) => {
+    const candidate = answer + offset;
+    if (candidate >= 1 && candidate <= 10 && candidate !== answer && !distractors.includes(candidate)) {
+      distractors.push(candidate);
+    }
+  });
+
+  if (distractors.length < choiceCount - 1) {
+    shuffle(Array.from({ length: 10 }, (_, index) => index + 1))
+      .filter((candidate) => candidate !== answer && !distractors.includes(candidate))
+      .forEach((candidate) => distractors.push(candidate));
+  }
+
+  return shuffle([answer, ...distractors.slice(0, choiceCount - 1)]).map(String);
+}
+
+function buildCountStarsRounds() {
+  const usedCombinations = new Set();
+  let previousObject = null;
+
+  return LETTER_FIND_LEVELS.map((level, index) => {
+    const range = index < 3 ? [1, 4] : index < 6 ? [3, 7] : [5, 10];
+    let object;
+    let quantity;
+    let key;
+    let attempts = 0;
+
+    do {
+      const objectPool = COUNTING_OBJECTS.filter((item) => item.emoji !== previousObject);
+      object = shuffle(objectPool.length ? objectPool : COUNTING_OBJECTS)[0];
+      quantity = range[0] + Math.floor(Math.random() * (range[1] - range[0] + 1));
+      key = object.emoji + ":" + quantity;
+      attempts += 1;
+    } while (usedCombinations.has(key) && attempts < 30);
+
+    usedCombinations.add(key);
+    previousObject = object.emoji;
+
+    return {
+      prompt: `How many ${object.plural} do you see? Tap each one to count.`,
+      stage: object.emoji,
+      choices: buildCountingChoices(quantity, level.choiceCount),
+      answer: String(quantity),
+      speak: `How many ${object.plural} do you see? Tap each one to count.`,
+      difficultyLabel: level.label,
+      choiceCount: level.choiceCount,
+      countingRound: true,
+      quantity,
+      objectEmoji: object.emoji,
+      objectSingular: object.singular,
+      objectPlural: object.plural
+    };
+  });
 }
 
 function buildLetterFindRounds() {
@@ -408,6 +480,10 @@ function prepareActivityForPlay(worldId, activityId) {
   if (activityId === "rhyme-time") {
     activity.rounds = buildRhymeRounds();
   }
+
+  if (activityId === "count-stars") {
+    activity.rounds = buildCountStarsRounds();
+  }
 }
 
 function startGameSession(worldId, activityId) {
@@ -439,6 +515,7 @@ let activeGame = null;
 let gameSession = null;
 let pendingPictureChoice = null;
 let pendingFirstSoundChoice = null;
+let pendingNumberChoice = null;
 
 const screen = document.getElementById("screen");
 const starCount = document.getElementById("star-count");
@@ -674,7 +751,15 @@ function renderGame(worldId, activityId, roundIndex = 0) {
   const activity = (activities[worldId] || []).find((item) => item.id === activityId);
   if (!activity) return renderWorld(worldId);
 
-  activeGame = { worldId, activityId, roundIndex, correctThisRound: false, buildIndex: 0 };
+  activeGame = {
+    worldId,
+    activityId,
+    roundIndex,
+    correctThisRound: false,
+    buildIndex: 0,
+    countedIds: new Set(),
+    answerLocked: false
+  };
   currentView = { type: "game", worldId, activityId };
   setActiveNav("worlds");
 
@@ -712,7 +797,19 @@ function renderGame(worldId, activityId, roundIndex = 0) {
 
       <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound ? "picture-match-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
-        ${round.pictureMatchRound || round.buildWordRound
+        ${round.countingRound
+          ? `<div class="counting-stage-content">
+               <div class="counting-object-grid count-${round.quantity}" aria-label="${round.quantity} ${escapeAttr(round.objectPlural)}. Tap each object once to count it.">
+                 ${Array.from({ length: round.quantity }, (_, objectIndex) => `
+                   <button class="counting-object" type="button" data-count-object="${objectIndex}" aria-pressed="false" aria-label="${escapeAttr(round.objectSingular)} ${objectIndex + 1}, not counted" style="--object-index:${objectIndex}">
+                     <span class="counting-object-emoji" aria-hidden="true">${round.objectEmoji}</span>
+                     <span class="counting-check" aria-hidden="true">✓</span>
+                   </button>
+                 `).join("")}
+               </div>
+               <button class="count-reset-button" type="button" data-count-reset>↺ Count again</button>
+             </div>`
+          : round.pictureMatchRound || round.buildWordRound
           ? `<button class="picture-speak-button" type="button" data-speak-word="${escapeAttr(round.spokenWord)}" aria-label="Hear ${escapeAttr(round.spokenWord)}">
                <span class="picture-speak-emoji" aria-hidden="true">${round.stage}</span>
                <span class="picture-speak-hint">🔊 Tap to hear</span>
@@ -736,6 +833,14 @@ function renderGame(worldId, activityId, roundIndex = 0) {
             `).join("")}
           </div>
           <button class="build-reset-button" type="button" data-build-reset>↺ Start this word again</button>
+        </div>
+      ` : round.countingRound ? `
+        <div class="choice-grid count-number-grid choices-${round.choiceCount}" aria-label="Number choices">
+          ${round.choices.map((choice, choiceIndex) => `
+            <button class="choice-button count-number-choice" style="--choice-index:${choiceIndex}" type="button" data-number-choice="${choice}" aria-label="${NUMBER_WORDS[Number(choice)] || choice}. Tap to hear and choose this number.">
+              <span aria-hidden="true">${choice}</span>
+            </button>
+          `).join("")}
         </div>
       ` : `
         <div class="choice-grid ${isAlphabetRound ? `alphabet-choice-grid choices-${round.choiceCount}` : ""}">
@@ -769,6 +874,153 @@ function closePictureChoiceConfirmation() {
   const overlay = document.getElementById("picture-confirm-overlay");
   overlay?.remove();
   pendingPictureChoice = null;
+}
+
+function numberWord(value) {
+  return NUMBER_WORDS[Number(value)] || String(value);
+}
+
+function refreshVisibleSessionScore() {
+  const scoreValue = document.querySelector(".session-score strong");
+  const scoreDetail = document.querySelector(".session-score small");
+  if (scoreValue) scoreValue.textContent = String(gameSession?.score ?? 0);
+  if (scoreDetail && gameSession) {
+    scoreDetail.textContent = `${gameSession.correctAnswers} correct • ${gameSession.mistakes} mistakes`;
+  }
+}
+
+function closeNumberChoiceConfirmation() {
+  document.getElementById("number-confirm-overlay")?.remove();
+  pendingNumberChoice = null;
+  document.querySelectorAll("[data-number-choice]").forEach((button) => {
+    if (!activeGame?.correctThisRound) button.disabled = false;
+  });
+}
+
+function showNumberChoiceConfirmation(choice, button) {
+  if (!activeGame || activeGame.correctThisRound || activeGame.answerLocked || pendingNumberChoice) return;
+
+  pendingNumberChoice = { choice, button };
+  document.querySelectorAll("[data-number-choice]").forEach((numberButton) => {
+    numberButton.disabled = true;
+  });
+
+  const openDialog = () => {
+    if (!pendingNumberChoice || pendingNumberChoice.choice !== choice || activeGame?.correctThisRound) return;
+
+    document.getElementById("number-confirm-overlay")?.remove();
+    const overlay = document.createElement("div");
+    overlay.id = "number-confirm-overlay";
+    overlay.className = "picture-confirm-overlay";
+    overlay.innerHTML = `
+      <div class="picture-confirm-card" role="dialog" aria-modal="true" aria-labelledby="number-confirm-title">
+        <span class="picture-confirm-heard">🔊 You chose</span>
+        <strong class="picture-confirm-word">${choice}</strong>
+        <h2 id="number-confirm-title">Is this the answer you want?</h2>
+        <div class="picture-confirm-actions">
+          <button class="picture-confirm-button yes" type="button" data-number-confirm="yes" aria-label="Yes, choose ${escapeAttr(choice)}">
+            <span class="picture-confirm-symbol" aria-hidden="true">✓</span>
+            <span>Yes</span>
+          </button>
+          <button class="picture-confirm-button no" type="button" data-number-confirm="no" aria-label="No, choose another number">
+            <span class="picture-confirm-symbol" aria-hidden="true">✕</span>
+            <span>No</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector("[data-number-confirm='yes']")?.focus();
+  };
+
+  speak(numberWord(choice), openDialog);
+}
+
+function resetCountStarsRound(announce = true) {
+  if (!activeGame) return;
+
+  activeGame.countedIds = new Set();
+  document.querySelectorAll("[data-count-object]").forEach((button, index) => {
+    button.disabled = false;
+    button.classList.remove("is-counted");
+    button.setAttribute("aria-pressed", "false");
+    const activity = (activities[activeGame.worldId] || []).find((item) => item.id === activeGame.activityId);
+    const round = activity?.rounds?.[activeGame.roundIndex];
+    if (round?.countingRound) {
+      button.setAttribute("aria-label", `${round.objectSingular} ${index + 1}, not counted`);
+    }
+  });
+
+  const feedback = document.getElementById("feedback");
+  if (feedback && announce) {
+    feedback.className = "feedback";
+    feedback.textContent = "";
+  }
+
+  if (announce) speak("Let's count again.");
+}
+
+function handleCountObject(button) {
+  if (!activeGame || activeGame.correctThisRound) return;
+  const activity = (activities[activeGame.worldId] || []).find((item) => item.id === activeGame.activityId);
+  const round = activity?.rounds?.[activeGame.roundIndex];
+  if (!round?.countingRound) return;
+
+  const objectId = Number(button.dataset.countObject);
+  if (activeGame.countedIds.has(objectId)) return;
+
+  activeGame.countedIds.add(objectId);
+  const count = activeGame.countedIds.size;
+  button.disabled = true;
+  button.classList.add("is-counted");
+  button.setAttribute("aria-pressed", "true");
+  button.setAttribute("aria-label", `${round.objectSingular} ${objectId + 1}, counted as ${numberWord(count)}`);
+  speak(numberWord(count));
+}
+
+function handleCountStarsChoice(choice, button) {
+  if (!activeGame || activeGame.correctThisRound || activeGame.answerLocked) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = activities[worldId].find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.countingRound) return;
+
+  activeGame.answerLocked = true;
+  const feedback = document.getElementById("feedback");
+
+  if (choice === round.answer) {
+    activeGame.correctThisRound = true;
+    updateSessionScore(1);
+    refreshVisibleSessionScore();
+    button.classList.add("is-correct");
+    feedback.className = "feedback good";
+    feedback.textContent = `Great counting! ${numberWord(choice)}! ⭐`;
+    document.querySelector(".game-card")?.classList.add("round-success");
+    document.querySelectorAll("[data-number-choice], [data-count-object], [data-count-reset]").forEach((control) => {
+      control.disabled = true;
+    });
+    speak(`Brilliant! There are ${numberWord(choice).toLowerCase()}!`);
+
+    setTimeout(() => {
+      const nextRound = roundIndex + 1;
+      if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+      else completeActivity(worldId, activityId);
+    }, 1100);
+    return;
+  }
+
+  updateSessionScore(-1);
+  refreshVisibleSessionScore();
+  button.classList.add("is-try-again");
+  feedback.className = "feedback try";
+  feedback.textContent = "Almost! Let's count them again.";
+  speak("Almost! Let's count them again.");
+  setTimeout(() => {
+    button.classList.remove("is-try-again");
+    activeGame.answerLocked = false;
+    resetCountStarsRound(false);
+  }, 650);
 }
 
 function speakLetterSound(letter, button, onDone) {
@@ -990,9 +1242,15 @@ function completeActivity(worldId, activityId) {
   celebration.classList.add("is-visible");
   celebration.setAttribute("aria-hidden", "false");
 
+  const isCountingGame = activityId === "count-stars";
   const resultMessage = sessionStars === 1
-    ? "Great job! You earned one star!"
-    : `Great job! You earned ${sessionStars} stars!`;
+    ? `${isCountingGame ? "Great counting!" : "Great job!"} You earned one star!`
+    : `${isCountingGame ? "Great counting!" : "Great job!"} You earned ${sessionStars} stars!`;
+
+  const celebrationHeading = celebration.querySelector("h2");
+  if (celebrationHeading) {
+    celebrationHeading.textContent = isCountingGame ? "Great counting!" : "Great job!";
+  }
 
   const celebrationText = celebration.querySelector("p");
   if (celebrationText) {
@@ -1127,6 +1385,37 @@ document.addEventListener("click", (event) => {
     prepareActivityForPlay(activityButton.dataset.worldId, activityButton.dataset.activity);
     startGameSession(activityButton.dataset.worldId, activityButton.dataset.activity);
     renderGame(activityButton.dataset.worldId, activityButton.dataset.activity, 0);
+    return;
+  }
+
+  const numberConfirmButton = event.target.closest("[data-number-confirm]");
+  if (numberConfirmButton) {
+    if (numberConfirmButton.dataset.numberConfirm === "yes" && pendingNumberChoice) {
+      const { choice, button } = pendingNumberChoice;
+      closeNumberChoiceConfirmation();
+      handleCountStarsChoice(choice, button);
+    } else {
+      closeNumberChoiceConfirmation();
+      speak("Okay. Choose another number.");
+    }
+    return;
+  }
+
+  const countResetButton = event.target.closest("[data-count-reset]");
+  if (countResetButton) {
+    resetCountStarsRound(true);
+    return;
+  }
+
+  const countObjectButton = event.target.closest("[data-count-object]");
+  if (countObjectButton) {
+    handleCountObject(countObjectButton);
+    return;
+  }
+
+  const numberChoiceButton = event.target.closest("[data-number-choice]");
+  if (numberChoiceButton) {
+    showNumberChoiceConfirmation(numberChoiceButton.dataset.numberChoice, numberChoiceButton);
     return;
   }
 
