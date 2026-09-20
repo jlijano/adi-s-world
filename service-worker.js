@@ -1,7 +1,13 @@
-const CACHE_NAME = "adis-world-v36";
+const CACHE_NAME = "adis-world-v37";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./styles.css?v=37",
+  "./drawing-garden.css?v=37",
+  "./outfit-check.css?v=37",
+  "./app.js?v=37",
+  "./drawing-garden.js?v=37",
+  "./outfit-check.js?v=37",
   "./styles.css",
   "./drawing-garden.css",
   "./outfit-check.css",
@@ -68,4 +74,9 @@ self.addEventListener("fetch", (event) => {
   const isCoreRequest = isSameOrigin && (event.request.mode === "navigate" || CORE_PATHS.has(url.pathname));
 
   event.respondWith(isCoreRequest ? networkFirst(event.request) : cacheFirst(event.request));
+});
+
+
+self.addEventListener("message", (event) => {
+  if (event.data?.type === "SKIP_WAITING") self.skipWaiting();
 });
