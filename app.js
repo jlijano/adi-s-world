@@ -84,6 +84,15 @@ const activities = {
       rounds: []
     }
   ],
+  discovery: [
+    {
+      id: "plant-food-sort",
+      title: "Plant Food Sort",
+      icon: "🌱",
+      description: "10 randomized rounds. Listen to each plant food and decide whether we usually call it a fruit or a vegetable.",
+      rounds: []
+    }
+  ],
   blessing: [
     {
       id: "verse-time",
@@ -451,6 +460,11 @@ const GAME_INSTRUCTIONS = {
     steps: ["Tap a picture to select it and hear its name.", "Tap the beginning letter that matches the picture.", "Correct matches stay locked. Match every picture to finish the round."],
     spoken: "Tap a picture to hear its name, then tap the letter that begins that word. Correct matches stay locked. Match every picture to finish the round."
   },
+  "discovery:plant-food-sort": {
+    intro: "Plants give us lots of food. Sort each food into the group we usually call fruit or vegetable.",
+    steps: ["Look at the food picture and name.", "Tap the food to hear its name.", "Choose Fruit or Vegetable. If you miss, try again."],
+    spoken: "Plants give us lots of food. Look at each food, tap it to hear its name, then choose whether we usually call it a fruit or a vegetable. If you miss, try again."
+  },
   "blessing:verse-time": {
     intro: "Listen to a short Bible verse and choose the missing word.",
     steps: ["Listen to the verse.", "Look at the missing word.", "Tap the word that completes the verse."],
@@ -516,6 +530,66 @@ const LETTER_FIND_LEVELS = [
   { choiceCount: 5, label: "Super Search", reward: "⭐ ⭐ ⭐" },
   { choiceCount: 5, label: "Super Search", reward: "⭐ ⭐ ⭐" }
 ];
+
+const PLANT_FOOD_POOL = [
+  { name: "Mango", spokenName: "mango", emoji: "🥭", category: "Fruit", difficulty: 1 },
+  { name: "Banana", spokenName: "banana", emoji: "🍌", category: "Fruit", difficulty: 1 },
+  { name: "Pineapple", spokenName: "pineapple", emoji: "🍍", category: "Fruit", difficulty: 1 },
+  { name: "Carrot", spokenName: "carrot", emoji: "🥕", category: "Vegetable", difficulty: 1 },
+  { name: "Broccoli", spokenName: "broccoli", emoji: "🥦", category: "Vegetable", difficulty: 1 },
+  { name: "Papaya", spokenName: "papaya", emoji: "🍈", category: "Fruit", difficulty: 2 },
+  { name: "Guava", spokenName: "guava", emoji: "🍈", category: "Fruit", difficulty: 2 },
+  { name: "Coconut", spokenName: "coconut", emoji: "🥥", category: "Fruit", difficulty: 2 },
+  { name: "Eggplant", spokenName: "eggplant", emoji: "🍆", category: "Vegetable", difficulty: 2, culinaryGroup: true },
+  { name: "Squash", spokenName: "squash", emoji: "🎃", category: "Vegetable", difficulty: 2, culinaryGroup: true },
+  { name: "Cucumber", spokenName: "cucumber", emoji: "🥒", category: "Vegetable", difficulty: 2, culinaryGroup: true },
+  { name: "Chico", spokenName: "chico", emoji: "🍐", category: "Fruit", difficulty: 3 },
+  { name: "Calamansi", spokenName: "calamansi", emoji: "🍊", category: "Fruit", difficulty: 3 },
+  { name: "Lanzones", spokenName: "lanzones", emoji: "🍇", category: "Fruit", difficulty: 3 },
+  { name: "Jackfruit", spokenName: "jackfruit", emoji: "🍈", category: "Fruit", difficulty: 3 },
+  { name: "Ampalaya", spokenName: "ampalaya, or bitter melon", emoji: "🥒", category: "Vegetable", difficulty: 3, culinaryGroup: true },
+  { name: "Malunggay", spokenName: "malunggay", emoji: "🌿", category: "Vegetable", difficulty: 3 },
+  { name: "Patola", spokenName: "patola", emoji: "🥒", category: "Vegetable", difficulty: 3, culinaryGroup: true },
+  { name: "Kangkong", spokenName: "kangkong", emoji: "🥬", category: "Vegetable", difficulty: 3 },
+  { name: "String Beans", spokenName: "string beans", emoji: "🫛", category: "Vegetable", difficulty: 3, culinaryGroup: true }
+];
+
+function buildPlantFoodRounds() {
+  const choose = (difficulty, category, count) =>
+    shuffle(PLANT_FOOD_POOL.filter((food) => food.difficulty === difficulty && food.category === category)).slice(0, count);
+
+  const foods = [
+    ...shuffle([...choose(1, "Fruit", 2), ...choose(1, "Vegetable", 1)]),
+    ...shuffle([...choose(2, "Fruit", 2), ...choose(2, "Vegetable", 2)]),
+    ...shuffle([...choose(3, "Fruit", 1), ...choose(3, "Vegetable", 2)])
+  ];
+
+  return foods.map((food, index) => {
+    const difficultyLabel = index < 3 ? "Warm-up" : index < 7 ? "Explorer" : "Super Search";
+    const correctFeedback = food.culinaryGroup
+      ? `Yes! We usually call ${food.name} a vegetable when we eat or cook it. ⭐`
+      : `Yes! ${food.name} is a ${food.category.toLowerCase()}! ⭐`;
+    const correctSpeak = food.culinaryGroup
+      ? `Yes. We usually call ${food.spokenName} a vegetable when we eat or cook it.`
+      : `Yes! ${food.spokenName} is a ${food.category.toLowerCase()}!`;
+
+    return {
+      prompt: `Is ${food.name} a fruit or a vegetable?`,
+      stage: food.emoji,
+      choices: shuffle(["Fruit", "Vegetable"]),
+      answer: food.category,
+      speak: `Is ${food.spokenName} a fruit or a vegetable?`,
+      difficultyLabel,
+      choiceCount: 2,
+      plantFoodRound: true,
+      foodName: food.name,
+      foodSpokenName: food.spokenName,
+      foodEmoji: food.emoji,
+      correctFeedback,
+      correctSpeak
+    };
+  });
+}
 
 const LETTER_SOUND_CUES = {
   A: "A. ah. ah.",
@@ -1328,6 +1402,10 @@ function prepareActivityForPlay(worldId, activityId) {
     activity.rounds = buildSoundMatchRounds();
   }
 
+  if (activityId === "plant-food-sort") {
+    activity.rounds = buildPlantFoodRounds();
+  }
+
   if (activityId === "count-stars") {
     activity.rounds = buildCountStarsRounds();
   }
@@ -1379,6 +1457,9 @@ let pendingCompareChoice = null;
 let pendingCountMatchWordChoice = null;
 let startWordSetup = { letter: null, rounds: 10 };
 let soundHuntSetup = { letter: null, rounds: 10 };
+let instructionSpeechTimer = null;
+let instructionSpeechText = "";
+let instructionTransitionPending = false;
 
 const screen = document.getElementById("screen");
 const starCount = document.getElementById("star-count");
@@ -1568,6 +1649,46 @@ function speak(text, onDone) {
   window.speechSynthesis.speak(utterance);
 }
 
+function runAfterInstructionSpeech(callback) {
+  if (typeof callback !== "function" || instructionTransitionPending) return;
+
+  instructionTransitionPending = true;
+  const finish = () => {
+    instructionTransitionPending = false;
+    instructionSpeechText = "";
+    callback();
+  };
+
+  if (!soundEnabled || !("speechSynthesis" in window)) {
+    if (instructionSpeechTimer) {
+      window.clearTimeout(instructionSpeechTimer);
+      instructionSpeechTimer = null;
+    }
+    finish();
+    return;
+  }
+
+  if (instructionSpeechTimer) {
+    window.clearTimeout(instructionSpeechTimer);
+    instructionSpeechTimer = null;
+    const text = instructionSpeechText;
+    if (text) {
+      speak(text, finish);
+      return;
+    }
+  }
+
+  const waitUntilDone = () => {
+    if (window.speechSynthesis.speaking) {
+      window.setTimeout(waitUntilDone, 60);
+      return;
+    }
+    finish();
+  };
+
+  waitUntilDone();
+}
+
 function setActiveNav(name) {
   document.querySelectorAll(".nav-button").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.nav === name);
@@ -1575,7 +1696,7 @@ function setActiveNav(name) {
 }
 
 function worldCard(world) {
-  const cssClass = ["home", "word", "number", "puzzle"].includes(world.id) ? world.id : "";
+  const cssClass = ["home", "word", "number", "puzzle", "discovery", "blessing"].includes(world.id) ? world.id : "";
   const stateClass = world.status === "open" ? "is-open" : "is-locked";
   return `
     <button class="world-card ${cssClass} ${stateClass}" type="button" data-world="${world.id}" aria-label="${world.name}">
@@ -1859,7 +1980,13 @@ function renderGameInstructions(worldId, activityId) {
   `;
 
   screen.focus({ preventScroll: true });
-  setTimeout(() => speak(`${activity.title}. ${instructions.spoken}`), 250);
+  if (instructionSpeechTimer) window.clearTimeout(instructionSpeechTimer);
+  instructionTransitionPending = false;
+  instructionSpeechText = `${activity.title}. ${instructions.spoken}`;
+  instructionSpeechTimer = window.setTimeout(() => {
+    instructionSpeechTimer = null;
+    speak(instructionSpeechText);
+  }, 250);
 }
 
 function renderStartWordSetup() {
@@ -2025,7 +2152,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         <p>${round.prompt}</p>
       </div>
 
-      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound || round.startWordRound ? "picture-match-stage" : ""} ${round.soundHuntRound ? "sound-hunt-target-stage" : ""}">
+      <div class="prompt-stage ${isAlphabetRound ? "alphabet-stage" : ""} ${round.phonicsRound ? "phonics-stage" : ""} ${round.pictureMatchRound || round.buildWordRound || round.startWordRound ? "picture-match-stage" : ""} ${round.soundHuntRound ? "sound-hunt-target-stage" : ""} ${round.plantFoodRound ? "plant-food-stage" : ""}">
         ${isAlphabetRound ? '<span class="target-sparkle sparkle-left" aria-hidden="true">✨</span>' : ""}
         ${round.countMatchRound
           ? `<div class="counting-stage-content count-match-stage-content">
@@ -2068,6 +2195,12 @@ function renderGame(worldId, activityId, roundIndex = 0) {
                </div>
                <button class="count-reset-button" type="button" data-count-reset>↺ Count again</button>
              </div>`
+          : round.plantFoodRound
+          ? `<button class="plant-food-picture-button" type="button" data-plant-food-speak="${escapeAttr(round.foodSpokenName)}" aria-label="Hear ${escapeAttr(round.foodName)}">
+               <span class="plant-food-emoji" aria-hidden="true">${round.foodEmoji}</span>
+               <strong>${round.foodName}</strong>
+               <small>🔊 Tap to hear</small>
+             </button>`
           : round.soundMatchRound
           ? `<div class="sound-match-stage-note" aria-label="Tap a picture first, then tap its beginning letter"><span aria-hidden="true">👆</span><strong>Picture first</strong><span aria-hidden="true">→</span><strong>Letter next</strong></div>`
           : round.soundHuntRound
@@ -2166,6 +2299,16 @@ function renderGame(worldId, activityId, roundIndex = 0) {
           ${round.choices.map((choice, choiceIndex) => `
             <button class="choice-button count-number-choice" style="--choice-index:${choiceIndex}" type="button" data-number-choice="${choice}" aria-label="${NUMBER_WORDS[Number(choice)] || choice}. Tap to hear and choose this number.">
               <span aria-hidden="true">${choice}</span>
+            </button>
+          `).join("")}
+        </div>
+      ` : round.plantFoodRound ? `
+        <div class="plant-food-choice-grid" aria-label="Choose fruit or vegetable">
+          ${round.choices.map((choice, choiceIndex) => `
+            <button class="plant-food-choice-button" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" aria-label="${escapeAttr(choice)}">
+              <span class="plant-food-choice-icon" aria-hidden="true">${choice === "Fruit" ? "🍎" : "🥕"}</span>
+              <strong>${choice}</strong>
+              <small>${choice === "Fruit" ? "Fruit group" : "Vegetable group"}</small>
             </button>
           `).join("")}
         </div>
@@ -2994,6 +3137,49 @@ function handleBuildLetter(letter, button) {
   }, 1150);
 }
 
+function handlePlantFoodChoice(choice, button) {
+  if (!activeGame || activeGame.correctThisRound || !button) return;
+  const { worldId, activityId, roundIndex } = activeGame;
+  const activity = (activities[worldId] || []).find((item) => item.id === activityId);
+  const round = activity?.rounds?.[roundIndex];
+  if (!round?.plantFoodRound) return;
+
+  const feedback = document.getElementById("feedback");
+
+  if (choice === round.answer) {
+    activeGame.correctThisRound = true;
+    updateSessionScore(1);
+    refreshVisibleSessionScore();
+    button.classList.add("is-correct");
+    document.querySelectorAll(".plant-food-choice-button").forEach((choiceButton) => {
+      choiceButton.disabled = true;
+    });
+    if (feedback) {
+      feedback.className = "feedback good";
+      feedback.textContent = round.correctFeedback;
+    }
+    document.querySelector(".game-card")?.classList.add("round-success");
+    speak(round.correctSpeak);
+
+    window.setTimeout(() => {
+      const nextRound = roundIndex + 1;
+      if (nextRound < activity.rounds.length) renderGame(worldId, activityId, nextRound);
+      else completeActivity(worldId, activityId);
+    }, 1250);
+    return;
+  }
+
+  updateSessionScore(-1);
+  refreshVisibleSessionScore();
+  button.classList.add("is-try-again");
+  if (feedback) {
+    feedback.className = "feedback try";
+    feedback.textContent = "Almost! Try again. Is it a fruit or a vegetable?";
+  }
+  speak("Almost! Try again. Is it a fruit or a vegetable?");
+  window.setTimeout(() => button.classList.remove("is-try-again"), 650);
+}
+
 function handleChoice(choice, button) {
   if (!activeGame || activeGame.correctThisRound) return;
   const { worldId, activityId, roundIndex } = activeGame;
@@ -3045,13 +3231,15 @@ function completeActivity(worldId, activityId) {
   celebration.setAttribute("aria-hidden", "false");
 
   const isCountingGame = activityId === "count-stars" || activityId === "count-match";
+  const isDiscoveryGame = activityId === "plant-food-sort";
+  const completionLabel = isCountingGame ? "Great counting!" : isDiscoveryGame ? "Great discovering!" : "Great job!";
   const resultMessage = sessionStars === 1
-    ? `${isCountingGame ? "Great counting!" : "Great job!"} You earned one star!`
-    : `${isCountingGame ? "Great counting!" : "Great job!"} You earned ${sessionStars} stars!`;
+    ? `${completionLabel} You earned one star!`
+    : `${completionLabel} You earned ${sessionStars} stars!`;
 
   const celebrationHeading = celebration.querySelector("h2");
   if (celebrationHeading) {
-    celebrationHeading.textContent = isCountingGame ? "Great counting!" : "Great job!";
+    celebrationHeading.textContent = completionLabel;
   }
 
   const celebrationText = celebration.querySelector("p");
@@ -3241,26 +3429,29 @@ document.addEventListener("click", (event) => {
   if (instructedStartButton) {
     const worldId = instructedStartButton.dataset.worldId;
     const activityId = instructedStartButton.dataset.activityId;
+    instructedStartButton.disabled = true;
 
-    if (worldId === "blessing" && activityId === "story-garden") {
-      renderBibleStoryLibrary();
-      return;
-    }
+    runAfterInstructionSpeech(() => {
+      if (worldId === "blessing" && activityId === "story-garden") {
+        renderBibleStoryLibrary();
+        return;
+      }
 
-    if (activityId === "start-word") {
-      startWordSetup = { letter: null, rounds: 10 };
-      renderStartWordSetup();
-      return;
-    }
-    if (activityId === "sound-hunt") {
-      soundHuntSetup = { letter: null, rounds: 10 };
-      renderSoundHuntSetup();
-      return;
-    }
+      if (activityId === "start-word") {
+        startWordSetup = { letter: null, rounds: 10 };
+        renderStartWordSetup();
+        return;
+      }
+      if (activityId === "sound-hunt") {
+        soundHuntSetup = { letter: null, rounds: 10 };
+        renderSoundHuntSetup();
+        return;
+      }
 
-    prepareActivityForPlay(worldId, activityId);
-    startGameSession(worldId, activityId);
-    renderGame(worldId, activityId, 0);
+      prepareActivityForPlay(worldId, activityId);
+      startGameSession(worldId, activityId);
+      renderGame(worldId, activityId, 0);
+    });
     return;
   }
 
@@ -3283,6 +3474,12 @@ document.addEventListener("click", (event) => {
   const startWordStartButton = event.target.closest("[data-start-word-start]");
   if (startWordStartButton) {
     startConfiguredStartWordGame();
+    return;
+  }
+
+  const plantFoodSpeakButton = event.target.closest("[data-plant-food-speak]");
+  if (plantFoodSpeakButton) {
+    speak(plantFoodSpeakButton.dataset.plantFoodSpeak);
     return;
   }
 
@@ -3486,6 +3683,8 @@ document.addEventListener("click", (event) => {
       showPictureChoiceConfirmation(choiceButton.dataset.choice, choiceButton);
     } else if (round?.letterSoundRound) {
       showFirstSoundConfirmation(choiceButton.dataset.choice, choiceButton);
+    } else if (round?.plantFoodRound) {
+      handlePlantFoodChoice(choiceButton.dataset.choice, choiceButton);
     } else {
       handleChoice(choiceButton.dataset.choice, choiceButton);
     }
