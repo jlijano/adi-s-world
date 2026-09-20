@@ -1,11 +1,11 @@
-const CACHE_NAME = "adis-world-v43";
+const CACHE_NAME = "adis-world-v44";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=43",
+  "./styles.css?v=44",
   "./drawing-garden.css?v=37",
   "./outfit-check.css?v=43",
-  "./app.js?v=43",
+  "./app.js?v=44",
   "./drawing-garden.js?v=37",
   "./outfit-check.js?v=43",
   "./assets/character/adi-front-3d.webp?v=39",
@@ -17,7 +17,28 @@ const APP_SHELL = [
   "./outfit-check.js",
   "./manifest.json",
   "./assets/icons/icon.svg",
-  "./assets/icons/adis-world-splash.jpg"
+  "./assets/icons/adis-world-splash.jpg",
+  "./assets/discovery/plant-foods/mango.jpg",
+  "./assets/discovery/plant-foods/banana.jpg",
+  "./assets/discovery/plant-foods/pineapple.jpg",
+  "./assets/discovery/plant-foods/carrot.jpg",
+  "./assets/discovery/plant-foods/broccoli.jpg",
+  "./assets/discovery/plant-foods/papaya.jpg",
+  "./assets/discovery/plant-foods/guava.jpg",
+  "./assets/discovery/plant-foods/coconut.jpg",
+  "./assets/discovery/plant-foods/eggplant.jpg",
+  "./assets/discovery/plant-foods/squash.jpg",
+  "./assets/discovery/plant-foods/cucumber.jpg",
+  "./assets/discovery/plant-foods/chico.jpg",
+  "./assets/discovery/plant-foods/calamansi.jpg",
+  "./assets/discovery/plant-foods/lanzones.jpg",
+  "./assets/discovery/plant-foods/jackfruit.jpg",
+  "./assets/discovery/plant-foods/ampalaya.jpg",
+  "./assets/discovery/plant-foods/malunggay.jpg",
+  "./assets/discovery/plant-foods/patola.jpg",
+  "./assets/discovery/plant-foods/kangkong.jpg",
+  "./assets/discovery/plant-foods/string-beans.jpg",
+  "./assets/discovery/plant-foods/CREDITS.md"
 ];
 
 const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/drawing-garden.css", "/outfit-check.css", "/app.js", "/drawing-garden.js", "/outfit-check.js"]);
