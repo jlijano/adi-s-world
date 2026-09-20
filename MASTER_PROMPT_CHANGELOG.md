@@ -1,5 +1,22 @@
 # Adi's World Master Prompt Changelog
 
+## 1.18.0 — 2026-09-20
+
+Changed:
+
+- Removed the Blessing Garden Sacred Narrator requirement and the separate Sacred Narrator/Standard Voice mode.
+- Removed Male/Female voice preference, exact-gender heuristics, deep/baritone voice targeting, pitch/speed calibration panels, comparison previews, and Vocaroo delivery-reference requirements from the durable project standard.
+- Removed the interim voice-cloning replacement plan from the active voice standard.
+- Replaced the previous neutral British-English preference with one natural, neutral English system voice across Adi's World.
+- Blessing Garden Bible stories, memory verses, Verse Time, ordinary game narration, and Adi feedback now share the same standard speech system unless a future voice technology is explicitly approved.
+- Added a permanent credit-conservation rule: do not automatically cycle through voices, accents, gender guesses, pitch settings, or repeated preview samples when the platform cannot reliably satisfy those characteristics.
+- Added a hard fallback rule to use the best available natural installed English voice, regardless of perceived gender, rather than repeatedly tuning or retrying unsupported voice characteristics.
+- Preserved the existing rule that spoken instructions must not overlap and must finish before navigation when the current flow requires audio completion.
+
+Reason:
+
+- Browser/device speech synthesis did not reliably honor the requested male voice or accent characteristics, and repeated tuning attempts consumed credits without producing a dependable improvement. The project now prioritizes natural, understandable, consistent narration and avoids repeated unsupported voice experiments.
+
 ## 1.14.2 — 2026-09-20
 
 Fixed:
