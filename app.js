@@ -1886,10 +1886,15 @@ function scoreAdiChildVoice(voice) {
   let score = 0;
 
   if (lang.startsWith("en")) score += 30;
-  if (name.includes("child") || name.includes("kid") || name.includes("girl")) score += 500;
-  if (["samantha", "zira", "aria", "jenny", "sonia", "ava", "victoria", "karen", "moira", "fiona", "tessa", "susan"].some((hint) => name.includes(hint))) score += 140;
-  if (name.includes("natural") || name.includes("neural")) score += 80;
-  if (name.includes("enhanced") || name.includes("premium")) score += 60;
+
+  // Prefer the highest-quality natural voices first. A very high artificial pitch
+  // makes adult system voices sound robotic, so voice quality matters more than pitch.
+  if (name.includes("natural") || name.includes("neural")) score += 420;
+  if (name.includes("enhanced") || name.includes("premium")) score += 260;
+  if (name.includes("microsoft") || name.includes("google")) score += 90;
+
+  if (name.includes("child") || name.includes("kid") || name.includes("girl")) score += 180;
+  if (["samantha", "zira", "aria", "jenny", "sonia", "ava", "victoria", "karen", "moira", "fiona", "tessa", "susan"].some((hint) => name.includes(hint))) score += 100;
   if (["male", "daniel", "george", "david", "ryan", "arthur", "james", "mark", "bruce", "ralph"].some((hint) => name.includes(hint))) score -= 220;
 
   return score;
@@ -1909,15 +1914,14 @@ function speakAdiGreeting(onDone) {
 
   window.speechSynthesis.cancel();
   const voice = getAdiChildVoice();
-  const utterance = new SpeechSynthesisUtterance("Hi, my name is Adi!");
+  const utterance = new SpeechSynthesisUtterance("Hi! My name is Adi.");
   utterance.lang = voice?.lang || "en";
   if (voice) utterance.voice = voice;
 
-  // Young-child style for Adi: bright, short and natural.
-  // Browser voices vary by device, so the dedicated voice selection plus pitch/rate
-  // keeps the greeting consistently child-like without changing the app's normal voice.
-  utterance.rate = 0.94;
-  utterance.pitch = 1.45;
+  // Keep Adi bright and youthful without forcing an unnaturally high pitch.
+  // A small pause after "Hi!" makes the introduction sound more conversational.
+  utterance.rate = 0.88;
+  utterance.pitch = 1.12;
   utterance.volume = 1.0;
 
   if (typeof onDone === "function") {
