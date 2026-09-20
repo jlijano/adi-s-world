@@ -1,14 +1,14 @@
-const CACHE_NAME = "adis-world-v70";
+const CACHE_NAME = "adis-world-v71";
 const APP_SHELL = [
   "./", "./index.html",
   "./styles.css?v=67", "./drawing-garden.css?v=37", "./outfit-check.css?v=63", "./outfit-check-layered.css?v=70",
-  "./app.js?v=62", "./drawing-garden.js?v=37", "./outfit-check.js?v=70",
+  "./app.js?v=71", "./drawing-garden.js?v=37", "./outfit-check.js?v=70",
   "./assets/character/adi-front-3d.webp?v=70",
   "./assets/character/outfit-check/outfit-layers.svg",
   "./assets/character/idle-front.webp", "./assets/character/hi-wave.webp",
   "./styles.css", "./drawing-garden.css", "./outfit-check.css", "./outfit-check-layered.css",
   "./app.js", "./drawing-garden.js", "./outfit-check.js", "./manifest.json",
-  "./assets/icons/icon.svg", "./assets/icons/adis-world-splash.jpg",
+  "./assets/icons/icon.svg", "./assets/icons/adis-world-splash.jpg", "./assets/worlds/word-forest-card.svg",
   "./assets/blessing-garden/gideon/gideon-call.jpg",
   "./assets/discovery/plant-foods/mango.jpg", "./assets/discovery/plant-foods/banana-photo.jpg", "./assets/discovery/plant-foods/pineapple.jpg",
   "./assets/discovery/plant-foods/carrot.jpg", "./assets/discovery/plant-foods/broccoli.jpg", "./assets/discovery/plant-foods/papaya.jpg",
