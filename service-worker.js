@@ -1,4 +1,4 @@
-const CACHE_NAME = "adis-world-v60";
+const CACHE_NAME = "adis-world-v61";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -7,12 +7,7 @@ const APP_SHELL = [
   "./outfit-check.css?v=60",
   "./app.js?v=56",
   "./drawing-garden.js?v=37",
-  "./outfit-check-3d.js?v=60",
-  "./assets/character/addi/addi-base.glb?v=60",
-  "./assets/vendor/utils/BufferGeometryUtils.js",
-  "./assets/vendor/three/GLTFLoader.js",
-  "./assets/vendor/three/three.module.js",
-  "./outfit-check.js?v=60",
+  "./outfit-check.js?v=61",
   "./styles.css",
   "./drawing-garden.css",
   "./outfit-check.css",
@@ -46,7 +41,7 @@ const APP_SHELL = [
   "./assets/discovery/plant-foods/CREDITS.md"
 ];
 
-const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/drawing-garden.css", "/outfit-check.css", "/app.js", "/drawing-garden.js", "/outfit-check.js", "/outfit-check-3d.js"]);
+const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/drawing-garden.css", "/outfit-check.css", "/app.js", "/drawing-garden.js", "/outfit-check.js"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
