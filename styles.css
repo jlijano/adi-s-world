@@ -329,6 +329,7 @@ button:focus-visible {
   color: #148456;
 }
 
+.world-card.home { background: linear-gradient(150deg, #fff4ec, #ffffff 60%); }
 .world-card.word { background: linear-gradient(150deg, #f3fff5, #ffffff 60%); }
 .world-card.number { background: linear-gradient(150deg, #eaf8ff, #ffffff 60%); }
 .world-card.puzzle { background: linear-gradient(150deg, #fff5ea, #ffffff 60%); }
@@ -343,6 +344,7 @@ button:focus-visible {
   box-shadow: var(--shadow);
 }
 
+.world-hero.home { background: linear-gradient(135deg, #d75b39 0%, #e97a52 52%, #f29a72 100%); }
 .world-hero.word { background: linear-gradient(135deg, #26a269, #54c98a); }
 .world-hero.number { background: linear-gradient(135deg, #2a8fe3, #58b9f2); }
 .world-hero.puzzle { background: linear-gradient(135deg, #ef8d32, #f3b050); }
