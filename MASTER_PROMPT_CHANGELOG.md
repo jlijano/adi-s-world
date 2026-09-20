@@ -683,3 +683,21 @@ Added:
 Reason:
 
 - Comparing the same voice at several subtle pacing and pitch settings makes it easier to identify the most natural, reverent Sacred Narrator configuration on each Android/browser voice set.
+
+
+## 1.17.0 — 2026-09-20
+
+Changed:
+
+- Replaced the fixed three-sample Sacred Narrator tuning panel with an interactive **Bible Voice Calibration** panel.
+- Added Male and Female voice preference controls.
+- Added adjustable Low ↔ High pitch calibration.
+- Added adjustable Slow ↔ Fast reading-speed calibration.
+- Added a visible selected system voice name.
+- Added a Preview Current Voice button using the active gender, pitch, and speed.
+- Gender, pitch, and speed preferences persist locally and are reused for Bible Story and Memory Verse narration.
+- If the requested gender cannot be confidently matched from installed system voice names, the app falls back to the best available English system voice.
+
+Reason:
+
+- Browser/device TTS varies significantly. Direct calibration gives users control over the voice character and pacing instead of relying on an unreliable automatic male/female guess.

@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.16.3  
+**Version:** 1.17.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -1142,3 +1142,29 @@ Implementation rules:
 - Never claim the browser voice is an exact age, gender, or celebrity voice when the platform does not expose reliable metadata.
 - Do not imitate or market the voice as a specific living actor or public figure.
 - Do not allow overlapping Bible narration; existing audio-completion/navigation rules remain in effect.
+
+
+---
+
+## Blessing Garden Bible Voice Calibration — Permanent Standard
+
+Blessing Garden must provide an in-app **Bible Voice Calibration** panel for Bible stories and memory verses.
+
+Controls:
+
+- **Voice preference:** Male / Female.
+- **Tone / Pitch:** Low ↔ High adjustable control.
+- **Reading Speed:** Slow ↔ Fast adjustable control.
+- **Selected system voice name:** visibly show the browser/device voice currently being used.
+- **Preview Current Voice:** play a short Scripture-style preview using the current gender, pitch, and speed settings.
+
+Behavior:
+
+- Save gender preference, pitch, and reading speed locally and reuse them for future Bible Story and Memory Verse narration.
+- Changing gender must immediately reselect the best available matching English system voice.
+- Pitch and speed changes must affect actual Bible narration, not only the preview.
+- Previewing must not change stars, story progress, current lesson state, or narration mode.
+- The calibration controls apply to the custom Bible/Sacred narration mode; Standard Voice remains available as a fallback.
+- Browser speech APIs do not expose reliable gender metadata. Use known system voice-name hints to prefer male/female voices, but clearly show the actual selected system voice so users can verify the result.
+- If no voice clearly matching the requested gender is installed, gracefully use the best available English voice rather than breaking narration.
+- Avoid extreme pitch/rate values that significantly reduce intelligibility.

@@ -1,6 +1,9 @@
 const STORAGE_KEY = "adis-world-progress-v1";
 const SOUND_KEY = "adis-world-sound-v1";
 const BLESSING_VOICE_KEY = "adis-world-blessing-voice-v1";
+const BLESSING_GENDER_KEY = "adis-world-blessing-gender-v1";
+const BLESSING_PITCH_KEY = "adis-world-blessing-pitch-v1";
+const BLESSING_RATE_KEY = "adis-world-blessing-rate-v1";
 
 const worlds = [
   { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "open" },
@@ -1533,6 +1536,9 @@ function updateSessionScore(delta) {
 let progress = loadProgress();
 let soundEnabled = localStorage.getItem(SOUND_KEY) !== "off";
 let blessingVoiceMode = localStorage.getItem(BLESSING_VOICE_KEY) || "sacred";
+let blessingVoiceGender = localStorage.getItem(BLESSING_GENDER_KEY) || "male";
+let blessingVoicePitch = Math.min(1.2, Math.max(0.7, Number(localStorage.getItem(BLESSING_PITCH_KEY)) || 0.9));
+let blessingVoiceRate = Math.min(1.05, Math.max(0.6, Number(localStorage.getItem(BLESSING_RATE_KEY)) || 0.78));
 let currentView = { type: "home" };
 let activeGame = null;
 let gameSession = null;
@@ -1767,22 +1773,21 @@ function refreshPreferredBritishVoice() {
     const name = (voice.name || "").toLowerCase();
     return hasVoiceHint(name, SACRED_MALE_VOICE_HINTS) && !hasVoiceHint(name, SACRED_FEMALE_VOICE_HINTS);
   });
+  const femaleEnglishVoices = englishVoices.filter((voice) => {
+    const name = (voice.name || "").toLowerCase();
+    return hasVoiceHint(name, SACRED_FEMALE_VOICE_HINTS) && !hasVoiceHint(name, SACRED_MALE_VOICE_HINTS);
+  });
 
+  const preferredGenderVoices = blessingVoiceGender === "female" ? femaleEnglishVoices : maleEnglishVoices;
   preferredSacredVoice =
-    (maleEnglishVoices.length ? maleEnglishVoices : englishVoices)
+    (preferredGenderVoices.length ? preferredGenderVoices : englishVoices)
       .slice()
       .sort((a, b) => scoreSacredVoice(b) - scoreSacredVoice(a))[0] || preferredBritishVoice;
 
   document.querySelectorAll("[data-sacred-voice-name]").forEach((node) => {
     node.textContent = preferredSacredVoice?.name
-      ? `Using: ${preferredSacredVoice.name}`
-      : "Using the best available English system voice";
-  });
-
-  document.querySelectorAll("[data-sacred-test-voice-name]").forEach((node) => {
-    node.textContent = preferredSacredVoice?.name
-      ? `Selected voice: ${preferredSacredVoice.name}`
-      : "Selected voice: best available English system voice";
+      ? `Selected system voice: ${preferredSacredVoice.name}`
+      : "Selected system voice: best available English system voice";
   });
 }
 
@@ -1851,39 +1856,8 @@ function speakBlessing(text, onDone, forceSacred = false) {
 
   // Sacred Narrator: mature, warm, calm and reverent.
   // Keep pitch near natural range; extreme pitch-shifting sounds synthetic.
-  utterance.rate = 0.78;
-  utterance.pitch = 0.88;
-  utterance.volume = 1.0;
-
-  if (typeof onDone === "function") {
-    let finished = false;
-    const finishOnce = () => {
-      if (finished) return;
-      finished = true;
-      onDone();
-    };
-    utterance.onend = finishOnce;
-    utterance.onerror = finishOnce;
-  }
-
-  window.speechSynthesis.speak(utterance);
-}
-
-function speakSacredTestSample(text, rate, pitch, onDone) {
-  if (!soundEnabled || !("speechSynthesis" in window)) {
-    if (typeof onDone === "function") onDone();
-    return;
-  }
-
-  refreshPreferredBritishVoice();
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = preferredSacredVoice?.lang || "en-GB";
-  if (preferredSacredVoice) utterance.voice = preferredSacredVoice;
-
-  utterance.rate = rate;
-  utterance.pitch = pitch;
+  utterance.rate = blessingVoiceRate;
+  utterance.pitch = blessingVoicePitch;
   utterance.volume = 1.0;
 
   if (typeof onDone === "function") {
@@ -1902,42 +1876,47 @@ function speakSacredTestSample(text, rate, pitch, onDone) {
 
 function renderBlessingVoiceSelector() {
   const sacredSelected = blessingVoiceMode === "sacred";
+  const maleSelected = blessingVoiceGender === "male";
+  const pitchPercent = Math.round(((blessingVoicePitch - 0.7) / 0.5) * 100);
+  const ratePercent = Math.round(((blessingVoiceRate - 0.6) / 0.45) * 100);
+
   return `
-    <section class="blessing-voice-panel" aria-label="Bible narration voice">
+    <section class="blessing-voice-panel" aria-label="Bible voice calibration">
       <div class="blessing-voice-copy">
-        <strong>🎙️ Bible narration voice</strong>
-        <small>Sacred Narrator prefers a natural-sounding mature male English voice available on this device.</small>
-        <small class="blessing-voice-name" data-sacred-voice-name>${preferredSacredVoice?.name ? `Using: ${preferredSacredVoice.name}` : "Finding the best available voice…"}</small>
+        <strong>🎙️ Bible Voice Calibration</strong>
+        <small>Choose the voice style you want for Bible stories and memory verses.</small>
+        <small class="blessing-voice-name" data-sacred-voice-name>${preferredSacredVoice?.name ? `Selected system voice: ${preferredSacredVoice.name}` : "Finding the best available system voice…"}</small>
       </div>
-      <div class="blessing-voice-options" role="group" aria-label="Choose Bible narration voice">
-        <button type="button" class="blessing-voice-option ${sacredSelected ? "is-active" : ""}" data-blessing-voice="sacred" aria-pressed="${sacredSelected}">
-          Sacred Narrator
-        </button>
-        <button type="button" class="blessing-voice-option ${!sacredSelected ? "is-active" : ""}" data-blessing-voice="standard" aria-pressed="${!sacredSelected}">
-          Standard Voice
-        </button>
+
+      <div class="blessing-voice-options" role="group" aria-label="Choose Bible narration mode">
+        <button type="button" class="blessing-voice-option ${sacredSelected ? "is-active" : ""}" data-blessing-voice="sacred" aria-pressed="${sacredSelected}">Custom Bible Voice</button>
+        <button type="button" class="blessing-voice-option ${!sacredSelected ? "is-active" : ""}" data-blessing-voice="standard" aria-pressed="${!sacredSelected}">Standard Voice</button>
       </div>
-      <button type="button" class="blessing-voice-preview" data-blessing-voice-preview aria-label="Preview Sacred Narrator voice">
-        🔊 Preview Sacred Narrator
+
+      <div class="blessing-calibration-group">
+        <span class="blessing-calibration-label">Voice</span>
+        <div class="blessing-gender-options" role="group" aria-label="Choose male or female Bible voice">
+          <button type="button" class="blessing-gender-button ${maleSelected ? "is-active" : ""}" data-blessing-gender="male" aria-pressed="${maleSelected}">👨 Male</button>
+          <button type="button" class="blessing-gender-button ${!maleSelected ? "is-active" : ""}" data-blessing-gender="female" aria-pressed="${!maleSelected}">👩 Female</button>
+        </div>
+      </div>
+
+      <label class="blessing-calibration-group">
+        <span class="blessing-calibration-label">Tone / Pitch <strong data-blessing-pitch-value>${blessingVoicePitch.toFixed(2)}</strong></span>
+        <div class="blessing-range-labels"><span>Low</span><span>High</span></div>
+        <input class="blessing-range" type="range" min="0.70" max="1.20" step="0.02" value="${blessingVoicePitch}" data-blessing-pitch aria-label="Bible voice pitch from low to high" style="--range-progress:${pitchPercent}%">
+      </label>
+
+      <label class="blessing-calibration-group">
+        <span class="blessing-calibration-label">Reading Speed <strong data-blessing-rate-value>${blessingVoiceRate.toFixed(2)}</strong></span>
+        <div class="blessing-range-labels"><span>Slow</span><span>Fast</span></div>
+        <input class="blessing-range" type="range" min="0.60" max="1.05" step="0.03" value="${blessingVoiceRate}" data-blessing-rate aria-label="Bible reading speed from slow to fast" style="--range-progress:${ratePercent}%">
+      </label>
+
+      <button type="button" class="blessing-voice-preview" data-blessing-calibration-preview aria-label="Preview calibrated Bible voice">
+        🔊 Preview Current Voice
       </button>
-      <section class="blessing-voice-test" aria-label="Sacred Narrator test panel">
-        <div class="blessing-voice-test-head">
-          <strong>Voice test</strong>
-          <small data-sacred-test-voice-name>${preferredSacredVoice?.name ? `Selected voice: ${preferredSacredVoice.name}` : "Selected voice: finding best available voice…"}</small>
-        </div>
-        <div class="blessing-voice-test-grid">
-          <button type="button" class="blessing-voice-test-button" data-sacred-test rate="0.72" pitch="0.84" aria-label="Play slow deep Sacred Narrator sample">
-            <span>Sample 1</span><small>Slow • Deep</small>
-          </button>
-          <button type="button" class="blessing-voice-test-button" data-sacred-test rate="0.78" pitch="0.88" aria-label="Play balanced Sacred Narrator sample">
-            <span>Sample 2</span><small>Balanced</small>
-          </button>
-          <button type="button" class="blessing-voice-test-button" data-sacred-test rate="0.84" pitch="0.92" aria-label="Play clearer brighter Sacred Narrator sample">
-            <span>Sample 3</span><small>Clear • Warm</small>
-          </button>
-        </div>
-        <p class="blessing-voice-test-note">All three samples use the same selected system voice. Only pacing and pitch change.</p>
-      </section>
+      <p class="blessing-voice-test-note">The selected system voice depends on the voices installed on this device. Your calibration is saved automatically.</p>
     </section>
   `;
 }
@@ -3651,41 +3630,53 @@ function toggleSound() {
   else if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 }
 
-document.addEventListener("click", (event) => {
-  const sacredTestButton = event.target.closest("[data-sacred-test]");
-  if (sacredTestButton) {
-    const rate = Number(sacredTestButton.getAttribute("rate")) || 0.78;
-    const pitch = Number(sacredTestButton.getAttribute("pitch")) || 0.88;
-    const allTestButtons = Array.from(document.querySelectorAll("[data-sacred-test]"));
-    allTestButtons.forEach((button) => {
-      button.disabled = true;
-      button.classList.remove("is-playing");
-    });
-    sacredTestButton.classList.add("is-playing");
-
-    speakSacredTestSample(
-      "The Lord is with you. Do not be afraid. Listen, and trust in God's word.",
-      rate,
-      pitch,
-      () => {
-        allTestButtons.forEach((button) => {
-          button.disabled = false;
-          button.classList.remove("is-playing");
-        });
-      }
-    );
+document.addEventListener("input", (event) => {
+  const pitchInput = event.target.closest("[data-blessing-pitch]");
+  if (pitchInput) {
+    blessingVoicePitch = Math.min(1.2, Math.max(0.7, Number(pitchInput.value) || 0.9));
+    localStorage.setItem(BLESSING_PITCH_KEY, String(blessingVoicePitch));
+    const valueNode = document.querySelector("[data-blessing-pitch-value]");
+    if (valueNode) valueNode.textContent = blessingVoicePitch.toFixed(2);
+    const pct = Math.round(((blessingVoicePitch - 0.7) / 0.5) * 100);
+    pitchInput.style.setProperty("--range-progress", `${pct}%`);
     return;
   }
 
-  const blessingVoicePreviewButton = event.target.closest("[data-blessing-voice-preview]");
-  if (blessingVoicePreviewButton) {
-    blessingVoicePreviewButton.disabled = true;
-    blessingVoicePreviewButton.textContent = "🔊 Playing preview…";
+  const rateInput = event.target.closest("[data-blessing-rate]");
+  if (rateInput) {
+    blessingVoiceRate = Math.min(1.05, Math.max(0.6, Number(rateInput.value) || 0.78));
+    localStorage.setItem(BLESSING_RATE_KEY, String(blessingVoiceRate));
+    const valueNode = document.querySelector("[data-blessing-rate-value]");
+    if (valueNode) valueNode.textContent = blessingVoiceRate.toFixed(2);
+    const pct = Math.round(((blessingVoiceRate - 0.6) / 0.45) * 100);
+    rateInput.style.setProperty("--range-progress", `${pct}%`);
+  }
+});
+
+document.addEventListener("click", (event) => {
+  const blessingGenderButton = event.target.closest("[data-blessing-gender]");
+  if (blessingGenderButton) {
+    blessingVoiceGender = blessingGenderButton.dataset.blessingGender === "female" ? "female" : "male";
+    localStorage.setItem(BLESSING_GENDER_KEY, blessingVoiceGender);
+    refreshPreferredBritishVoice();
+
+    document.querySelectorAll("[data-blessing-gender]").forEach((button) => {
+      const active = button.dataset.blessingGender === blessingVoiceGender;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    return;
+  }
+
+  const calibrationPreviewButton = event.target.closest("[data-blessing-calibration-preview]");
+  if (calibrationPreviewButton) {
+    calibrationPreviewButton.disabled = true;
+    calibrationPreviewButton.textContent = "🔊 Playing preview…";
     speakBlessing(
       "Welcome to Blessing Garden. Let us listen quietly as we read God's word together.",
       () => {
-        blessingVoicePreviewButton.disabled = false;
-        blessingVoicePreviewButton.textContent = "🔊 Preview Sacred Narrator";
+        calibrationPreviewButton.disabled = false;
+        calibrationPreviewButton.textContent = "🔊 Preview Current Voice";
       },
       true
     );
@@ -4084,7 +4075,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=51", { updateViaCache: "none" })
+      .register("./service-worker.js?v=52", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });

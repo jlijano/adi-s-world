@@ -3298,3 +3298,58 @@ button:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Blessing Garden — Bible voice calibration */
+.blessing-calibration-group {
+  display: grid;
+  gap: 7px;
+  padding: 10px 0 2px;
+}
+.blessing-calibration-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #6f4518;
+  font-size: 13px;
+  font-weight: 900;
+}
+.blessing-calibration-label strong {
+  font-size: 12px;
+  color: #8a5a19;
+}
+.blessing-gender-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.blessing-gender-button {
+  min-height: 46px;
+  border: 2px solid rgba(138,90,25,.14);
+  border-radius: 13px;
+  background: #fff;
+  color: #6f4518;
+  font: inherit;
+  font-weight: 900;
+}
+.blessing-gender-button.is-active {
+  border-color: #8a5a19;
+  background: #8a5a19;
+  color: #fff;
+}
+.blessing-range-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #7c7468;
+  font-size: 11px;
+  font-weight: 800;
+}
+.blessing-range {
+  width: 100%;
+  accent-color: #8a5a19;
+  cursor: pointer;
+}
+.blessing-voice-name {
+  word-break: break-word;
+}
