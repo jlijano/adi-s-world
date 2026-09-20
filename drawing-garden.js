@@ -22,7 +22,7 @@
     { id: "number-tracing", title: "Number Tracing", icon: "🔢", description: "Choose a number from 0–30 and practise tracing it for up to 20 rounds.", rounds: [] },
     { id: "shape-tracing", title: "Shape Tracing", icon: "🔷", description: "Choose a shape and trace the dotted guide with your finger or stylus.", rounds: [] },
     { id: "word-writing", title: "Word Writing", icon: "📝", description: "Practise writing familiar 3–7 letter words from Word Forest.", rounds: [] },
-    { id: "free-drawing", title: "Free Drawing Practice", icon: "🎨", description: "Draw freely with simple colours, brush sizes, clear, and undo controls.", rounds: [] }
+    { id: "free-drawing", title: "Free Drawing Practice", icon: "🎨", description: "Draw freely with colours and brush sizes, then save your picture to your device.", rounds: [] }
   ];
 
   Object.assign(GAME_INSTRUCTIONS, {
@@ -48,8 +48,8 @@
     },
     "drawing:free-drawing": {
       intro: "Use the drawing board to practise lines, curves, shapes, or anything you imagine.",
-      steps: ["Draw with your finger or stylus.", "Change the colour or brush size whenever you like.", "Use Undo or Clear, then tap Finish Drawing when you are done."],
-      spoken: "Draw anything you like. You can change colours and brush size, undo, or clear the page. Tap Finish Drawing when you are done."
+      steps: ["Draw with your finger or stylus.", "Change the colour or brush size whenever you like.", "Tap Save to download your drawing as a PNG image, or tap Finish when you are done."],
+      spoken: "Draw anything you like. Change colours or brush size whenever you want. Tap Save to keep your picture on your device, or tap Finish when you are done."
     }
   });
 
@@ -323,9 +323,10 @@
           ${[6,10,16].map((width) => `<button type="button" class="brush-size-button ${freeDrawingState.width === width ? "is-selected" : ""}" data-drawing-width="${width}"><span style="--brush:${width}px"></span>${width === 6 ? "Small" : width === 10 ? "Medium" : "Large"}</button>`).join("")}
         </div>
         <div class="drawing-board-wrap free"><canvas id="drawing-canvas" class="drawing-canvas" width="760" height="500" aria-label="Free drawing board"></canvas></div>
-        <div class="drawing-actions three">
+        <div class="drawing-actions four">
           <button class="drawing-tool-button" type="button" data-drawing-undo>↶ Undo</button>
           <button class="drawing-tool-button" type="button" data-drawing-clear>↺ Clear</button>
+          <button class="drawing-tool-button drawing-save-button" type="button" data-free-drawing-save>💾 Save</button>
           <button class="primary-button drawing-done-button" type="button" data-free-drawing-finish>★ Finish</button>
         </div>
         <div id="feedback" class="feedback" aria-live="assertive"></div>
@@ -333,7 +334,7 @@
     freeDrawingState.history = [];
     initCanvas(null, true);
     screen.focus({ preventScroll: true });
-    setTimeout(() => speak("Draw anything you like. Use the colours and brush sizes, then tap Finish Drawing when you are done."), 220);
+    setTimeout(() => speak("Draw anything you like. Use the colours and brush sizes. Tap Save to keep your picture on your device, or tap Finish when you are done."), 220);
   }
 
   function initCanvas(round, isFree) {
@@ -424,6 +425,67 @@
       ctx.stroke();
       ctx.restore();
     }
+  }
+
+  function saveFreeDrawing() {
+    const canvas = document.getElementById("drawing-canvas");
+    const feedback = document.getElementById("feedback");
+    if (!canvas || activeGame?.activityId !== "free-drawing") return;
+
+    if (!freeDrawingState.history.length || (activeGame?.drawingDistance || 0) < 10) {
+      if (feedback) {
+        feedback.className = "feedback try";
+        feedback.textContent = "Draw something first, then tap Save.";
+      }
+      speak("Draw something first, then tap Save.");
+      return;
+    }
+
+    const now = new Date();
+    const stamp = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0"),
+      "-",
+      String(now.getHours()).padStart(2, "0"),
+      String(now.getMinutes()).padStart(2, "0"),
+      String(now.getSeconds()).padStart(2, "0")
+    ].join("");
+    const filename = `adis-world-drawing-${stamp}.png`;
+
+    const downloadBlob = (blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+
+      if (feedback) {
+        feedback.className = "feedback good";
+        feedback.textContent = "Saved! Your drawing was downloaded as a PNG. 💾";
+      }
+      speak("Saved! Your drawing was downloaded.");
+    };
+
+    if (canvas.toBlob) {
+      canvas.toBlob(downloadBlob, "image/png");
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png");
+    link.download = filename;
+    link.click();
+    if (feedback) {
+      feedback.className = "feedback good";
+      feedback.textContent = "Saved! Your drawing was downloaded as a PNG. 💾";
+    }
+    speak("Saved! Your drawing was downloaded.");
   }
 
   function clearCurrentCanvas() {
@@ -705,6 +767,11 @@
     if (event.target.closest("[data-drawing-undo]")) {
       freeDrawingState.history.pop();
       redrawFreeCanvas();
+      return;
+    }
+
+    if (event.target.closest("[data-free-drawing-save]")) {
+      saveFreeDrawing();
       return;
     }
 
