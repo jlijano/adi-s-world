@@ -461,3 +461,120 @@
   .top-lavender-star .wardrobe-top,
   .top-mint-hoodie .wardrobe-top{left:28%;width:44%}
 }
+
+
+/* Outfit Check Phase 3 — character visual upgrade */
+.outfit-avatar-v2{
+  background:
+    radial-gradient(circle at 50% 28%, rgba(255,255,255,.98) 0 18%, rgba(255,246,251,.88) 34%, rgba(246,236,255,.78) 58%, rgba(245,218,199,.94) 58% 100%);
+}
+.outfit-avatar-v2::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:19%;
+  width:72%;
+  height:62%;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.60),rgba(255,255,255,0) 72%);
+  filter:blur(6px);
+  pointer-events:none;
+  z-index:1;
+}
+.outfit-avatar-v2::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:70px;
+  width:58%;
+  height:34px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(84,57,74,.22) 0,rgba(84,57,74,.08) 42%,transparent 74%);
+  filter:blur(5px);
+  pointer-events:none;
+  z-index:2;
+}
+.outfit-avatar-v2 .adi-outfit-avatar-render{
+  bottom:72px;
+  width:min(82%,390px);
+  aspect-ratio:3/4;
+  transform:translateX(-50%) perspective(1100px) rotateY(calc(var(--adi-turn) * .35));
+  transform-origin:50% 82%;
+  z-index:5;
+  filter:none;
+}
+.outfit-avatar-v2 .adi-3d-render-phase3{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center bottom;
+  transform:translateZ(0);
+  image-rendering:auto;
+  filter:
+    drop-shadow(0 22px 18px rgba(65,42,55,.17))
+    drop-shadow(0 5px 4px rgba(255,255,255,.40));
+  animation:adiPhase3Idle 3.2s ease-in-out infinite;
+}
+.outfit-avatar-v2 .adi-shadow{
+  width:52%;
+  height:28px;
+  bottom:2px;
+  background:rgba(74,49,61,.20);
+  filter:blur(7px);
+  opacity:.85;
+}
+.outfit-avatar-v2 .room-rug{
+  left:50%;
+  bottom:22px;
+  width:78%;
+  height:78px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse at 50% 35%,rgba(255,226,237,.95),rgba(244,184,210,.62) 64%,rgba(237,164,197,.30));
+  box-shadow:inset 0 7px 16px rgba(255,255,255,.42),0 8px 20px rgba(123,81,102,.06);
+}
+.outfit-avatar-v2 .room-window,
+.outfit-avatar-v2 .room-shelf,
+.outfit-avatar-v2 .room-poster,
+.outfit-avatar-v2 .room-plush{
+  filter:saturate(.95) brightness(1.02);
+}
+.outfit-avatar-v2 .room-window{box-shadow:0 10px 28px rgba(88,104,127,.09),inset 0 0 0 1px rgba(255,255,255,.55)}
+.outfit-avatar-v2 .room-poster{box-shadow:0 10px 24px rgba(121,80,100,.10)}
+.outfit-avatar-v2 .outfit-stage-arrow{
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.76);
+}
+.outfit-avatar-v2 .outfit-turn-controls{
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.80);
+  box-shadow:0 10px 24px rgba(70,48,87,.12);
+}
+@keyframes adiPhase3Idle{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-6px) scale(1.006)}
+}
+@media(prefers-reduced-motion:reduce){
+  .outfit-avatar-v2 .adi-3d-render-phase3{animation:none}
+}
+@media(min-width:760px){
+  .outfit-avatar-v2 .adi-outfit-avatar-render{
+    width:min(80%,430px);
+    bottom:78px;
+  }
+}
+@media(max-width:420px){
+  .outfit-avatar-v2 .adi-outfit-avatar-render{
+    width:min(86%,350px);
+    bottom:68px;
+  }
+  .outfit-avatar-v2::after{
+    bottom:64px;
+    width:64%;
+  }
+}
