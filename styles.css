@@ -2942,3 +2942,108 @@ button:focus-visible {
     gap: 8px;
   }
 }
+
+
+/* Discovery Lab — Plant Food Sort */
+.plant-food-stage {
+  min-height: 210px;
+  padding: 18px;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(87, 201, 146, .13), transparent 24%),
+    radial-gradient(circle at 82% 78%, rgba(79, 70, 200, .10), transparent 26%),
+    linear-gradient(180deg, #f7fffb, #f4f5ff);
+  border: 2px solid rgba(28, 143, 126, .10);
+}
+
+.plant-food-picture-button {
+  width: min(100%, 320px);
+  min-height: 168px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 5px;
+  margin: 0 auto;
+  padding: 16px;
+  border: 0;
+  border-radius: 28px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 12px 28px rgba(44, 80, 104, .12);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.plant-food-picture-button:active { transform: scale(.98); }
+
+.plant-food-emoji {
+  display: block;
+  font-size: clamp(68px, 20vw, 96px);
+  line-height: 1;
+}
+
+.plant-food-picture-button strong { font-size: clamp(22px, 6vw, 30px); }
+
+.plant-food-picture-button small {
+  color: #27756b;
+  font-weight: 900;
+}
+
+.plant-food-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.plant-food-choice-button {
+  min-height: 122px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  padding: 14px 10px;
+  border: 2px solid rgba(79, 70, 200, .10);
+  border-radius: 22px;
+  background: linear-gradient(180deg, #fff, #f8f8ff);
+  color: var(--ink);
+  box-shadow: 0 8px 18px rgba(55, 46, 110, .08);
+  cursor: pointer;
+  touch-action: manipulation;
+  animation: choiceTileIn .34s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay: calc(var(--choice-index) * 60ms + 80ms);
+}
+
+.plant-food-choice-button:active { transform: scale(.97); }
+
+.plant-food-choice-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.plant-food-choice-button strong { font-size: 20px; }
+
+.plant-food-choice-button small {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.plant-food-choice-button.is-correct {
+  border-color: #2cb67d;
+  background: #e8fff5;
+}
+
+.plant-food-choice-button.is-try-again {
+  border-color: #f6b73c;
+  background: #fff8e8;
+  animation: gentleWiggle .42s ease;
+}
+
+@media (max-width: 360px) {
+  .plant-food-choice-grid { gap: 8px; }
+  .plant-food-choice-button { min-height: 108px; padding: 10px 6px; }
+  .plant-food-choice-icon { font-size: 34px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plant-food-choice-button { animation: none; }
+}
