@@ -3654,3 +3654,43 @@ body {
     font-size: 52px;
   }
 }
+
+
+/* Illustration-first visual cards */
+.world-card.world-card-visual {
+  padding: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  text-align: left;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid rgba(70,62,120,.08);
+}
+.world-card-art { position:relative; display:block; width:100%; aspect-ratio:4/3; overflow:hidden; }
+.card-illustration-svg { display:block; width:100%; height:100%; object-fit:cover; }
+.world-card-visual .status { position:absolute; top:12px; right:12px; z-index:2; margin:0; background:rgba(255,255,255,.94); color:#3c3562; box-shadow:0 5px 16px rgba(33,27,74,.14); }
+.world-card-copy { display:grid; gap:5px; padding:14px 15px 16px; }
+.world-card-copy strong { font-size:1.06rem; line-height:1.15; }
+.world-card-copy small { color:var(--muted); line-height:1.35; }
+.adi-bubble.adi-bubble-image { overflow:hidden; padding:0; background:rgba(255,255,255,.16); }
+.adi-bubble-image img { width:100%; height:100%; object-fit:cover; object-position:center top; }
+.world-hero-heading { display:flex; align-items:center; gap:14px; }
+.world-hero-art { width:92px; aspect-ratio:4/3; border-radius:18px; overflow:hidden; border:3px solid rgba(255,255,255,.68); box-shadow:0 8px 22px rgba(32,26,72,.14); flex:0 0 auto; }
+.activity-list { display:grid; grid-template-columns:1fr; gap:14px; }
+.activity-card.activity-card-visual { padding:0; display:grid; grid-template-columns:minmax(112px,36%) minmax(0,1fr) auto; align-items:stretch; overflow:hidden; min-height:128px; text-align:left; background:var(--surface); }
+.activity-card-art { min-height:128px; overflow:hidden; }
+.activity-card-copy { display:grid; align-content:center; gap:7px; padding:14px; min-width:0; }
+.activity-card-copy strong { font-size:1rem; line-height:1.2; }
+.activity-card-copy small { color:var(--muted); line-height:1.35; }
+.activity-card-visual .activity-stars { align-self:center; padding-right:14px; white-space:nowrap; }
+.world-empty-art { width:min(240px,72%); aspect-ratio:4/3; border-radius:22px; overflow:hidden; margin:0 auto 12px; }
+@media (min-width:620px) {
+  .world-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .activity-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .activity-card.activity-card-visual { grid-template-columns:1fr; grid-template-rows:auto 1fr auto; }
+  .activity-card-art { aspect-ratio:16/9; min-height:0; }
+  .activity-card-visual .activity-stars { padding:0 14px 14px; }
+}
+@media (min-width:1024px) { .world-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
