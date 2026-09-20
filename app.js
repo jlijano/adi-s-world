@@ -1909,7 +1909,7 @@ function speakAdiGreeting(onDone) {
 
   window.speechSynthesis.cancel();
   const voice = getAdiChildVoice();
-  const utterance = new SpeechSynthesisUtterance("Hi!");
+  const utterance = new SpeechSynthesisUtterance("Hi, my name is Adi!");
   utterance.lang = voice?.lang || "en";
   if (voice) utterance.voice = voice;
 
@@ -1948,7 +1948,7 @@ function greetAdiAtHome() {
 
   image.src = ADI_HOME_HI_IMAGE;
   button.classList.add("is-waving");
-  button.setAttribute("aria-label", "Adi is waving and saying hi");
+  button.setAttribute("aria-label", "Adi is waving and saying, Hi, my name is Adi");
 
   const returnToIdle = () => {
     adiHomeGreetingTimer = window.setTimeout(() => {
@@ -2128,7 +2128,7 @@ function renderWorld(worldId) {
         <img class="adi-home-character-image" data-adi-home-image src="${ADI_HOME_IDLE_IMAGE}" alt="Adi standing and smiling" decoding="async">
         <span class="adi-home-tap-hint" aria-hidden="true">Tap Adi 👋</span>
       </button>
-      <p class="adi-home-character-help">Tap Adi and she’ll wave and say “Hi!”</p>
+      <p class="adi-home-character-help">Tap Adi and she’ll wave and say “Hi, my name is Adi!”</p>
     </section>
     ` : ""}
 
