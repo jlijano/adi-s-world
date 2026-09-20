@@ -2036,6 +2036,9 @@ function setActiveNav(name) {
 }
 
 function visualCardArtwork(kind, label) {
+  if (kind === "word") {
+    return `<img class="card-illustration-svg" src="assets/worlds/word-forest-card.svg?v=71" alt="" aria-hidden="true" decoding="async">`;
+  }
   const seed = [...String(kind || label || "adi")].reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const variants = [
     ["#6c5ce7", "#9d8cff", "#ffd1e8"],
