@@ -79,6 +79,15 @@
 
   let outfitState = loadOutfit();
   let activeCategory = "top";
+  let threeMounted = false;
+
+  function ensure3D() {
+    if (threeMounted) return;
+    threeMounted = true;
+    const wrap = document.querySelector(".outfit-avatar-wrap");
+    wrap?.classList.add("is-3d-active");
+    window.Adi3D?.mount("adi-three-stage");
+  }
 
   function loadOutfit() {
     try {
@@ -101,10 +110,12 @@
     return AVATAR_VIEWS.map((view) => `
       <button
         type="button"
-        class="outfit-view-thumb"
+        class="outfit-view-thumb ${view.angle === 0 ? "is-active" : ""}"
         data-outfit-angle="${view.angle}"
-        aria-label="Rotate real 3D Addi to ${view.label}">
-        <span class="outfit-view-angle" aria-hidden="true">${view.angle}°</span>
+        aria-label="Turn Adi to ${view.label}">
+        <span class="outfit-view-mini view-${view.id}" aria-hidden="true">
+          <img src="assets/character/adi-front-3d.webp" alt="">
+        </span>
         <span>${view.label}</span>
       </button>
     `).join("");
@@ -123,9 +134,11 @@
 
         <button type="button" class="outfit-stage-arrow outfit-stage-arrow-left" data-outfit-turn="-45" aria-label="Rotate real 3D Addi left">‹</button>
 
-        <div class="adi-three-stage" id="adi-three-stage">
-          <div class="adi-three-status">Preparing real 3D Addi…</div>
+        <div class="adi-front-stage" aria-label="Adi front view">
+          <img class="adi-front-reference" src="assets/character/adi-front-3d.webp" alt="Adi standing in her room wearing her default outfit">
         </div>
+
+        <div class="adi-three-stage" id="adi-three-stage" aria-hidden="true"></div>
 
         <button type="button" class="outfit-stage-arrow outfit-stage-arrow-right" data-outfit-turn="45" aria-label="Rotate real 3D Addi right">›</button>
 
@@ -135,7 +148,7 @@
 
         <div class="outfit-turn-controls" aria-label="Rotate Addi 360 degrees">
           <button type="button" data-outfit-turn="-45" aria-label="Rotate Addi left 45 degrees">↶</button>
-          <span><strong data-adi-angle-label>0°</strong><small> drag to rotate</small></span>
+          <span><strong>Turn Adi</strong><small>tap an arrow or a view</small></span>
           <button type="button" data-outfit-turn="45" aria-label="Rotate Addi right 45 degrees">↷</button>
         </div>
       </div>`;
@@ -244,9 +257,7 @@
     `;
     window.scrollTo({ top: 0, behavior: "auto" });
     screen.focus({ preventScroll: true });
-    window.requestAnimationFrame(() => {
-      window.Adi3D?.mount("adi-three-stage");
-    });
+    threeMounted = false;
   };
 
   document.addEventListener("click", (event) => {
@@ -270,12 +281,17 @@
 
     const angleButton = event.target.closest("[data-outfit-angle]");
     if (angleButton && currentView?.type === "outfit-check") {
+      ensure3D();
       window.Adi3D?.setAngle(Number(angleButton.dataset.outfitAngle || 0));
+      document.querySelectorAll(".outfit-view-thumb").forEach((button) => {
+        button.classList.toggle("is-active", button === angleButton);
+      });
       return;
     }
 
     const turnButton = event.target.closest("[data-outfit-turn]");
     if (turnButton && currentView?.type === "outfit-check") {
+      ensure3D();
       window.Adi3D?.rotateBy(Number(turnButton.dataset.outfitTurn || 0));
       return;
     }
