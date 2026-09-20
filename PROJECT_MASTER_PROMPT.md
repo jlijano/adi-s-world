@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.15.0  
+**Version:** 1.16.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -1103,3 +1103,39 @@ For an implementation request:
 5. verify the deployed commit still contains the Bible story, verse, activity, and approved image.
 
 This workflow is the reusable baseline for future Blessing Garden lesson additions.
+
+
+---
+
+## Blessing Garden Sacred Narrator — Permanent Voice Standard
+
+Bible stories and Bible verses must support a dedicated **Sacred Narrator** option.
+
+The Sacred Narrator is defined by general voice qualities, not by impersonating a specific real person:
+
+- male;
+- mature/elderly character, approximately 70–80 in perceived age;
+- deep, warm vocal tone;
+- calm and reverent;
+- slow enough for young children to understand;
+- very clear pronunciation and diction;
+- natural pauses;
+- gentle, solemn delivery appropriate for Scripture;
+- never theatrical, frightening, booming, or exaggerated.
+
+The intended feeling is peaceful, dignified, comforting, and holy.
+
+Implementation rules:
+
+- Sacred Narrator is the default Blessing Garden narration mode unless the user changes it.
+- Provide a visible option to switch between **Sacred Narrator** and **Standard Voice**.
+- Persist the selected Blessing Garden narration mode locally.
+- Use Sacred Narrator for actual Bible Story scene narration and Memory Verse read-aloud.
+- Use Sacred Narrator for Verse Time verse/question narration where the verse itself is being read.
+- Keep normal Adi/game feedback on the standard voice unless the content being spoken is Scripture/story narration.
+- Reuse the existing Web Speech / speechSynthesis infrastructure rather than introducing a separate audio engine unless a future voice service is deliberately adopted.
+- Browser and Android system voices vary. Select the best available English male/mature-sounding voice heuristically and fall back gracefully when the ideal voice is unavailable.
+- A lower pitch and slightly slower rate may be used to create the intended mature, reverent delivery, but speech must remain natural and intelligible.
+- Never claim the browser voice is an exact age, gender, or celebrity voice when the platform does not expose reliable metadata.
+- Do not imitate or market the voice as a specific living actor or public figure.
+- Do not allow overlapping Bible narration; existing audio-completion/navigation rules remain in effect.

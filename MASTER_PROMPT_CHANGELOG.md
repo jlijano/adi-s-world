@@ -618,3 +618,20 @@ Added:
 Reason:
 
 - The Call of Gideon implementation established a repeatable content-production workflow: analyze the lesson pages, colorize the raw illustration, verify Biblical character accuracy, add the story, add its memory verse, recreate the worksheet activity, store the approved image locally, and deploy the complete package. Future Bible lessons should follow the same connected workflow instead of being implemented as unrelated one-off features.
+
+
+## 1.16.0 — 2026-09-20
+
+Added:
+
+- Added a permanent Blessing Garden **Sacred Narrator** voice profile.
+- Sacred Narrator targets a deep, warm, mature male character with slow, clear, calm, reverent delivery suitable for Bible stories and Scripture.
+- Added a persistent Blessing Garden choice between Sacred Narrator and Standard Voice.
+- Sacred Narrator is used for Bible Story scene narration, Memory Verse read-aloud, and Verse Time verse narration.
+- The implementation selects the best available mature/male-sounding English system voice and uses lower pitch and slower pacing, with graceful fallback on devices that expose different voice sets.
+- Other worlds and ordinary game feedback keep the standard Adi's World voice behavior.
+- Added a master-prompt rule that this is a general voice profile and must not be represented as an imitation of a specific living actor or public figure.
+
+Reason:
+
+- Blessing Garden Scripture and story reading should feel natural, peaceful, dignified, easy for young children to understand, and distinct from ordinary game narration.

@@ -1,5 +1,6 @@
 const STORAGE_KEY = "adis-world-progress-v1";
 const SOUND_KEY = "adis-world-sound-v1";
+const BLESSING_VOICE_KEY = "adis-world-blessing-voice-v1";
 
 const worlds = [
   { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "open" },
@@ -1531,6 +1532,7 @@ function updateSessionScore(delta) {
 
 let progress = loadProgress();
 let soundEnabled = localStorage.getItem(SOUND_KEY) !== "off";
+let blessingVoiceMode = localStorage.getItem(BLESSING_VOICE_KEY) || "sacred";
 let currentView = { type: "home" };
 let activeGame = null;
 let gameSession = null;
@@ -1655,6 +1657,7 @@ function updateStarCount() {
 }
 
 let preferredBritishVoice = null;
+let preferredSacredVoice = null;
 
 function scoreBritishVoice(voice) {
   const name = (voice.name || "").toLowerCase();
@@ -1679,16 +1682,48 @@ function scoreBritishVoice(voice) {
   return score;
 }
 
+function scoreSacredVoice(voice) {
+  const name = (voice.name || "").toLowerCase();
+  const lang = (voice.lang || "").toLowerCase();
+  let score = 0;
+
+  if (lang === "en-gb") score += 80;
+  else if (lang.startsWith("en-gb")) score += 70;
+  else if (lang.startsWith("en")) score += 30;
+
+  if (name.includes("male")) score += 80;
+  if (name.includes("daniel")) score += 70;
+  if (name.includes("ryan")) score += 65;
+  if (name.includes("george")) score += 60;
+  if (name.includes("arthur")) score += 58;
+  if (name.includes("james")) score += 55;
+  if (name.includes("david")) score += 52;
+  if (name.includes("mark")) score += 50;
+  if (name.includes("alex")) score += 45;
+  if (name.includes("google uk english male")) score += 75;
+  if (name.includes("whisper") || name.includes("novelty")) score -= 80;
+  if (voice.localService) score += 8;
+
+  return score;
+}
+
 function refreshPreferredBritishVoice() {
   if (!("speechSynthesis" in window)) return;
 
   const voices = window.speechSynthesis.getVoices();
   if (!voices.length) return;
 
+  const englishVoices = voices.filter((voice) => (voice.lang || "").toLowerCase().startsWith("en"));
+
   preferredBritishVoice =
-    voices
-      .filter((voice) => (voice.lang || "").toLowerCase().startsWith("en"))
+    englishVoices
+      .slice()
       .sort((a, b) => scoreBritishVoice(b) - scoreBritishVoice(a))[0] || null;
+
+  preferredSacredVoice =
+    englishVoices
+      .slice()
+      .sort((a, b) => scoreSacredVoice(b) - scoreSacredVoice(a))[0] || preferredBritishVoice;
 }
 
 if ("speechSynthesis" in window) {
@@ -1731,6 +1766,67 @@ function speak(text, onDone) {
   }
 
   window.speechSynthesis.speak(utterance);
+}
+
+function speakBlessing(text, onDone) {
+  if (blessingVoiceMode !== "sacred") {
+    speak(text, onDone);
+    return;
+  }
+
+  if (!soundEnabled || !("speechSynthesis" in window)) {
+    if (typeof onDone === "function") onDone();
+    return;
+  }
+
+  refreshPreferredBritishVoice();
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = preferredSacredVoice?.lang || "en-GB";
+
+  if (preferredSacredVoice) {
+    utterance.voice = preferredSacredVoice;
+  }
+
+  // Sacred Narrator: deep, warm, mature, slow and reverent.
+  // Browser/device TTS determines the exact available voice.
+  utterance.rate = 0.72;
+  utterance.pitch = 0.72;
+  utterance.volume = 1.0;
+
+  if (typeof onDone === "function") {
+    let finished = false;
+    const finishOnce = () => {
+      if (finished) return;
+      finished = true;
+      onDone();
+    };
+    utterance.onend = finishOnce;
+    utterance.onerror = finishOnce;
+  }
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function renderBlessingVoiceSelector() {
+  const sacredSelected = blessingVoiceMode === "sacred";
+  return `
+    <section class="blessing-voice-panel" aria-label="Bible narration voice">
+      <div class="blessing-voice-copy">
+        <strong>🎙️ Bible narration voice</strong>
+        <small>Sacred Narrator uses the deepest, warmest mature English voice available on this device.</small>
+      </div>
+      <div class="blessing-voice-options" role="group" aria-label="Choose Bible narration voice">
+        <button type="button" class="blessing-voice-option ${sacredSelected ? "is-active" : ""}" data-blessing-voice="sacred" aria-pressed="${sacredSelected}">
+          Sacred Narrator
+        </button>
+        <button type="button" class="blessing-voice-option ${!sacredSelected ? "is-active" : ""}" data-blessing-voice="standard" aria-pressed="${!sacredSelected}">
+          Standard Voice
+        </button>
+      </div>
+    </section>
+  `;
 }
 
 function runAfterInstructionSpeech(callback) {
@@ -1884,6 +1980,8 @@ function renderWorld(worldId) {
       <p>${hasActivities ? `${world.note}. Pick a short game and help Adi complete fun learning challenges.` : `${world.note}. This world is open and ready to explore.`}</p>
     </section>
 
+    ${worldId === "blessing" ? renderBlessingVoiceSelector() : ""}
+
     <section class="section" aria-labelledby="activity-heading">
       <div class="section-heading">
         <div>
@@ -1931,6 +2029,7 @@ function renderBibleStoryLibrary() {
       <p class="helper-text">Choose a Bible story to read and listen to.</p>
       <p class="bible-library-reward-note">Each story can earn up to 5 stars.</p>
     </header>
+    ${renderBlessingVoiceSelector()}
     <section class="bible-story-grid" aria-label="Bible story library">
       ${BIBLE_STORIES.map((story) => {
         const storyProgress = getStoryProgress(story.id);
@@ -2011,7 +2110,7 @@ function renderBibleStory(storyId, sceneIndex = 0, announce = true) {
   `;
 
   screen.focus({ preventScroll: true });
-  if (announce) setTimeout(() => speak(`${scene.title}. ${scene.text}`), 220);
+  if (announce) setTimeout(() => speakBlessing(`${scene.title}. ${scene.text}`), 220);
 }
 
 function renderBibleStoryCompletion(storyId) {
@@ -2436,7 +2535,8 @@ function renderGame(worldId, activityId, roundIndex = 0) {
   `;
 
   screen.focus({ preventScroll: true });
-  setTimeout(() => speak(round.speak || round.prompt), 250);
+  const useSacredNarrator = worldId === "blessing" && activityId === "verse-time";
+  setTimeout(() => (useSacredNarrator ? speakBlessing : speak)(round.speak || round.prompt), 250);
 }
 
 function escapeAttr(value) {
@@ -3439,6 +3539,26 @@ function toggleSound() {
 }
 
 document.addEventListener("click", (event) => {
+  const blessingVoiceButton = event.target.closest("[data-blessing-voice]");
+  if (blessingVoiceButton) {
+    const mode = blessingVoiceButton.dataset.blessingVoice === "standard" ? "standard" : "sacred";
+    blessingVoiceMode = mode;
+    localStorage.setItem(BLESSING_VOICE_KEY, mode);
+
+    document.querySelectorAll("[data-blessing-voice]").forEach((button) => {
+      const isActive = button.dataset.blessingVoice === mode;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    });
+
+    if (mode === "sacred") {
+      speakBlessing("Sacred Narrator selected. The Bible story will be read slowly and clearly.");
+    } else {
+      speak("Standard voice selected.");
+    }
+    return;
+  }
+
   const nav = event.target.closest("[data-nav]");
   if (nav) {
     const name = nav.dataset.nav;
@@ -3527,7 +3647,7 @@ document.addEventListener("click", (event) => {
   const bibleVerseReadButton = event.target.closest("[data-bible-read-verse]");
   if (bibleVerseReadButton && currentView.type === "bible-story") {
     const story = BIBLE_STORIES.find((item) => item.id === currentView.storyId);
-    if (story?.memoryVerse) speak(`Memory verse. ${story.memoryVerseReference}. ${story.memoryVerse}`);
+    if (story?.memoryVerse) speakBlessing(`Memory verse. ${story.memoryVerseReference}. ${story.memoryVerse}`);
     return;
   }
 
@@ -3535,7 +3655,7 @@ document.addEventListener("click", (event) => {
   if (bibleReadButton && currentView.type === "bible-story") {
     const story = BIBLE_STORIES.find((item) => item.id === currentView.storyId);
     const scene = story?.scenes[currentView.sceneIndex];
-    if (scene) speak(`${scene.title}. ${scene.text}`);
+    if (scene) speakBlessing(`${scene.title}. ${scene.text}`);
     return;
   }
 
@@ -3811,7 +3931,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=47", { updateViaCache: "none" })
+      .register("./service-worker.js?v=48", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
