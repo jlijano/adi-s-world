@@ -3141,3 +3141,13 @@ button:focus-visible {
   .gideon-letter-choice { min-height: 54px; font-size: 20px; }
   .bible-memory-verse blockquote { font-size: 16px; }
 }
+
+.bible-memory-verse-image {
+  width: 100%;
+  max-height: 320px;
+  display: block;
+  object-fit: contain;
+  margin: 0 auto 14px;
+  border-radius: 16px;
+  background: #fffdf6;
+}

@@ -456,8 +456,10 @@ const BIBLE_STORIES = [
     maxStars: 5,
     memoryVerseReference: "Judges 6:17",
     memoryVerse: "If now I have found favor in your eyes, give me a sign.",
+    memoryVerseImage: "assets/blessing-garden/gideon/gideon-call.jpg",
+    memoryVerseImageAlt: "Child-friendly illustration of Jesus and Gideon beside the stone altar.",
     coverImage: "assets/blessing-garden/gideon/gideon-call.jpg",
-    coverAlt: "Colorful child-friendly illustration of an angel speaking to Gideon beside a stone altar with a small flame.",
+    coverAlt: "Colorful child-friendly illustration of Jesus and Gideon beside a stone altar with a small flame.",
     sourceUrl: "assets/blessing-garden/gideon/gideon-call.jpg",
     credits: "Colorized child-friendly adaptation based on the workbook illustration provided by the user",
     license: "User-provided reference, adapted for this Adi's World lesson",
@@ -472,13 +474,13 @@ const BIBLE_STORIES = [
         image: "assets/blessing-garden/gideon/gideon-call.jpg",
         title: "God Chooses Gideon",
         text: "God heard their prayers and chose a man named Gideon to lead His people. An angel came to Gideon while he was hiding and threshing grain.",
-        alt: "Colorful child-friendly illustration of an angel speaking to Gideon."
+        alt: "Colorful child-friendly illustration of Jesus speaking to Gideon."
       },
       {
         image: "assets/blessing-garden/gideon/gideon-call.jpg",
         title: "Gideon Asks for a Sign",
         text: "Gideon was afraid and wanted to know that God was really calling him. He brought food, and the angel touched it on the rock. A flame rose up as a sign.",
-        alt: "Colorful child-friendly illustration of the angel, Gideon, a stone altar, food, and a gentle flame."
+        alt: "Colorful child-friendly illustration of Jesus, Gideon, a stone altar, food, and a gentle flame."
       },
       {
         image: "assets/blessing-garden/gideon/gideon-call.jpg",
@@ -1985,6 +1987,7 @@ function renderBibleStory(storyId, sceneIndex = 0, announce = true) {
       <p class="bible-reader-text">${scene.text}</p>
       ${story.memoryVerse ? `
         <aside class="bible-memory-verse" aria-label="Memory verse">
+          ${story.memoryVerseImage ? `<img class="bible-memory-verse-image" src="${story.memoryVerseImage}" alt="${escapeAttr(story.memoryVerseImageAlt || story.coverAlt || "Bible story illustration")}">` : ""}
           <span>Memory Verse</span>
           <strong>${story.memoryVerseReference}</strong>
           <blockquote>“${story.memoryVerse}”</blockquote>
@@ -3808,7 +3811,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=45", { updateViaCache: "none" })
+      .register("./service-worker.js?v=46", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
