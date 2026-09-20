@@ -20,12 +20,15 @@ function exists(localPath) {
 
 const html = fs.readFileSync("index.html", "utf8");
 const app = fs.readFileSync("app.js", "utf8");
+const audio = fs.readFileSync("audio-manager.js", "utf8");
 const sw = fs.readFileSync("service-worker.js", "utf8");
 const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8"));
 
 check(html.includes('id="app"'), "App shell exists");
 check(html.includes('id="screen"'), "Main screen mount exists");
 check(html.includes('data-nav="home"') && html.includes('data-nav="worlds"') && html.includes('data-nav="progress"'), "Primary navigation controls exist");
+check(html.includes('data-action="show-settings"'), "Settings entry exists in app header");
+check(html.includes('audio-manager.js?v='), "Central audio manager loads before app");
 
 for (const id of ["home","word","number","drawing","discovery","blessing","robot","puzzle","memory","feelings","adventure"]) {
   check(app.includes(`id: "${id}"`), `World definition exists: ${id}`);
@@ -45,6 +48,10 @@ check(app.includes('document.addEventListener("click"'), "Delegated interaction 
 check(app.includes("gameSession.score = Math.max(0"), "Session score cannot go below zero");
 check(app.includes("progress.stars"), "Persistent star tracking is present");
 check(app.includes("localStorage"), "Local progress storage is present");
+check(app.includes("function renderSettings()"), "Settings screen renderer is present");
+check(app.includes("window.AdiAudio"), "App routes speech through centralized audio manager");
+check(audio.includes("window.AdiAudio"), "Central audio manager exports its API");
+check(audio.includes("setRatePreset") && audio.includes("setEnabled"), "Audio settings controls are supported");
 
 const refs = [];
 for (const match of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
