@@ -16,6 +16,16 @@ const worlds = [
 ];
 
 const activities = {
+  home: [
+    {
+      id: "outfit-check",
+      title: "Outfit Check",
+      icon: "👗",
+      description: "Dress Adi in different tops, bottoms, accessories, watches, and shoes. Your outfit is saved on this device.",
+      rounds: [],
+      customActivity: true
+    }
+  ],
   word: [
     {
       id: "letter-find",
@@ -3174,6 +3184,10 @@ document.addEventListener("click", (event) => {
 
   const activityButton = event.target.closest("[data-activity]");
   if (activityButton) {
+    if (activityButton.dataset.worldId === "home" && activityButton.dataset.activity === "outfit-check") {
+      renderOutfitCheck();
+      return;
+    }
     if (activityButton.dataset.worldId === "blessing" && activityButton.dataset.activity === "story-garden") {
       renderBibleStoryLibrary();
     } else {
