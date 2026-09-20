@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.14.1  
+**Version:** 1.14.2  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -870,3 +870,14 @@ For Plant Food Sort specifically:
 - Do not substitute a visually different generic emoji for calamansi, lanzones, chico, jackfruit, ampalaya, malunggay, patola, kangkong, or other foods without an accurate emoji.
 - Image assets should be sourced from reusable-license or public-domain sources, with credits recorded in the repository.
 - Core Plant Food Sort image assets must be listed in the service-worker app shell so previously loaded/cached versions remain playable offline.
+
+
+---
+
+## Plant Food Sort — Photo-Only Content Rule
+
+Plant Food Sort food prompts must use verified photographs of the named food. Illustrations, clip-art, emoji-like drawings, or generic substitute images are not acceptable as the primary learning image.
+
+Category answer buttons should remain text-first and must not use decorative fruit or vegetable emoji that could be confused with the item being classified.
+
+When replacing an incorrect food image, use a new local filename and bump the PWA cache version so installed/offline clients cannot continue serving the old asset.
