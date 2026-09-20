@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.14.0  
+**Version:** 1.14.1  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -856,3 +856,17 @@ Permanent behavior:
 - Where a food is botanically a fruit but commonly treated as a vegetable in cooking, feedback must use careful wording such as “We usually call cucumber a vegetable when we eat or cook it” rather than presenting the culinary grouping as a strict botanical fact.
 - Completion uses the existing persistent-star and best-score system and a Discovery Lab celebration message such as **Great discovering!**
 - Layout must remain Android-phone-first, tablet-responsive, accessible, reduced-motion-aware, and compatible with the existing PWA/offline architecture.
+
+
+---
+
+## Discovery Lab Visual Accuracy Rule
+
+For image-based Discovery Lab classification activities, use accurate local image assets rather than generic emoji substitutions when the emoji could misrepresent the learning item.
+
+For Plant Food Sort specifically:
+
+- Every food in the 20-item pool must use its own locally stored photograph under `assets/discovery/plant-foods/`.
+- Do not substitute a visually different generic emoji for calamansi, lanzones, chico, jackfruit, ampalaya, malunggay, patola, kangkong, or other foods without an accurate emoji.
+- Image assets should be sourced from reusable-license or public-domain sources, with credits recorded in the repository.
+- Core Plant Food Sort image assets must be listed in the service-worker app shell so previously loaded/cached versions remain playable offline.
