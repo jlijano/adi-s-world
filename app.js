@@ -532,26 +532,26 @@ const LETTER_FIND_LEVELS = [
 ];
 
 const PLANT_FOOD_POOL = [
-  { name: "Mango", spokenName: "mango", emoji: "🥭", category: "Fruit", difficulty: 1 },
-  { name: "Banana", spokenName: "banana", emoji: "🍌", category: "Fruit", difficulty: 1 },
-  { name: "Pineapple", spokenName: "pineapple", emoji: "🍍", category: "Fruit", difficulty: 1 },
-  { name: "Carrot", spokenName: "carrot", emoji: "🥕", category: "Vegetable", difficulty: 1 },
-  { name: "Broccoli", spokenName: "broccoli", emoji: "🥦", category: "Vegetable", difficulty: 1 },
-  { name: "Papaya", spokenName: "papaya", emoji: "🍈", category: "Fruit", difficulty: 2 },
-  { name: "Guava", spokenName: "guava", emoji: "🍈", category: "Fruit", difficulty: 2 },
-  { name: "Coconut", spokenName: "coconut", emoji: "🥥", category: "Fruit", difficulty: 2 },
-  { name: "Eggplant", spokenName: "eggplant", emoji: "🍆", category: "Vegetable", difficulty: 2, culinaryGroup: true },
-  { name: "Squash", spokenName: "squash", emoji: "🎃", category: "Vegetable", difficulty: 2, culinaryGroup: true },
-  { name: "Cucumber", spokenName: "cucumber", emoji: "🥒", category: "Vegetable", difficulty: 2, culinaryGroup: true },
-  { name: "Chico", spokenName: "chico", emoji: "🍐", category: "Fruit", difficulty: 3 },
-  { name: "Calamansi", spokenName: "calamansi", emoji: "🍊", category: "Fruit", difficulty: 3 },
-  { name: "Lanzones", spokenName: "lanzones", emoji: "🍇", category: "Fruit", difficulty: 3 },
-  { name: "Jackfruit", spokenName: "jackfruit", emoji: "🍈", category: "Fruit", difficulty: 3 },
-  { name: "Ampalaya", spokenName: "ampalaya, or bitter melon", emoji: "🥒", category: "Vegetable", difficulty: 3, culinaryGroup: true },
-  { name: "Malunggay", spokenName: "malunggay", emoji: "🌿", category: "Vegetable", difficulty: 3 },
-  { name: "Patola", spokenName: "patola", emoji: "🥒", category: "Vegetable", difficulty: 3, culinaryGroup: true },
-  { name: "Kangkong", spokenName: "kangkong", emoji: "🥬", category: "Vegetable", difficulty: 3 },
-  { name: "String Beans", spokenName: "string beans", emoji: "🫛", category: "Vegetable", difficulty: 3, culinaryGroup: true }
+  { name: "Mango", spokenName: "mango", image: "./assets/discovery/plant-foods/mango.jpg", category: "Fruit", difficulty: 1 },
+  { name: "Banana", spokenName: "banana", image: "./assets/discovery/plant-foods/banana.jpg", category: "Fruit", difficulty: 1 },
+  { name: "Pineapple", spokenName: "pineapple", image: "./assets/discovery/plant-foods/pineapple.jpg", category: "Fruit", difficulty: 1 },
+  { name: "Carrot", spokenName: "carrot", image: "./assets/discovery/plant-foods/carrot.jpg", category: "Vegetable", difficulty: 1 },
+  { name: "Broccoli", spokenName: "broccoli", image: "./assets/discovery/plant-foods/broccoli.jpg", category: "Vegetable", difficulty: 1 },
+  { name: "Papaya", spokenName: "papaya", image: "./assets/discovery/plant-foods/papaya.jpg", category: "Fruit", difficulty: 2 },
+  { name: "Guava", spokenName: "guava", image: "./assets/discovery/plant-foods/guava.jpg", category: "Fruit", difficulty: 2 },
+  { name: "Coconut", spokenName: "coconut", image: "./assets/discovery/plant-foods/coconut.jpg", category: "Fruit", difficulty: 2 },
+  { name: "Eggplant", spokenName: "eggplant", image: "./assets/discovery/plant-foods/eggplant.jpg", category: "Vegetable", difficulty: 2, culinaryGroup: true },
+  { name: "Squash", spokenName: "squash", image: "./assets/discovery/plant-foods/squash.jpg", category: "Vegetable", difficulty: 2, culinaryGroup: true },
+  { name: "Cucumber", spokenName: "cucumber", image: "./assets/discovery/plant-foods/cucumber.jpg", category: "Vegetable", difficulty: 2, culinaryGroup: true },
+  { name: "Chico", spokenName: "chico", image: "./assets/discovery/plant-foods/chico.jpg", category: "Fruit", difficulty: 3 },
+  { name: "Calamansi", spokenName: "calamansi", image: "./assets/discovery/plant-foods/calamansi.jpg", category: "Fruit", difficulty: 3 },
+  { name: "Lanzones", spokenName: "lanzones", image: "./assets/discovery/plant-foods/lanzones.jpg", category: "Fruit", difficulty: 3 },
+  { name: "Jackfruit", spokenName: "jackfruit", image: "./assets/discovery/plant-foods/jackfruit.jpg", category: "Fruit", difficulty: 3 },
+  { name: "Ampalaya", spokenName: "ampalaya, or bitter melon", image: "./assets/discovery/plant-foods/ampalaya.jpg", category: "Vegetable", difficulty: 3, culinaryGroup: true },
+  { name: "Malunggay", spokenName: "malunggay", image: "./assets/discovery/plant-foods/malunggay.jpg", category: "Vegetable", difficulty: 3 },
+  { name: "Patola", spokenName: "patola", image: "./assets/discovery/plant-foods/patola.jpg", category: "Vegetable", difficulty: 3, culinaryGroup: true },
+  { name: "Kangkong", spokenName: "kangkong", image: "./assets/discovery/plant-foods/kangkong.jpg", category: "Vegetable", difficulty: 3 },
+  { name: "String Beans", spokenName: "string beans", image: "./assets/discovery/plant-foods/string-beans.jpg", category: "Vegetable", difficulty: 3, culinaryGroup: true }
 ];
 
 function buildPlantFoodRounds() {
@@ -575,7 +575,7 @@ function buildPlantFoodRounds() {
 
     return {
       prompt: `Is ${food.name} a fruit or a vegetable?`,
-      stage: food.emoji,
+      stage: "",
       choices: shuffle(["Fruit", "Vegetable"]),
       answer: food.category,
       speak: `Is ${food.spokenName} a fruit or a vegetable?`,
@@ -584,7 +584,7 @@ function buildPlantFoodRounds() {
       plantFoodRound: true,
       foodName: food.name,
       foodSpokenName: food.spokenName,
-      foodEmoji: food.emoji,
+      foodImage: food.image,
       correctFeedback,
       correctSpeak
     };
@@ -2197,7 +2197,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
              </div>`
           : round.plantFoodRound
           ? `<button class="plant-food-picture-button" type="button" data-plant-food-speak="${escapeAttr(round.foodSpokenName)}" aria-label="Hear ${escapeAttr(round.foodName)}">
-               <span class="plant-food-emoji" aria-hidden="true">${round.foodEmoji}</span>
+               <img class="plant-food-photo" src="${escapeAttr(round.foodImage)}" alt="${escapeAttr(round.foodName)}" loading="eager" decoding="async">
                <strong>${round.foodName}</strong>
                <small>🔊 Tap to hear</small>
              </button>`
