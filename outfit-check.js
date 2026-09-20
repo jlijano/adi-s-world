@@ -97,7 +97,6 @@
           <span class="room-shelf"></span>
           <span class="room-rug"></span>
           <span class="room-poster">A Brighter<br>Tomorrow<br>with Adi! ♡</span>
-          <span class="room-plush">🐰</span>
         </div>
       </div>`;
   }
