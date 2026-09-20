@@ -293,7 +293,7 @@ import { GLTFLoader } from "./assets/vendor/three/GLTFLoader.js";
             state.ready = true;
             state.loadError = null;
 
-            setAngle(0);
+            setAngle(state.angle);
             setStatus("Addi 3D ready • drag to rotate 360°", "ready");
 
             console.info("Addi GLB loaded", {
