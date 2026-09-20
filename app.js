@@ -2037,7 +2037,7 @@ function setActiveNav(name) {
 
 function visualCardArtwork(kind, label) {
   if (kind === "word") {
-    return `<img class="card-illustration-svg" src="assets/worlds/word-forest-card.svg?v=71" alt="" aria-hidden="true" decoding="async">`;
+    return `<img class="card-illustration-svg" src="assets/worlds/word-forest-card.svg?v=73" alt="" aria-hidden="true" decoding="async">`;
   }
   const seed = [...String(kind || label || "adi")].reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const variants = [
@@ -4135,8 +4135,16 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
+    let reloadingForUpdate = false;
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (reloadingForUpdate) return;
+      reloadingForUpdate = true;
+      window.location.reload();
+    });
+
     navigator.serviceWorker
-      .register("./service-worker.js?v=56", { updateViaCache: "none" })
+      .register("./service-worker.js?v=73", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
