@@ -1,5 +1,15 @@
 # Adi's World Master Prompt Changelog
 
+## 1.14.2 — 2026-09-20
+
+Fixed:
+
+- Replaced the illustrated banana asset with a verified banana photograph.
+- Removed decorative Fruit and Vegetable emoji from Plant Food Sort answer buttons.
+- Switched the banana to a new local filename to prevent stale PWA caches from reusing the old illustration.
+- Updated index asset query versions and bumped the PWA cache to v45.
+
+
 ## 1.14.1 — 2026-09-20
 
 Fixed:
