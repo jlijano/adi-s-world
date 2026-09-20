@@ -3151,3 +3151,85 @@ button:focus-visible {
   border-radius: 16px;
   background: #fffdf6;
 }
+
+
+/* Adi's Home — first interactive character prototype */
+.adi-home-character-section {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin: 18px 0 8px;
+}
+
+.adi-home-character-button {
+  position: relative;
+  width: min(72vw, 310px);
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #050505;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.adi-home-character-button:focus-visible {
+  outline: 4px solid #6c5ce7;
+  outline-offset: 4px;
+}
+
+.adi-home-character-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: contain;
+  object-position: center bottom;
+  transition: transform 180ms ease;
+}
+
+.adi-home-character-button.is-waving .adi-home-character-image {
+  aspect-ratio: 240 / 430;
+  animation: adi-home-hi-pop 420ms ease-out;
+}
+
+.adi-home-tap-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  min-width: 120px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #2d2342;
+  font-weight: 800;
+  font-size: 0.92rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+.adi-home-character-help {
+  margin: 0;
+  color: #635b73;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+@keyframes adi-home-hi-pop {
+  0% { transform: scale(0.97); }
+  55% { transform: scale(1.025); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adi-home-character-image {
+    transition: none;
+  }
+
+  .adi-home-character-button.is-waving .adi-home-character-image {
+    animation: none;
+  }
+}

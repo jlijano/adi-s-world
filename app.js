@@ -6,6 +6,8 @@ const BLESSING_PITCH_KEY = "adis-world-blessing-pitch-v1";
 const BLESSING_RATE_KEY = "adis-world-blessing-rate-v1";
 const BLESSING_SYSTEM_VOICE_KEY = "adis-world-blessing-system-voice-v1";
 const BLESSING_PROFILE_VERSION_KEY = "adis-world-blessing-profile-version";
+const ADI_HOME_IDLE_IMAGE = "assets/character/idle-front.webp";
+const ADI_HOME_HI_IMAGE = "assets/character/hi-wave.webp";
 
 const worlds = [
   { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "open" },
@@ -1878,6 +1880,93 @@ function speakBlessing(text, onDone) {
   speak(text, onDone);
 }
 
+function scoreAdiChildVoice(voice) {
+  const name = (voice.name || "").toLowerCase();
+  const lang = (voice.lang || "").toLowerCase();
+  let score = 0;
+
+  if (lang.startsWith("en")) score += 30;
+  if (name.includes("child") || name.includes("kid") || name.includes("girl")) score += 500;
+  if (["samantha", "zira", "aria", "jenny", "sonia", "ava", "victoria", "karen", "moira", "fiona", "tessa", "susan"].some((hint) => name.includes(hint))) score += 140;
+  if (name.includes("natural") || name.includes("neural")) score += 80;
+  if (name.includes("enhanced") || name.includes("premium")) score += 60;
+  if (["male", "daniel", "george", "david", "ryan", "arthur", "james", "mark", "bruce", "ralph"].some((hint) => name.includes(hint))) score -= 220;
+
+  return score;
+}
+
+function getAdiChildVoice() {
+  if (!("speechSynthesis" in window)) return null;
+  const voices = window.speechSynthesis.getVoices().filter((voice) => (voice.lang || "").toLowerCase().startsWith("en"));
+  return voices.slice().sort((a, b) => scoreAdiChildVoice(b) - scoreAdiChildVoice(a))[0] || null;
+}
+
+function speakAdiGreeting(onDone) {
+  if (!soundEnabled || !("speechSynthesis" in window)) {
+    if (typeof onDone === "function") onDone();
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  const voice = getAdiChildVoice();
+  const utterance = new SpeechSynthesisUtterance("Hi!");
+  utterance.lang = voice?.lang || "en";
+  if (voice) utterance.voice = voice;
+
+  // Young-child style for Adi: bright, short and natural.
+  // Browser voices vary by device, so the dedicated voice selection plus pitch/rate
+  // keeps the greeting consistently child-like without changing the app's normal voice.
+  utterance.rate = 0.94;
+  utterance.pitch = 1.45;
+  utterance.volume = 1.0;
+
+  if (typeof onDone === "function") {
+    let finished = false;
+    const finishOnce = () => {
+      if (finished) return;
+      finished = true;
+      onDone();
+    };
+    utterance.onend = finishOnce;
+    utterance.onerror = finishOnce;
+  }
+
+  window.speechSynthesis.speak(utterance);
+}
+
+let adiHomeGreetingTimer = null;
+
+function greetAdiAtHome() {
+  const button = document.querySelector("[data-adi-home-character]");
+  const image = button?.querySelector("[data-adi-home-image]");
+  if (!button || !image) return;
+
+  if (adiHomeGreetingTimer) {
+    window.clearTimeout(adiHomeGreetingTimer);
+    adiHomeGreetingTimer = null;
+  }
+
+  image.src = ADI_HOME_HI_IMAGE;
+  button.classList.add("is-waving");
+  button.setAttribute("aria-label", "Adi is waving and saying hi");
+
+  const returnToIdle = () => {
+    adiHomeGreetingTimer = window.setTimeout(() => {
+      if (!document.body.contains(image)) return;
+      image.src = ADI_HOME_IDLE_IMAGE;
+      button.classList.remove("is-waving");
+      button.setAttribute("aria-label", "Tap Adi to say hi");
+      adiHomeGreetingTimer = null;
+    }, 850);
+  };
+
+  speakAdiGreeting(returnToIdle);
+
+  if (!soundEnabled || !("speechSynthesis" in window)) {
+    returnToIdle();
+  }
+}
+
 function renderBlessingVoiceSelector() {
   return "";
 }
@@ -3617,6 +3706,12 @@ document.addEventListener("click", (event) => {
         renderWorld(action.dataset.worldId);
         break;
     }
+    return;
+  }
+
+  const adiHomeCharacterButton = event.target.closest("[data-adi-home-character]");
+  if (adiHomeCharacterButton) {
+    greetAdiAtHome();
     return;
   }
 
