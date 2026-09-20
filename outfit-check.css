@@ -685,3 +685,134 @@
   .outfit-view-thumb:nth-child(2),
   .outfit-view-thumb:nth-child(6){display:none}
 }
+
+
+/* Outfit Check real Three.js/GLB pipeline */
+.outfit-avatar-real3d{
+  position:relative;
+  min-height:620px;
+  overflow:hidden;
+}
+.adi-three-stage{
+  position:absolute;
+  z-index:5;
+  left:50%;
+  top:46px;
+  bottom:74px;
+  width:min(82%,430px);
+  transform:translateX(-50%);
+  touch-action:none;
+  border-radius:26px;
+}
+.adi-three-canvas{
+  display:block;
+  width:100%;
+  height:100%;
+  cursor:grab;
+  touch-action:none;
+  border-radius:26px;
+}
+.adi-three-canvas:active{cursor:grabbing}
+.adi-three-status{
+  position:absolute;
+  z-index:2;
+  left:50%;
+  bottom:8px;
+  transform:translateX(-50%);
+  max-width:90%;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.88);
+  color:#5d5870;
+  font-size:10px;
+  font-weight:900;
+  text-align:center;
+  box-shadow:0 5px 14px rgba(65,48,78,.08);
+  pointer-events:none;
+}
+.adi-three-status[data-kind="ready"]{color:#4f48b8}
+.adi-three-status[data-kind="error"]{color:#a23e55}
+.outfit-avatar-real3d .outfit-view-rail{
+  top:18px;
+  right:14px;
+  width:84px;
+  z-index:11;
+}
+.outfit-avatar-real3d .outfit-view-thumb{
+  min-height:54px;
+  grid-template-rows:auto auto;
+  gap:1px;
+}
+.outfit-view-angle{
+  display:grid;
+  place-items:center;
+  min-width:42px;
+  min-height:28px;
+  padding:3px 7px;
+  border-radius:10px;
+  background:linear-gradient(145deg,#f4f0ff,#fff);
+  color:#604ed1;
+  font-size:12px;
+  font-weight:1000;
+}
+.outfit-avatar-real3d .outfit-turn-controls{
+  z-index:12;
+}
+.outfit-avatar-real3d .outfit-turn-controls span{
+  display:grid;
+  justify-items:center;
+  min-width:92px;
+  line-height:1.05;
+}
+.outfit-avatar-real3d .outfit-turn-controls small{
+  margin-top:3px;
+  color:#7d7890;
+  font-size:9px;
+  font-weight:800;
+}
+.outfit-avatar-real3d .outfit-stage-arrow{
+  z-index:12;
+}
+.outfit-avatar-real3d .room-rug{
+  z-index:1;
+}
+.outfit-avatar-real3d .outfit-room-backdrop{
+  z-index:0;
+}
+.outfit-avatar-real3d::after{
+  display:none;
+}
+
+/* Disable previous sprite-only artifacts. */
+.outfit-avatar-real3d .adi-outfit-avatar-render,
+.outfit-avatar-real3d .adi-3d-render,
+.outfit-avatar-real3d .adi-wardrobe-layer{
+  display:none !important;
+}
+
+@media(max-width:520px){
+  .adi-three-stage{
+    top:56px;
+    bottom:72px;
+    width:min(88%,360px);
+  }
+  .outfit-avatar-real3d .outfit-view-rail{
+    width:68px;
+    right:9px;
+  }
+  .outfit-avatar-real3d .outfit-view-thumb{
+    min-height:47px;
+    padding:4px;
+  }
+  .outfit-view-angle{
+    min-width:34px;
+    min-height:23px;
+    font-size:10px;
+  }
+}
+@media(max-width:400px){
+  .outfit-avatar-real3d .outfit-view-thumb:nth-child(2),
+  .outfit-avatar-real3d .outfit-view-thumb:nth-child(6){
+    display:grid;
+  }
+}
