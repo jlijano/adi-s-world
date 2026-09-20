@@ -8,8 +8,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css?v=67">
-  <link rel="stylesheet" href="drawing-garden.css?v=38">
+  <link rel="stylesheet" href="drawing-garden.css?v=37">
   <link rel="stylesheet" href="outfit-check.css?v=63">
+  <link rel="stylesheet" href="outfit-check-layered.css?v=70">
   <title>Adi's World</title>
 </head>
 <body>
@@ -29,58 +30,32 @@
       </div>
       <h1>Adi's World</h1>
       <p>Getting your adventure ready…</p>
-      <div class="splash-loader" aria-hidden="true">
-        <span></span><span></span><span></span>
-      </div>
+      <div class="splash-loader" aria-hidden="true"><span></span><span></span><span></span></div>
     </div>
   </div>
-
   <div id="app" class="app-shell is-loading">
     <header class="topbar" aria-label="Adi's World header">
       <button class="brand-button" data-action="go-home" aria-label="Go to Adi's World home">
         <span class="brand-mark" aria-hidden="true"></span>
-        <span class="brand-copy">
-          <strong>Adi's World</strong>
-          <small>Play • Learn • Explore</small>
-        </span>
+        <span class="brand-copy"><strong>Adi's World</strong><small>Play • Learn • Explore</small></span>
       </button>
       <div class="topbar-actions">
-        <div class="star-pill" aria-label="Stars earned">
-          <span aria-hidden="true">⭐</span>
-          <strong id="star-count">0</strong>
-        </div>
+        <div class="star-pill" aria-label="Stars earned"><span aria-hidden="true">⭐</span><strong id="star-count">0</strong></div>
         <button id="sound-button" class="icon-button" type="button" aria-label="Toggle sound">🔊</button>
       </div>
     </header>
-
     <main id="screen" class="screen" tabindex="-1"></main>
-
     <nav class="bottom-nav" aria-label="Main navigation">
-      <button class="nav-button is-active" data-nav="home" type="button">
-        <span aria-hidden="true">🏠</span>
-        <span>Home</span>
-      </button>
-      <button class="nav-button" data-nav="worlds" type="button">
-        <span aria-hidden="true">🗺️</span>
-        <span>Worlds</span>
-      </button>
-      <button class="nav-button" data-nav="progress" type="button">
-        <span aria-hidden="true">⭐</span>
-        <span>Progress</span>
-      </button>
+      <button class="nav-button is-active" data-nav="home" type="button"><span aria-hidden="true">🏠</span><span>Home</span></button>
+      <button class="nav-button" data-nav="worlds" type="button"><span aria-hidden="true">🗺️</span><span>Worlds</span></button>
+      <button class="nav-button" data-nav="progress" type="button"><span aria-hidden="true">⭐</span><span>Progress</span></button>
     </nav>
   </div>
-
   <div id="celebration" class="celebration" aria-hidden="true">
-    <div class="celebration-card">
-      <div class="celebration-stars" aria-hidden="true">⭐ ✨ ⭐</div>
-      <h2>Great job!</h2>
-      <p>You helped Adi learn something new.</p>
-    </div>
+    <div class="celebration-card"><div class="celebration-stars" aria-hidden="true">⭐ ✨ ⭐</div><h2>Great job!</h2><p>You helped Adi learn something new.</p></div>
   </div>
-
   <script src="app.js?v=62" defer></script>
-  <script src="drawing-garden.js?v=38" defer></script>
-  <script src="outfit-check.js?v=63" defer></script>
+  <script src="drawing-garden.js?v=37" defer></script>
+  <script src="outfit-check.js?v=70" defer></script>
 </body>
 </html>
