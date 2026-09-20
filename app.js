@@ -2,7 +2,7 @@ const STORAGE_KEY = "adis-world-progress-v1";
 const SOUND_KEY = "adis-world-sound-v1";
 
 const worlds = [
-  { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "soon" },
+  { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "open" },
   { id: "word", name: "Word Forest", icon: "🌳", note: "Letters, sounds & words", status: "open" },
   { id: "number", name: "Number Island", icon: "🏝️", note: "Counting & early math", status: "open" },
   { id: "drawing", name: "Drawing Garden", icon: "🎨", note: "Tracing & creativity", status: "soon" },
@@ -1599,7 +1599,7 @@ function renderHome() {
       <div class="section-heading">
         <div>
           <h2 id="continue-heading">Choose an adventure</h2>
-          <p>Five worlds are ready to play.</p>
+          <p>${openWorlds.length} worlds are ready to explore.</p>
         </div>
         <button class="text-button" type="button" data-action="show-worlds">See all</button>
       </div>
@@ -1651,7 +1651,9 @@ function renderWorld(worldId) {
   currentView = { type: "world", worldId };
   setActiveNav("worlds");
   const worldActivities = activities[worldId] || [];
+  const hasActivities = worldActivities.length > 0;
   const worldGameCopy = {
+    home: "Adi’s Home is now open for routines and life-skills adventures. Games and activities will be added here later.",
     word: "Word Forest games build letters, sounds, and early reading skills through short child-friendly challenges, including sound matching, word building, and selected-letter practice.",
     number: "Number Island games build early maths skills through playful counting, comparing, and number patterns.",
     puzzle: "Puzzle Mountain games use short, child-friendly challenges for logic and problem-solving.",
@@ -1664,13 +1666,13 @@ function renderWorld(worldId) {
     <section class="world-hero ${worldId}">
       <span class="eyebrow">Learning world</span>
       <h1>${world.icon} ${world.name}</h1>
-      <p>${world.note}. Pick a short game and help Adi complete fun learning challenges.</p>
+      <p>${hasActivities ? `${world.note}. Pick a short game and help Adi complete fun learning challenges.` : `${world.note}. This world is open and ready to explore.`}</p>
     </section>
 
     <section class="section" aria-labelledby="activity-heading">
       <div class="section-heading">
         <div>
-          <h2 id="activity-heading">Pick a game</h2>
+          <h2 id="activity-heading">${hasActivities ? "Pick a game" : "World ready"}</h2>
           <p>${worldGameCopy[worldId] || "Pick a short, child-friendly learning challenge."}</p>
         </div>
       </div>
@@ -1691,9 +1693,9 @@ function renderWorld(worldId) {
         }).join("")}
       </div>` : `
       <div class="world-empty-state" role="status">
-        <span class="world-empty-icon" aria-hidden="true">🧪</span>
-        <strong>Discovery games are coming next!</strong>
-        <p>This world is open and ready for its first science adventure.</p>
+        <span class="world-empty-icon" aria-hidden="true">${world.icon}</span>
+        <strong>${world.name} is open!</strong>
+        <p>No games have been added yet. You can enter and explore this world now, and activities can be added later.</p>
       </div>`}
     </section>
   `;
