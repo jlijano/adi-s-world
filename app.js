@@ -2017,7 +2017,7 @@ function setActiveNav(name) {
 }
 
 function worldCard(world) {
-  const cssClass = ["home", "word", "number", "puzzle", "discovery", "blessing"].includes(world.id) ? world.id : "";
+  const cssClass = ["home", "word", "number", "drawing", "puzzle", "discovery", "blessing", "robot", "memory", "feelings", "adventure"].includes(world.id) ? world.id : "";
   const stateClass = world.status === "open" ? "is-open" : "is-locked";
   return `
     <button class="world-card ${cssClass} ${stateClass}" type="button" data-world="${world.id}" aria-label="${world.name}">
@@ -2079,7 +2079,7 @@ function renderWorlds() {
   currentView = { type: "worlds" };
   setActiveNav("worlds");
   screen.innerHTML = `
-    <section class="section" style="margin-top:0">
+    <section class="section worlds-gallery">
       <div class="section-heading">
         <div>
           <h2>Explore Adi’s World</h2>
