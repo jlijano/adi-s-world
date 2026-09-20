@@ -1,7 +1,5 @@
 (() => {
   const OUTFIT_STORAGE_KEY = "adis-world-outfit-v1";
-  const ADI_3D_FRONT = "./assets/character/adi-front-3d.webp?v=39";
-
   const DEFAULT_OUTFIT = Object.freeze({
     top: "pink-donut",
     bottom: "denim-shorts",
@@ -97,19 +95,6 @@
 
   function optionFor(category, id) {
     return OUTFIT_OPTIONS[category].find((item) => item.id === id) || OUTFIT_OPTIONS[category][0];
-  }
-
-  function avatarClasses() {
-    return [
-      "adi-outfit-avatar",
-      "top-" + outfitState.top,
-      "bottom-" + outfitState.bottom,
-      "headband-" + outfitState.headband,
-      "necklace-" + outfitState.necklace,
-      "wrist-" + outfitState.wrist,
-      "watch-" + outfitState.watch,
-      "shoes-" + outfitState.shoes
-    ].join(" ");
   }
 
   function renderViewRail() {
