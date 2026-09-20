@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.18.0  
+**Version:** 1.18.1  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -1161,3 +1161,11 @@ Existing audio-flow rules remain mandatory:
 - audio preview or narration must never change stars, progress, or lesson state.
 
 This standard supersedes the former Sacred Narrator, Bible Voice Calibration, exact-gender selection, accent-targeting, Vocaroo-reference, and interim voice-cloning rules.
+
+
+### Neutral standard voice implementation settings
+
+- Default standard speech settings: rate 0.90, pitch 1.0, full volume.
+- Prefer quality-indicated installed English voices such as natural, neural, enhanced, or premium when available.
+- Do not target a specific regional accent, gender, age, or narrator character.
+- If the best natural installed voice sounds female, use it without artificial pitch processing.

@@ -750,3 +750,19 @@ Changed:
 Reason:
 
 - Device speech synthesis cannot transform a female source voice into a genuine male voice or reproduce the user's own vocal identity. The best interim approach is to select the deepest available male-sounding installed voice and use the user's recording only as a delivery-style reference.
+
+
+## 1.18.1 — 2026-09-20
+
+Changed:
+
+- Blessing Garden production narration now uses the same standard speech path as the rest of Adi's World.
+- Removed the visible custom Bible voice calibration/selector UI.
+- Standard speech no longer targets a regional accent or voice gender.
+- Voice selection now favors higher-quality installed English voices when quality indicators are available.
+- Default speech uses normal pitch (1.0) and a slightly relaxed rate (0.90) for clearer, less robotic narration.
+- A female-sounding voice is acceptable when it is the best natural voice available on the device.
+
+Reason:
+
+- The final requirement is a neutral, normal, natural voice without accent or gender emphasis.

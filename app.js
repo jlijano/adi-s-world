@@ -1687,20 +1687,16 @@ function scoreBritishVoice(voice) {
   const lang = (voice.lang || "").toLowerCase();
   let score = 0;
 
-  if (lang === "en-gb") score += 100;
-  else if (lang.startsWith("en-gb")) score += 90;
-  else if (lang.startsWith("en")) score += 20;
-
-  if (name.includes("google uk english")) score += 40;
-  if (name.includes("sonia")) score += 35;
-  if (name.includes("ryan")) score += 34;
-  if (name.includes("serena")) score += 33;
-  if (name.includes("daniel")) score += 32;
-  if (name.includes("kate")) score += 31;
-  if (name.includes("british")) score += 28;
-  if (voice.localService) score += 8;
-
-  if (name.includes("whisper") || name.includes("novelty")) score -= 50;
+  if (lang === "en" || lang.startsWith("en-")) score += 30;
+  if (name.includes("natural")) score += 120;
+  if (name.includes("neural")) score += 115;
+  if (name.includes("enhanced")) score += 105;
+  if (name.includes("premium")) score += 100;
+  if (name.includes("high quality")) score += 95;
+  if (name.includes("google")) score += 25;
+  if (name.includes("microsoft")) score += 25;
+  if (voice.localService) score += 10;
+  if (name.includes("whisper") || name.includes("novelty") || name.includes("compact")) score -= 100;
 
   return score;
 }
@@ -1837,40 +1833,10 @@ function refreshPreferredBritishVoice() {
   if (!voices.length) return;
 
   const englishVoices = voices.filter((voice) => (voice.lang || "").toLowerCase().startsWith("en"));
-
   preferredBritishVoice =
     englishVoices
       .slice()
       .sort((a, b) => scoreBritishVoice(b) - scoreBritishVoice(a))[0] || null;
-
-  const maleEnglishVoices = englishVoices.filter((voice) => {
-    const name = (voice.name || "").toLowerCase();
-    return hasVoiceHint(name, SACRED_MALE_VOICE_HINTS) && !hasVoiceHint(name, SACRED_FEMALE_VOICE_HINTS);
-  });
-  const femaleEnglishVoices = englishVoices.filter((voice) => {
-    const name = (voice.name || "").toLowerCase();
-    return hasVoiceHint(name, SACRED_FEMALE_VOICE_HINTS) && !hasVoiceHint(name, SACRED_MALE_VOICE_HINTS);
-  });
-
-  const manualVoice = blessingSystemVoiceId
-    ? englishVoices.find((voice) => voiceStableId(voice) === blessingSystemVoiceId)
-    : null;
-
-  const preferredGenderVoices = blessingVoiceGender === "female" ? femaleEnglishVoices : maleEnglishVoices;
-  preferredSacredVoice =
-    manualVoice ||
-    (preferredGenderVoices.length ? preferredGenderVoices : englishVoices)
-      .slice()
-      .sort((a, b) => scoreSacredVoice(b) - scoreSacredVoice(a))[0] ||
-    preferredBritishVoice;
-
-  document.querySelectorAll("[data-sacred-voice-name]").forEach((node) => {
-    node.textContent = preferredSacredVoice?.name
-      ? `Selected system voice: ${preferredSacredVoice.name} (${preferredSacredVoice.lang || "English"})`
-      : "Selected system voice: best available English system voice";
-  });
-
-  renderBlessingSystemVoiceOptions();
 }
 
 if ("speechSynthesis" in window) {
@@ -1889,15 +1855,14 @@ function speak(text, onDone) {
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "en-GB";
+  utterance.lang = preferredBritishVoice?.lang || "en";
 
   if (preferredBritishVoice) {
     utterance.voice = preferredBritishVoice;
   }
 
-  // Calm, neutral British delivery for young learners:
-  // slightly slower pace, natural pitch, and full volume for clear enunciation.
-  utterance.rate = 0.82;
+  // Neutral, normal delivery: no accent target, no gender target, no pitch effect.
+  utterance.rate = 0.90;
   utterance.pitch = 1.0;
   utterance.volume = 1.0;
 
@@ -1915,45 +1880,8 @@ function speak(text, onDone) {
   window.speechSynthesis.speak(utterance);
 }
 
-function speakBlessing(text, onDone, forceSacred = false) {
-  if (!forceSacred && blessingVoiceMode !== "sacred") {
-    speak(text, onDone);
-    return;
-  }
-
-  if (!soundEnabled || !("speechSynthesis" in window)) {
-    if (typeof onDone === "function") onDone();
-    return;
-  }
-
-  refreshPreferredBritishVoice();
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = preferredSacredVoice?.lang || "en-GB";
-
-  if (preferredSacredVoice) {
-    utterance.voice = preferredSacredVoice;
-  }
-
-  // Sacred Narrator: mature, warm, calm and reverent.
-  // Keep pitch near natural range; extreme pitch-shifting sounds synthetic.
-  utterance.rate = blessingVoiceRate;
-  utterance.pitch = blessingVoicePitch;
-  utterance.volume = 1.0;
-
-  if (typeof onDone === "function") {
-    let finished = false;
-    const finishOnce = () => {
-      if (finished) return;
-      finished = true;
-      onDone();
-    };
-    utterance.onend = finishOnce;
-    utterance.onerror = finishOnce;
-  }
-
-  window.speechSynthesis.speak(utterance);
+function speakBlessing(text, onDone) {
+  speak(text, onDone);
 }
 
 function renderBlessingVoiceSelector() {
@@ -2171,7 +2099,6 @@ function renderWorld(worldId) {
       <p>${hasActivities ? `${world.note}. Pick a short game and help Adi complete fun learning challenges.` : `${world.note}. This world is open and ready to explore.`}</p>
     </section>
 
-    ${worldId === "blessing" ? renderBlessingVoiceSelector() : ""}
 
     <section class="section" aria-labelledby="activity-heading">
       <div class="section-heading">
@@ -2220,7 +2147,6 @@ function renderBibleStoryLibrary() {
       <p class="helper-text">Choose a Bible story to read and listen to.</p>
       <p class="bible-library-reward-note">Each story can earn up to 5 stars.</p>
     </header>
-    ${renderBlessingVoiceSelector()}
     <section class="bible-story-grid" aria-label="Bible story library">
       ${BIBLE_STORIES.map((story) => {
         const storyProgress = getStoryProgress(story.id);
@@ -2301,7 +2227,7 @@ function renderBibleStory(storyId, sceneIndex = 0, announce = true) {
   `;
 
   screen.focus({ preventScroll: true });
-  if (announce) setTimeout(() => speakBlessing(`${scene.title}. ${scene.text}`), 220);
+  if (announce) setTimeout(() => speak(`${scene.title}. ${scene.text}`), 220);
 }
 
 function renderBibleStoryCompletion(storyId) {
@@ -2726,8 +2652,7 @@ function renderGame(worldId, activityId, roundIndex = 0) {
   `;
 
   screen.focus({ preventScroll: true });
-  const useSacredNarrator = worldId === "blessing" && activityId === "verse-time";
-  setTimeout(() => (useSacredNarrator ? speakBlessing : speak)(round.speak || round.prompt), 250);
+  setTimeout(() => speak(round.speak || round.prompt), 250);
 }
 
 function escapeAttr(value) {
@@ -3906,7 +3831,7 @@ document.addEventListener("click", (event) => {
   const bibleVerseReadButton = event.target.closest("[data-bible-read-verse]");
   if (bibleVerseReadButton && currentView.type === "bible-story") {
     const story = BIBLE_STORIES.find((item) => item.id === currentView.storyId);
-    if (story?.memoryVerse) speakBlessing(`Memory verse. ${story.memoryVerseReference}. ${story.memoryVerse}`);
+    if (story?.memoryVerse) speak(`Memory verse. ${story.memoryVerseReference}. ${story.memoryVerse}`);
     return;
   }
 
@@ -3914,7 +3839,7 @@ document.addEventListener("click", (event) => {
   if (bibleReadButton && currentView.type === "bible-story") {
     const story = BIBLE_STORIES.find((item) => item.id === currentView.storyId);
     const scene = story?.scenes[currentView.sceneIndex];
-    if (scene) speakBlessing(`${scene.title}. ${scene.text}`);
+    if (scene) speak(`${scene.title}. ${scene.text}`);
     return;
   }
 
@@ -4190,7 +4115,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=55", { updateViaCache: "none" })
+      .register("./service-worker.js?v=56", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
