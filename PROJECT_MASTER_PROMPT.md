@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.13.1  
+**Version:** 1.14.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -831,3 +831,28 @@ Permanent behavior:
 - The interaction is tap-to-match rather than freehand line drawing or precision drag, while preserving the worksheet's connect-picture-to-beginning-sound learning objective.
 - The layout is Android-phone-first, expands naturally on tablets, uses large touch targets and ARIA labels, and respects reduced-motion preferences.
 - The game reuses existing British-English speech, star scoring, persistent progress, best-score tracking, localStorage, world navigation, and PWA infrastructure.
+
+
+---
+
+## Plant Food Sort — Permanent Discovery Lab Standard
+
+**Game:** Plant Food Sort  
+**World:** Discovery Lab  
+**Source learning mechanic:** Preschool lesson and worksheet about plants as sources of food and classifying familiar foods as fruits or vegetables.
+
+Permanent behavior:
+
+- Show the universal **How to Play** screen before the first round.
+- Spoken instructions must finish before the game transitions into round one when sound is enabled.
+- Use 10 randomized rounds per session with no repeated food in the same session.
+- Draw from a 20-food pool based on the source lesson, including Filipino-context foods such as calamansi, lanzones, ampalaya, malunggay, patola, and kangkong.
+- Keep each session balanced at five Fruit answers and five Vegetable answers.
+- Progress from familiar foods in rounds 1–3, to moderately familiar foods in rounds 4–7, to more locally specific or challenging foods in rounds 8–10.
+- Show one large food visual and printed food name per round; tapping the food speaks its name without changing score.
+- Present two large touch choices, Fruit and Vegetable, with their order randomized per round.
+- Correct answers add one session star, lock the answer for that round, give short positive spoken feedback, and then advance.
+- Incorrect attempts subtract one session star without going below zero, do not reveal the correct answer, and keep the child on the same round for another try.
+- Where a food is botanically a fruit but commonly treated as a vegetable in cooking, feedback must use careful wording such as “We usually call cucumber a vegetable when we eat or cook it” rather than presenting the culinary grouping as a strict botanical fact.
+- Completion uses the existing persistent-star and best-score system and a Discovery Lab celebration message such as **Great discovering!**
+- Layout must remain Android-phone-first, tablet-responsive, accessible, reduced-motion-aware, and compatible with the existing PWA/offline architecture.
