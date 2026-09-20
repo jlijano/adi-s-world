@@ -119,7 +119,7 @@
 
         <div class="adi-outfit-avatar adi-outfit-avatar-render" id="outfit-avatar" style="--adi-turn:${rotation}deg" role="img" aria-label="Adi in her Outfit Check look">
           <div class="adi-shadow"></div>
-          <img class="adi-3d-render" src="${ADI_3D_FRONT}" alt="" aria-hidden="true">
+          <img class="adi-3d-render adi-3d-render-phase3" src="${ADI_3D_FRONT}" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
           <div class="adi-wardrobe-layer" aria-hidden="true">
             <span class="wardrobe-top"></span>
             <span class="wardrobe-bottom"></span>
