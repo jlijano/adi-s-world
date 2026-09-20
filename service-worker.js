@@ -1,4 +1,4 @@
-const CACHE_NAME = "adis-world-v75";
+const CACHE_NAME = "adis-world-v76";
 const APP_SHELL = [
   "./", "./index.html",
   "./styles.css?v=74", "./drawing-garden.css?v=37", "./outfit-check.css?v=63", "./outfit-check-layered.css?v=70",
@@ -17,6 +17,7 @@ const APP_SHELL = [
   "./assets/discovery/plant-foods/calamansi.jpg", "./assets/discovery/plant-foods/lanzones.jpg", "./assets/discovery/plant-foods/jackfruit.jpg",
   "./assets/discovery/plant-foods/ampalaya.jpg", "./assets/discovery/plant-foods/malunggay.jpg", "./assets/discovery/plant-foods/patola.jpg",
   "./assets/discovery/plant-foods/kangkong.jpg", "./assets/discovery/plant-foods/string-beans.jpg", "./assets/discovery/plant-foods/CREDITS.md"
+  "assets/worlds/word-forest-card.webp",
 ];
 const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/drawing-garden.css", "/outfit-check.css", "/outfit-check-layered.css", "/app.js", "/drawing-garden.js", "/outfit-check.js"]);
 self.addEventListener("install", (event) => { event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting())); });
