@@ -23,13 +23,19 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
   - Verified service-worker syntax and fallback logic after the change.
   - Completed on commit `c27d8c446ed87937f23f17d552f3c94de9cdc7b6`.
 
-- [ ] **4. Add deployment syntax validation**
-  - Validate core JavaScript, service worker, and manifest before production deployment.
+- [x] **4. Add deployment syntax validation**
+  - Added `scripts/validate-deploy.mjs` to validate JavaScript syntax, JSON parsing, and PWA version alignment.
+  - Added GitHub Actions quality gate for pushes to `main`, pull requests, and manual runs.
+  - Verified the validation step passes in GitHub Actions.
+  - Completed across commits `010d255c30904b39b5f3ed0cbcffeaf8f9e321c2` and `d7d1412e76a3ffc6ed671e827da32812e44d0bf0`.
 
 ## P1 — High
 
-- [ ] **5. Add automated smoke tests**
-  - Verify Home, worlds, games, assets, navigation, scoring, manifest, and PWA basics.
+- [x] **5. Add automated smoke tests**
+  - Added `scripts/smoke-test.mjs` covering app shell, navigation, all 11 worlds, activity registration, scoring floor, persistent storage, local assets, manifest, and service-worker behavior.
+  - Corrected the test to account for Drawing Garden being registered by its own module.
+  - Verified the complete quality-gate workflow passes on `main` in GitHub Actions.
+  - Completed across commits `ecffaa1c8f8f06fbb7751e70cfa261345238c02d` and `07ea57707634e85630dda08c84aa84e11bbfd370`.
 
 - [ ] **6. Centralize audio handling**
   - Create one audio/speech manager for queueing, completion, cancellation, and navigation locks.
@@ -114,4 +120,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 4 — Add deployment syntax validation.
+**Next:** Item 6 — Centralize audio handling.
