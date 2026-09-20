@@ -2035,15 +2035,55 @@ function setActiveNav(name) {
   });
 }
 
+function visualCardArtwork(kind, label) {
+  const seed = [...String(kind || label || "adi")].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  const variants = [
+    ["#6c5ce7", "#9d8cff", "#ffd1e8"],
+    ["#2cb67d", "#8fe0b0", "#e8ffd2"],
+    ["#2f80ed", "#7bc8ff", "#ffe28a"],
+    ["#ff7bbd", "#ffc0dc", "#fff0a8"],
+    ["#667eea", "#9cb9ff", "#e9efff"]
+  ];
+  const [a, b, c] = variants[seed % variants.length];
+  const markerA = String(label || "A").trim().charAt(0).toUpperCase() || "A";
+  const markerB = /number|count|math/i.test(kind) ? "3" : /word|letter|sound|rhyme/i.test(kind) ? "B" : "";
+  return `
+    <svg class="card-illustration-svg" viewBox="0 0 800 520" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="g-${seed}" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="${a}"/>
+          <stop offset=".55" stop-color="${b}"/>
+          <stop offset="1" stop-color="${c}"/>
+        </linearGradient>
+      </defs>
+      <rect width="800" height="520" rx="34" fill="url(#g-${seed})"/>
+      <circle cx="665" cy="92" r="78" fill="#fff" opacity=".22"/>
+      <circle cx="120" cy="88" r="42" fill="#fff" opacity=".2"/>
+      <path d="M0 390 Q150 330 290 398 T575 392 T800 408 V520 H0Z" fill="#fff" opacity=".34"/>
+      <path d="M0 438 Q170 378 330 447 T660 438 T800 454 V520 H0Z" fill="#fff" opacity=".48"/>
+      <rect x="150" y="150" width="500" height="230" rx="34" fill="#fff" opacity=".88"/>
+      <rect x="205" y="205" width="120" height="120" rx="26" fill="${c}" opacity=".92"/>
+      <rect x="340" y="205" width="120" height="120" rx="26" fill="${a}" opacity=".82"/>
+      <rect x="475" y="205" width="120" height="120" rx="26" fill="${b}" opacity=".92"/>
+      <text x="265" y="286" text-anchor="middle" font-size="64" font-weight="800" font-family="system-ui, sans-serif" fill="#fff">${markerA}</text>
+      ${markerB ? `<text x="400" y="286" text-anchor="middle" font-size="64" font-weight="800" font-family="system-ui, sans-serif" fill="#fff">${markerB}</text>` : '<circle cx="400" cy="265" r="34" fill="#fff" opacity=".9"/>'}
+      <path d="M510 286 L535 230 L560 286Z" fill="#fff" opacity=".92"/>
+    </svg>`;
+}
+
 function worldCard(world) {
   const cssClass = ["home", "word", "number", "drawing", "puzzle", "discovery", "blessing", "robot", "memory", "feelings", "adventure"].includes(world.id) ? world.id : "";
   const stateClass = world.status === "open" ? "is-open" : "is-locked";
   return `
-    <button class="world-card ${cssClass} ${stateClass}" type="button" data-world="${world.id}" aria-label="${world.name}">
-      <span class="status">${world.status === "open" ? "PLAY" : "SOON"}</span>
-      <span class="world-icon" aria-hidden="true">${world.icon}</span>
-      <strong>${world.name}</strong>
-      <small>${world.note}</small>
+    <button class="world-card world-card-visual ${cssClass} ${stateClass}" type="button" data-world="${world.id}" aria-label="${world.name}">
+      <span class="world-card-art">
+        ${visualCardArtwork(world.id, world.name)}
+        <span class="status">${world.status === "open" ? "PLAY" : "SOON"}</span>
+      </span>
+      <span class="world-card-copy">
+        <strong>${world.name}</strong>
+        <small>${world.note}</small>
+      </span>
     </button>`;
 }
 
@@ -2062,7 +2102,7 @@ function renderHome() {
             <button class="secondary-button" type="button" data-action="show-progress">My stars</button>
           </div>
         </div>
-        <div class="adi-bubble" aria-hidden="true">👧🏻</div>
+        <div class="adi-bubble adi-bubble-image" aria-hidden="true"><img src="${ADI_HOME_IDLE_IMAGE}" alt=""></div>
       </div>
     </section>
 
@@ -2136,7 +2176,7 @@ function renderWorld(worldId) {
     <div class="back-row"><button class="back-button" type="button" data-action="back-worlds">← All worlds</button></div>
     <section class="world-hero ${worldId}">
       <span class="eyebrow">Learning world</span>
-      <h1>${world.icon} ${world.name}</h1>
+      <div class="world-hero-heading"><div class="world-hero-art">${visualCardArtwork(world.id, world.name)}</div><h1>${world.name}</h1></div>
       <p>${hasActivities ? `${world.note}. Pick a short game and help Adi complete fun learning challenges.` : `${world.note}. This world is open and ready to explore.`}</p>
     </section>
 
@@ -2164,9 +2204,9 @@ function renderWorld(worldId) {
           const key = `${worldId}:${activity.id}`;
           const done = progress.completed[key] || 0;
           return `
-            <button class="activity-card" type="button" data-activity="${activity.id}" data-world-id="${worldId}">
-              <span class="activity-icon" aria-hidden="true">${activity.icon}</span>
-              <span>
+            <button class="activity-card activity-card-visual" type="button" data-activity="${activity.id}" data-world-id="${worldId}">
+              <span class="activity-card-art">${visualCardArtwork(`${worldId}-${activity.id}`, activity.title)}</span>
+              <span class="activity-card-copy">
                 <strong>${activity.title}</strong>
                 <small>${activity.description}</small>
               </span>
@@ -2175,7 +2215,7 @@ function renderWorld(worldId) {
         }).join("")}
       </div>` : `
       <div class="world-empty-state" role="status">
-        <span class="world-empty-icon" aria-hidden="true">${world.icon}</span>
+        <div class="world-empty-art" aria-hidden="true">${visualCardArtwork(worldId, world.name)}</div>
         <strong>${world.name} is open!</strong>
         <p>No games have been added yet. You can enter and explore this world now, and activities can be added later.</p>
       </div>`}
