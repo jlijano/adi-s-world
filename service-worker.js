@@ -20,7 +20,7 @@ const APP_SHELL = [
   "./assets/icons/adis-world-splash.jpg",
   "./assets/blessing-garden/gideon/gideon-call.jpg",
   "./assets/discovery/plant-foods/mango.jpg",
-  "./assets/discovery/plant-foods/banana.jpg",
+  "./assets/discovery/plant-foods/banana-photo.jpg",
   "./assets/discovery/plant-foods/pineapple.jpg",
   "./assets/discovery/plant-foods/carrot.jpg",
   "./assets/discovery/plant-foods/broccoli.jpg",
