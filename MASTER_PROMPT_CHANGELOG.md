@@ -701,3 +701,19 @@ Changed:
 Reason:
 
 - Browser/device TTS varies significantly. Direct calibration gives users control over the voice character and pacing instead of relying on an unreliable automatic male/female guess.
+
+
+## 1.17.1 — 2026-09-20
+
+Changed:
+
+- Clarified that Male/Female is a voice preference, not a guaranteed gender switch, because browser speech synthesis does not reliably expose gender metadata.
+- Added an **Exact System Voice** dropdown listing the English voices actually installed on the current device/browser.
+- Selecting an exact voice saves that voice locally and forces Bible Story and Memory Verse narration to use it.
+- Changing Male/Female clears the manual voice selection and returns to automatic preference-based selection.
+- The selected voice label now shows both the system voice name and language.
+- Updated calibration help text to explain how to resolve a female-sounding voice by choosing another installed voice directly.
+
+Reason:
+
+- Pitch shifting cannot change a female source voice into a male source voice. Reliable control requires selecting the actual installed system voice rather than inferring gender from incomplete browser metadata.

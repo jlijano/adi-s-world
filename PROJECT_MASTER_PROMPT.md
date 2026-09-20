@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.17.0  
+**Version:** 1.17.1  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -1166,5 +1166,6 @@ Behavior:
 - Previewing must not change stars, story progress, current lesson state, or narration mode.
 - The calibration controls apply to the custom Bible/Sacred narration mode; Standard Voice remains available as a fallback.
 - Browser speech APIs do not expose reliable gender metadata. Use known system voice-name hints to prefer male/female voices, but clearly show the actual selected system voice so users can verify the result.
+- Because Web Speech does not reliably expose gender, Male/Female controls are preferences only. Also provide an **Exact System Voice** selector populated from the device's installed English voices. When the user selects one, persist and use that exact voice for Bible Story and Memory Verse narration until changed.
 - If no voice clearly matching the requested gender is installed, gracefully use the best available English voice rather than breaking narration.
 - Avoid extreme pitch/rate values that significantly reduce intelligibility.

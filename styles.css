@@ -3353,3 +3353,24 @@ button:focus-visible {
 .blessing-voice-name {
   word-break: break-word;
 }
+
+.blessing-system-voice-select {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 2px solid rgba(138,90,25,.16);
+  border-radius: 13px;
+  background: #fff;
+  color: #4f3518;
+  font: inherit;
+  font-size: 13px;
+}
+.blessing-system-voice-select:focus-visible {
+  outline: 4px solid rgba(183,122,32,.24);
+  outline-offset: 2px;
+}
+.blessing-system-voice-help {
+  color: #7c7468;
+  font-size: 11px;
+  line-height: 1.45;
+}

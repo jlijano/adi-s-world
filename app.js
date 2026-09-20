@@ -4,6 +4,7 @@ const BLESSING_VOICE_KEY = "adis-world-blessing-voice-v1";
 const BLESSING_GENDER_KEY = "adis-world-blessing-gender-v1";
 const BLESSING_PITCH_KEY = "adis-world-blessing-pitch-v1";
 const BLESSING_RATE_KEY = "adis-world-blessing-rate-v1";
+const BLESSING_SYSTEM_VOICE_KEY = "adis-world-blessing-system-voice-v1";
 
 const worlds = [
   { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "open" },
@@ -1539,6 +1540,7 @@ let blessingVoiceMode = localStorage.getItem(BLESSING_VOICE_KEY) || "sacred";
 let blessingVoiceGender = localStorage.getItem(BLESSING_GENDER_KEY) || "male";
 let blessingVoicePitch = Math.min(1.2, Math.max(0.7, Number(localStorage.getItem(BLESSING_PITCH_KEY)) || 0.9));
 let blessingVoiceRate = Math.min(1.05, Math.max(0.6, Number(localStorage.getItem(BLESSING_RATE_KEY)) || 0.78));
+let blessingSystemVoiceId = localStorage.getItem(BLESSING_SYSTEM_VOICE_KEY) || "";
 let currentView = { type: "home" };
 let activeGame = null;
 let gameSession = null;
@@ -1756,6 +1758,42 @@ function scoreSacredVoice(voice) {
   return score;
 }
 
+function voiceStableId(voice) {
+  return [voice.voiceURI || "", voice.name || "", voice.lang || ""].join("::");
+}
+
+function getEnglishSystemVoices() {
+  if (!("speechSynthesis" in window)) return [];
+  return window.speechSynthesis
+    .getVoices()
+    .filter((voice) => (voice.lang || "").toLowerCase().startsWith("en"))
+    .sort((a, b) => {
+      const langScore = (voice) => {
+        const lang = (voice.lang || "").toLowerCase();
+        if (lang === "en-gb") return 3;
+        if (lang.startsWith("en-gb")) return 2;
+        return 1;
+      };
+      return langScore(b) - langScore(a) || (a.name || "").localeCompare(b.name || "");
+    });
+}
+
+function renderBlessingSystemVoiceOptions() {
+  const select = document.querySelector("[data-blessing-system-voice]");
+  if (!select) return;
+
+  const voices = getEnglishSystemVoices();
+  const options = [
+    '<option value="">Auto-select from preference</option>',
+    ...voices.map((voice) => {
+      const id = voiceStableId(voice);
+      const selected = id === blessingSystemVoiceId ? " selected" : "";
+      return `<option value="${escapeAttr(id)}"${selected}>${escapeHtml(voice.name || "Unnamed voice")} — ${escapeHtml(voice.lang || "English")}</option>`;
+    })
+  ];
+  select.innerHTML = options.join("");
+}
+
 function refreshPreferredBritishVoice() {
   if (!("speechSynthesis" in window)) return;
 
@@ -1778,17 +1816,25 @@ function refreshPreferredBritishVoice() {
     return hasVoiceHint(name, SACRED_FEMALE_VOICE_HINTS) && !hasVoiceHint(name, SACRED_MALE_VOICE_HINTS);
   });
 
+  const manualVoice = blessingSystemVoiceId
+    ? englishVoices.find((voice) => voiceStableId(voice) === blessingSystemVoiceId)
+    : null;
+
   const preferredGenderVoices = blessingVoiceGender === "female" ? femaleEnglishVoices : maleEnglishVoices;
   preferredSacredVoice =
+    manualVoice ||
     (preferredGenderVoices.length ? preferredGenderVoices : englishVoices)
       .slice()
-      .sort((a, b) => scoreSacredVoice(b) - scoreSacredVoice(a))[0] || preferredBritishVoice;
+      .sort((a, b) => scoreSacredVoice(b) - scoreSacredVoice(a))[0] ||
+    preferredBritishVoice;
 
   document.querySelectorAll("[data-sacred-voice-name]").forEach((node) => {
     node.textContent = preferredSacredVoice?.name
-      ? `Selected system voice: ${preferredSacredVoice.name}`
+      ? `Selected system voice: ${preferredSacredVoice.name} (${preferredSacredVoice.lang || "English"})`
       : "Selected system voice: best available English system voice";
   });
+
+  renderBlessingSystemVoiceOptions();
 }
 
 if ("speechSynthesis" in window) {
@@ -1902,6 +1948,18 @@ function renderBlessingVoiceSelector() {
       </div>
 
       <label class="blessing-calibration-group">
+        <span class="blessing-calibration-label">Exact System Voice</span>
+        <select class="blessing-system-voice-select" data-blessing-system-voice aria-label="Choose exact system voice">
+          <option value="">Auto-select from preference</option>
+          ${getEnglishSystemVoices().map((voice) => {
+            const id = voiceStableId(voice);
+            return `<option value="${escapeAttr(id)}" ${id === blessingSystemVoiceId ? "selected" : ""}>${escapeHtml(voice.name || "Unnamed voice")} — ${escapeHtml(voice.lang || "English")}</option>`;
+          }).join("")}
+        </select>
+        <small class="blessing-system-voice-help">If Male still sounds female, choose a different installed voice here and preview it. The app will use this exact voice for Bible reading.</small>
+      </label>
+
+      <label class="blessing-calibration-group">
         <span class="blessing-calibration-label">Tone / Pitch <strong data-blessing-pitch-value>${blessingVoicePitch.toFixed(2)}</strong></span>
         <div class="blessing-range-labels"><span>Low</span><span>High</span></div>
         <input class="blessing-range" type="range" min="0.70" max="1.20" step="0.02" value="${blessingVoicePitch}" data-blessing-pitch aria-label="Bible voice pitch from low to high" style="--range-progress:${pitchPercent}%">
@@ -1916,7 +1974,7 @@ function renderBlessingVoiceSelector() {
       <button type="button" class="blessing-voice-preview" data-blessing-calibration-preview aria-label="Preview calibrated Bible voice">
         🔊 Preview Current Voice
       </button>
-      <p class="blessing-voice-test-note">The selected system voice depends on the voices installed on this device. Your calibration is saved automatically.</p>
+      <p class="blessing-voice-test-note">Male/Female is a preference only because browsers do not report voice gender reliably. Choose an exact installed system voice above when you need guaranteed voice selection. Your calibration is saved automatically.</p>
     </section>
   `;
 }
@@ -3630,6 +3688,20 @@ function toggleSound() {
   else if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 }
 
+document.addEventListener("change", (event) => {
+  const systemVoiceSelect = event.target.closest("[data-blessing-system-voice]");
+  if (!systemVoiceSelect) return;
+
+  blessingSystemVoiceId = systemVoiceSelect.value || "";
+  if (blessingSystemVoiceId) {
+    localStorage.setItem(BLESSING_SYSTEM_VOICE_KEY, blessingSystemVoiceId);
+  } else {
+    localStorage.removeItem(BLESSING_SYSTEM_VOICE_KEY);
+  }
+
+  refreshPreferredBritishVoice();
+});
+
 document.addEventListener("input", (event) => {
   const pitchInput = event.target.closest("[data-blessing-pitch]");
   if (pitchInput) {
@@ -3658,6 +3730,8 @@ document.addEventListener("click", (event) => {
   if (blessingGenderButton) {
     blessingVoiceGender = blessingGenderButton.dataset.blessingGender === "female" ? "female" : "male";
     localStorage.setItem(BLESSING_GENDER_KEY, blessingVoiceGender);
+    blessingSystemVoiceId = "";
+    localStorage.removeItem(BLESSING_SYSTEM_VOICE_KEY);
     refreshPreferredBritishVoice();
 
     document.querySelectorAll("[data-blessing-gender]").forEach((button) => {
@@ -4075,7 +4149,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=52", { updateViaCache: "none" })
+      .register("./service-worker.js?v=53", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
