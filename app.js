@@ -2077,6 +2077,15 @@ function visualCardArtwork(kind, label) {
 function worldCard(world) {
   const cssClass = ["home", "word", "number", "drawing", "puzzle", "discovery", "blessing", "robot", "memory", "feelings", "adventure"].includes(world.id) ? world.id : "";
   const stateClass = world.status === "open" ? "is-open" : "is-locked";
+
+  if (world.id === "word") {
+    return `
+      <button class="world-card world-card-visual world-card-icon-only ${cssClass} ${stateClass}" type="button" data-world="${world.id}" aria-label="${world.name}">
+        ${visualCardArtwork(world.id, world.name)}
+        <span class="status">${world.status === "open" ? "PLAY" : "SOON"}</span>
+      </button>`;
+  }
+
   return `
     <button class="world-card world-card-visual ${cssClass} ${stateClass}" type="button" data-world="${world.id}" aria-label="${world.name}">
       <span class="world-card-art">
