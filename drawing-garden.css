@@ -111,6 +111,14 @@
 .drawing-actions.three {
   grid-template-columns: repeat(3, 1fr);
 }
+.drawing-actions.four {
+  grid-template-columns: repeat(4, 1fr);
+}
+.drawing-save-button {
+  background: #eaf8ef;
+  color: #217a47;
+  box-shadow: inset 0 0 0 2px #b9e7ca;
+}
 .drawing-tool-button {
   min-height: 50px;
   border-radius: 16px;
@@ -177,10 +185,12 @@
   .drawing-target-button {
     min-height: 60px;
   }
-  .drawing-actions.three {
+  .drawing-actions.three,
+  .drawing-actions.four {
     grid-template-columns: 1fr 1fr;
   }
-  .drawing-actions.three .drawing-done-button {
+  .drawing-actions.three .drawing-done-button,
+  .drawing-actions.four .drawing-done-button {
     grid-column: 1 / -1;
   }
 }
