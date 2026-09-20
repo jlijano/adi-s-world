@@ -1914,28 +1914,43 @@ function speakAdiGreeting(onDone) {
 
   window.speechSynthesis.cancel();
   const voice = getAdiChildVoice();
-  const utterance = new SpeechSynthesisUtterance("Hi! My name is Adi.");
-  utterance.lang = voice?.lang || "en";
-  if (voice) utterance.voice = voice;
+  const lang = voice?.lang || "en";
 
-  // Keep Adi bright and youthful without forcing an unnaturally high pitch.
-  // A small pause after "Hi!" makes the introduction sound more conversational.
-  utterance.rate = 0.88;
-  utterance.pitch = 1.12;
-  utterance.volume = 1.0;
+  // Use two short phrases instead of one long sentence. The tiny pause makes
+  // Adi sound warmer and more conversational, rather than like a TTS prompt.
+  const hello = new SpeechSynthesisUtterance("Hi!");
+  const intro = new SpeechSynthesisUtterance("My name is Adi.");
 
-  if (typeof onDone === "function") {
-    let finished = false;
-    const finishOnce = () => {
-      if (finished) return;
-      finished = true;
-      onDone();
-    };
-    utterance.onend = finishOnce;
-    utterance.onerror = finishOnce;
-  }
+  [hello, intro].forEach((utterance) => {
+    utterance.lang = lang;
+    if (voice) utterance.voice = voice;
+    utterance.volume = 0.96;
+  });
 
-  window.speechSynthesis.speak(utterance);
+  // Gentle child-like delivery: soft pace, only a slight lift in pitch.
+  hello.rate = 0.82;
+  hello.pitch = 1.08;
+  intro.rate = 0.84;
+  intro.pitch = 1.06;
+
+  let finished = false;
+  const finishOnce = () => {
+    if (finished) return;
+    finished = true;
+    if (typeof onDone === "function") onDone();
+  };
+
+  hello.onend = () => {
+    window.setTimeout(() => {
+      if (!soundEnabled) return finishOnce();
+      intro.onend = finishOnce;
+      intro.onerror = finishOnce;
+      window.speechSynthesis.speak(intro);
+    }, 180);
+  };
+  hello.onerror = finishOnce;
+
+  window.speechSynthesis.speak(hello);
 }
 
 let adiHomeGreetingTimer = null;
