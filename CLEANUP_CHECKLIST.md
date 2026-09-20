@@ -37,8 +37,15 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
   - Verified the complete quality-gate workflow passes on `main` in GitHub Actions.
   - Completed across commits `ecffaa1c8f8f06fbb7751e70cfa261345238c02d` and `07ea57707634e85630dda08c84aa84e11bbfd370`.
 
-- [ ] **6. Centralize audio handling**
-  - Create one audio/speech manager for queueing, completion, cancellation, and navigation locks.
+- [x] **6. Centralize audio handling**
+  - Added `audio-manager.js` as the single shared speech/audio controller.
+  - Centralized sound enable/disable, voice selection, speaking speed, cancellation, speaking-state checks, and multi-part speech sequencing.
+  - Routed the main `speak()`, instruction-transition waits, Bible story navigation waits, and Adi greeting through the shared manager.
+  - Added an in-app Settings screen with Sound On/Off, Slow/Normal/Quick speaking speed, and Test Voice.
+  - Saved audio preferences locally on the device.
+  - Added the Settings button to the app header and cached the audio manager for offline use in PWA version `v79`.
+  - Extended deployment validation and smoke tests to cover the new audio manager and Settings UI.
+  - Completed across commits `6b4a5203069359536baa4de8036e21e3e66c727b`, `563f483b4980a0cf0877c65dd0a94904a29b641e`, `65c081e7edd62f5e85c1931f52b0c9ea92afef36`, `eb6e2717a3f98ceaafd77ef11d3d498b60bba2bb`, `486c51eabf31fc34e9ca5bfdf09268eb0441366a`, `cbc9cc88e723bb1f03a4cff9240f3f25bae72b9a`, `2940eafe4849a182725a8b47e0b62c2f5905e225`, and `46792d901ffc04dfeec5519abbcafd68457d327b`.
 
 - [ ] **7. Localize external Bible Story images**
   - Store approved story illustrations under local `assets/` paths for offline reliability.
@@ -120,4 +127,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 6 — Centralize audio handling.
+**Next:** Item 7 — Localize external Bible Story images.
