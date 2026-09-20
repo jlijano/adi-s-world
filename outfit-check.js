@@ -91,12 +91,19 @@
 
   function renderAvatar() {
     return `
-      <div class="outfit-avatar-wrap outfit-avatar-v2 outfit-avatar-empty">
+      <div class="outfit-avatar-wrap outfit-avatar-v2 outfit-avatar-static">
         <div class="outfit-room-backdrop" aria-hidden="true">
           <span class="room-window"></span>
           <span class="room-shelf"></span>
           <span class="room-rug"></span>
           <span class="room-poster">A Brighter<br>Tomorrow<br>with Adi! ♡</span>
+        </div>
+
+        <div class="adi-static-stage" aria-label="Adi wearing her default outfit">
+          <img
+            class="adi-static-character"
+            src="assets/character/adi-front-3d.webp?v=63"
+            alt="Adi standing in the middle of her room wearing a pink donut shirt, denim shorts, white socks, and pink shoes">
         </div>
       </div>`;
   }
