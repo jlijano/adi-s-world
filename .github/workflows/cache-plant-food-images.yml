@@ -37,7 +37,7 @@ jobs:
           }
 
           download_food "mango" "Green Mango fruit.jpg"
-          download_food "banana" "Banana fruit.jpeg"
+          download_food "banana-photo" "Banana Bunch.jpg"
           download_food "pineapple" "Pineapple fruit.jpg"
           download_food "carrot" "Carrot vegetable on white background.jpg"
           download_food "broccoli" "Broccoli vegetable.jpg"
