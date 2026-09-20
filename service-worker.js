@@ -4,11 +4,11 @@ const APP_SHELL = [
   "./index.html",
   "./styles.css?v=46",
   "./drawing-garden.css?v=37",
-  "./outfit-check.css?v=43",
+  "./outfit-check.css?v=46",
   "./app.js?v=46",
   "./drawing-garden.js?v=37",
-  "./outfit-check.js?v=43",
-  "./assets/character/adi-front-3d.webp?v=39",
+  "./outfit-check-3d.js?v=46",
+  "./outfit-check.js?v=46",
   "./styles.css",
   "./drawing-garden.css",
   "./outfit-check.css",
@@ -42,7 +42,7 @@ const APP_SHELL = [
   "./assets/discovery/plant-foods/CREDITS.md"
 ];
 
-const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/drawing-garden.css", "/outfit-check.css", "/app.js", "/drawing-garden.js", "/outfit-check.js"]);
+const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/drawing-garden.css", "/outfit-check.css", "/app.js", "/drawing-garden.js", "/outfit-check.js", "/outfit-check-3d.js"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
