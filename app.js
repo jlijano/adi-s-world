@@ -5,6 +5,7 @@ const BLESSING_GENDER_KEY = "adis-world-blessing-gender-v1";
 const BLESSING_PITCH_KEY = "adis-world-blessing-pitch-v1";
 const BLESSING_RATE_KEY = "adis-world-blessing-rate-v1";
 const BLESSING_SYSTEM_VOICE_KEY = "adis-world-blessing-system-voice-v1";
+const BLESSING_PROFILE_VERSION_KEY = "adis-world-blessing-profile-version";
 
 const worlds = [
   { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "open" },
@@ -1541,6 +1542,20 @@ let blessingVoiceGender = localStorage.getItem(BLESSING_GENDER_KEY) || "male";
 let blessingVoicePitch = Math.min(1.2, Math.max(0.7, Number(localStorage.getItem(BLESSING_PITCH_KEY)) || 0.9));
 let blessingVoiceRate = Math.min(1.05, Math.max(0.6, Number(localStorage.getItem(BLESSING_RATE_KEY)) || 0.78));
 let blessingSystemVoiceId = localStorage.getItem(BLESSING_SYSTEM_VOICE_KEY) || "";
+const blessingProfileVersion = localStorage.getItem(BLESSING_PROFILE_VERSION_KEY);
+if (blessingProfileVersion !== "deep-male-v1") {
+  blessingVoiceMode = "sacred";
+  blessingVoiceGender = "male";
+  blessingVoicePitch = 0.86;
+  blessingVoiceRate = 0.78;
+  blessingSystemVoiceId = "";
+  localStorage.setItem(BLESSING_VOICE_KEY, "sacred");
+  localStorage.setItem(BLESSING_GENDER_KEY, "male");
+  localStorage.setItem(BLESSING_PITCH_KEY, "0.86");
+  localStorage.setItem(BLESSING_RATE_KEY, "0.78");
+  localStorage.removeItem(BLESSING_SYSTEM_VOICE_KEY);
+  localStorage.setItem(BLESSING_PROFILE_VERSION_KEY, "deep-male-v1");
+}
 let currentView = { type: "home" };
 let activeGame = null;
 let gameSession = null;
@@ -1690,6 +1705,15 @@ function scoreBritishVoice(voice) {
   return score;
 }
 
+const SACRED_DEEP_VOICE_HINTS = [
+  "baritone",
+  "bass",
+  "deep",
+  "low",
+  "narrator",
+  "mature"
+];
+
 const SACRED_MALE_VOICE_HINTS = [
   "male",
   "daniel",
@@ -1735,25 +1759,37 @@ function scoreSacredVoice(voice) {
   const lang = (voice.lang || "").toLowerCase();
   let score = 0;
 
-  if (lang === "en-gb") score += 80;
-  else if (lang.startsWith("en-gb")) score += 70;
+  if (lang === "en-gb") score += 55;
+  else if (lang.startsWith("en-gb")) score += 50;
   else if (lang.startsWith("en")) score += 30;
 
   const clearlyMale = hasVoiceHint(name, SACRED_MALE_VOICE_HINTS);
   const clearlyFemale = hasVoiceHint(name, SACRED_FEMALE_VOICE_HINTS);
+  const deepHint = hasVoiceHint(name, SACRED_DEEP_VOICE_HINTS);
 
-  if (clearlyMale) score += 180;
-  if (clearlyFemale) score -= 300;
+  if (deepHint) score += 260;
+  if (clearlyMale) score += 220;
+  if (clearlyFemale) score -= 500;
 
-  if (name.includes("google uk english male")) score += 140;
-  if (name.includes("natural")) score += 70;
-  if (name.includes("neural")) score += 70;
-  if (name.includes("enhanced")) score += 60;
-  if (name.includes("premium")) score += 55;
+  if (name.includes("google uk english male")) score += 180;
+  if (name.includes("daniel")) score += 120;
+  if (name.includes("george")) score += 115;
+  if (name.includes("david")) score += 110;
+  if (name.includes("ryan")) score += 105;
+  if (name.includes("arthur")) score += 100;
+  if (name.includes("james")) score += 95;
+  if (name.includes("mark")) score += 90;
+  if (name.includes("bruce")) score += 90;
+  if (name.includes("ralph")) score += 85;
+
+  if (name.includes("natural")) score += 75;
+  if (name.includes("neural")) score += 75;
+  if (name.includes("enhanced")) score += 65;
+  if (name.includes("premium")) score += 60;
   if (name.includes("microsoft")) score += 30;
   if (name.includes("google")) score += 25;
 
-  if (name.includes("whisper") || name.includes("novelty") || name.includes("compact")) score -= 90;
+  if (name.includes("whisper") || name.includes("novelty") || name.includes("compact")) score -= 100;
 
   return score;
 }
@@ -1784,7 +1820,7 @@ function renderBlessingSystemVoiceOptions() {
 
   const voices = getEnglishSystemVoices();
   const options = [
-    '<option value="">Auto-select from preference</option>',
+    '<option value="">Auto-select deepest male-sounding voice</option>',
     ...voices.map((voice) => {
       const id = voiceStableId(voice);
       const selected = id === blessingSystemVoiceId ? " selected" : "";
@@ -1950,7 +1986,7 @@ function renderBlessingVoiceSelector() {
       <label class="blessing-calibration-group">
         <span class="blessing-calibration-label">Exact System Voice</span>
         <select class="blessing-system-voice-select" data-blessing-system-voice aria-label="Choose exact system voice">
-          <option value="">Auto-select from preference</option>
+          <option value="">Auto-select deepest male-sounding voice</option>
           ${getEnglishSystemVoices().map((voice) => {
             const id = voiceStableId(voice);
             return `<option value="${escapeAttr(id)}" ${id === blessingSystemVoiceId ? "selected" : ""}>${escapeAttr(voice.name || "Unnamed voice")} — ${escapeAttr(voice.lang || "English")}</option>`;
@@ -1974,7 +2010,12 @@ function renderBlessingVoiceSelector() {
       <button type="button" class="blessing-voice-preview" data-blessing-calibration-preview aria-label="Preview calibrated Bible voice">
         🔊 Preview Current Voice
       </button>
-      <p class="blessing-voice-test-note">Male/Female is a preference only because browsers do not report voice gender reliably. Choose an exact installed system voice above when you need guaranteed voice selection. Your calibration is saved automatically.</p>
+      <div class="blessing-reference-note">
+        <strong>Current narrator baseline</strong>
+        <p>The automatic male profile uses the deepest male-sounding English system voice available on this device. Your Vocaroo recording is the reference for measured pacing, conversational intonation, and clear Filipino-English delivery. System TTS can approximate that delivery, but it cannot reproduce your actual voice.</p>
+        <p><strong>Future upgrade:</strong> your private cloned voice will replace this system-voice fallback when voice cloning becomes available.</p>
+      </div>
+      <p class="blessing-voice-test-note">Male/Female remains a preference because browsers do not report voice gender reliably. You can still override the automatic choice with an exact installed system voice above.</p>
     </section>
   `;
 }
@@ -4149,7 +4190,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=54", { updateViaCache: "none" })
+      .register("./service-worker.js?v=55", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });

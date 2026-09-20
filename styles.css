@@ -3374,3 +3374,22 @@ button:focus-visible {
   font-size: 11px;
   line-height: 1.45;
 }
+
+.blessing-reference-note {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(111,69,24,.14);
+  background: #fff8e8;
+  color: #5f472d;
+}
+.blessing-reference-note > strong {
+  color: #6f4518;
+  font-size: 13px;
+}
+.blessing-reference-note p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+}

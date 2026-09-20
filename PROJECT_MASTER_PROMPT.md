@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.17.1  
+**Version:** 1.17.2  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -1169,3 +1169,18 @@ Behavior:
 - Because Web Speech does not reliably expose gender, Male/Female controls are preferences only. Also provide an **Exact System Voice** selector populated from the device's installed English voices. When the user selects one, persist and use that exact voice for Bible Story and Memory Verse narration until changed.
 - If no voice clearly matching the requested gender is installed, gracefully use the best available English voice rather than breaking narration.
 - Avoid extreme pitch/rate values that significantly reduce intelligibility.
+
+
+### Interim personal narrator baseline
+
+Until private voice cloning is available, the default Blessing Garden male narrator must:
+
+- auto-select the deepest available installed male-sounding English system voice;
+- prioritize voice names containing deep/baritone/bass/mature/narrator hints and known male identifiers;
+- use the user's approved Vocaroo voice sample as a **delivery reference** for measured pacing, conversational intonation, clear Filipino-English cadence, and natural phrasing;
+- never claim that system TTS reproduces the user's actual timbre, accent, or identity;
+- default to approximately rate 0.78 and pitch 0.86 unless the user calibrates them;
+- retain the Exact System Voice override for device-specific correction;
+- show a clear in-app note that this is an interim system-voice fallback;
+- state that the user's private cloned voice will replace the system fallback once voice cloning is available and authorized;
+- do not commit or expose the user's raw private voice recording in the public repository unless the user explicitly requests that.

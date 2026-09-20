@@ -717,3 +717,19 @@ Changed:
 Reason:
 
 - Pitch shifting cannot change a female source voice into a male source voice. Reliable control requires selecting the actual installed system voice rather than inferring gender from incomplete browser metadata.
+
+
+## 1.17.2 — 2026-09-20
+
+Changed:
+
+- Blessing Garden's automatic male narrator now prioritizes the deepest identifiable installed male-sounding English system voice.
+- Added high-priority deep/baritone/bass/mature/narrator voice-name hints plus stronger known-male voice scoring.
+- Added a one-time migration that resets the interim Bible narrator to Custom Bible Voice + Male, rate 0.78, pitch 0.86, and automatic deep-male voice selection.
+- The user's Vocaroo recording is now documented as the delivery reference for measured pacing, conversational intonation, and clear Filipino-English cadence; the raw recording is not committed to the public repository.
+- Added an in-app note explaining that system TTS is an interim fallback and cannot reproduce the user's actual voice.
+- Added a clear future-upgrade note that the user's private cloned voice will replace the system voice when voice cloning becomes available and authorized.
+
+Reason:
+
+- Device speech synthesis cannot transform a female source voice into a genuine male voice or reproduce the user's own vocal identity. The best interim approach is to select the deepest available male-sounding installed voice and use the user's recording only as a delivery-style reference.
