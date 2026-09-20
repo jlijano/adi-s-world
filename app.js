@@ -15,6 +15,19 @@ const worlds = [
   { id: "adventure", name: "Adventure World", icon: "🌎", note: "Mixed learning missions", status: "soon" }
 ];
 
+const GIDEON_ANSWER_BANK = [
+  { letter: "A", text: "mountains" },
+  { letter: "B", text: "Angel" },
+  { letter: "C", text: "Robbers" },
+  { letter: "D", text: "God" },
+  { letter: "E", text: "Midianites" },
+  { letter: "F", text: "fleece" },
+  { letter: "G", text: "No" },
+  { letter: "H", text: "Yes" },
+  { letter: "I", text: "food" },
+  { letter: "J", text: "afraid" }
+];
+
 const activities = {
   home: [
     {
@@ -111,7 +124,7 @@ const activities = {
       id: "story-garden",
       title: "Bible Stories",
       icon: "📚",
-      description: "Read and listen to 5 Bible stories with picture scenes. No quiz.",
+      description: "Read and listen to 6 Bible stories with picture scenes. No quiz.",
       reader: true,
       rounds: []
     },
@@ -126,6 +139,24 @@ const activities = {
         { prompt: "What did David use when he faced Goliath?", stage: "👦  🪨  🛡️", choices: ["A stone", "A crown", "A boat"], answer: "A stone", speak: "What did David use when he faced Goliath?" },
         { prompt: "Who was in the lions' den?", stage: "🦁  🦁  🙏", choices: ["Daniel", "Jonah", "Noah"], answer: "Daniel", speak: "Who was in the lions den?" },
         { prompt: "Ephesians 4:32 tells us to be what to one another?", stage: "📖 Be ye kind one to another.", choices: ["Kind", "Angry", "Rough"], answer: "Kind", speak: "Ephesians chapter four, verse thirty two tells us to be what to one another?" }
+      ]
+    },
+    {
+      id: "gideon-activity",
+      title: "The Call of Gideon Activity",
+      icon: "✍️",
+      description: "10 questions from Judges 6. Look in the answer box and choose the letter of the correct answer.",
+      rounds: [
+        { prompt: "1. The Israelites were afraid of the ________.", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "E", speak: "The Israelites were afraid of the blank. Look in the answer box and choose the correct letter.", gideonActivityRound: true },
+        { prompt: "2. The Midianites were ________.", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "C", speak: "The Midianites were blank. Look in the answer box and choose the correct letter.", gideonActivityRound: true },
+        { prompt: "3. The Israelites hid in ________.", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "A", speak: "The Israelites hid in blank. Look in the answer box and choose the correct letter.", gideonActivityRound: true },
+        { prompt: "4. Who talked to Gideon?", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "B", speak: "Who talked to Gideon? Look in the answer box and choose the correct letter.", gideonActivityRound: true },
+        { prompt: "5. Who chose Gideon?", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "D", speak: "Who chose Gideon? Look in the answer box and choose the correct letter.", gideonActivityRound: true },
+        { prompt: "6. What did the angel touch?", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "I", speak: "What did the angel touch? Look in the answer box and choose the correct letter.", gideonActivityRound: true },
+        { prompt: "7. Gideon was ________.", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "J", speak: "Gideon was blank. Look in the answer box and choose the correct letter.", gideonActivityRound: true },
+        { prompt: "8. What did Gideon put in the field?", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "F", speak: "What did Gideon put in the field? Look in the answer box and choose the correct letter.", gideonActivityRound: true },
+        { prompt: "9. Did the angel eat the food?", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "G", speak: "Did the angel eat the food? Look in the answer box and choose the correct letter.", gideonActivityRound: true },
+        { prompt: "10. Was Gideon's prayer answered?", stage: "Look for the answer in the box.", choices: GIDEON_ANSWER_BANK.map((item) => item.letter), answer: "H", speak: "Was Gideon's prayer answered? Look in the answer box and choose the correct letter.", gideonActivityRound: true }
       ]
     }
   ],
@@ -416,6 +447,52 @@ const BIBLE_STORIES = [
         alt: "Bible illustration of Jesus blessing children."
       }
     ]
+  },
+  {
+    id: "gideon-call",
+    title: "The Call of Gideon",
+    reference: "Judges 6",
+    summary: "God hears His people, calls Gideon, and patiently gives him signs.",
+    maxStars: 5,
+    memoryVerseReference: "Judges 6:17",
+    memoryVerse: "If now I have found favor in your eyes, give me a sign.",
+    coverImage: "assets/blessing-garden/gideon/gideon-call.jpg",
+    coverAlt: "Colorful child-friendly illustration of an angel speaking to Gideon beside a stone altar with a small flame.",
+    sourceUrl: "assets/blessing-garden/gideon/gideon-call.jpg",
+    credits: "Colorized child-friendly adaptation based on the workbook illustration provided by the user",
+    license: "User-provided reference, adapted for this Adi's World lesson",
+    scenes: [
+      {
+        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        title: "The Israelites Ask for Help",
+        text: "The Israelites had forgotten God. The Midianites came and took their animals and crops, so the people became poor and afraid. They remembered God and cried to Him for help.",
+        alt: "Colorful Bible story illustration representing God's help for the Israelites in the time of Gideon."
+      },
+      {
+        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        title: "God Chooses Gideon",
+        text: "God heard their prayers and chose a man named Gideon to lead His people. An angel came to Gideon while he was hiding and threshing grain.",
+        alt: "Colorful child-friendly illustration of an angel speaking to Gideon."
+      },
+      {
+        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        title: "Gideon Asks for a Sign",
+        text: "Gideon was afraid and wanted to know that God was really calling him. He brought food, and the angel touched it on the rock. A flame rose up as a sign.",
+        alt: "Colorful child-friendly illustration of the angel, Gideon, a stone altar, food, and a gentle flame."
+      },
+      {
+        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        title: "The Fleece",
+        text: "Gideon asked God for more assurance. He placed a fleece in the field and prayed that the fleece would be wet while the ground stayed dry.",
+        alt: "Child-friendly Gideon story illustration accompanying the story of the fleece."
+      },
+      {
+        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        title: "God Answers Gideon",
+        text: "God answered Gideon's prayer. Gideon asked once more for the ground to be wet and the fleece to be dry, and God answered again. Gideon learned that God would help him.",
+        alt: "Colorful child-friendly Gideon story illustration representing God's patient answer to Gideon."
+      }
+    ]
   }
 ];
 
@@ -479,6 +556,11 @@ const GAME_INSTRUCTIONS = {
     intro: "Answer simple questions about Bible verses and stories.",
     steps: ["Listen to the question.", "Look at the verse or picture clue.", "Tap the correct answer."],
     spoken: "Listen to the Bible question, look at the clue, then tap the correct answer."
+  },
+  "blessing:gideon-activity": {
+    intro: "Use the answer box from the Gideon lesson to answer ten questions.",
+    steps: ["Read or listen to the question.", "Look through the answer box for the matching word.", "Tap the letter beside that answer. If you miss, try again."],
+    spoken: "Read the question, look in the answer box, and tap the letter beside the correct answer. There are ten questions."
   },
   "number:count-stars": {
     intro: "Count the objects, then choose the matching number.",
@@ -1901,6 +1983,14 @@ function renderBibleStory(storyId, sceneIndex = 0, announce = true) {
       <div class="bible-reader-page-label">Page ${safeIndex + 1} of ${story.scenes.length}</div>
       <h2>${scene.title}</h2>
       <p class="bible-reader-text">${scene.text}</p>
+      ${story.memoryVerse ? `
+        <aside class="bible-memory-verse" aria-label="Memory verse">
+          <span>Memory Verse</span>
+          <strong>${story.memoryVerseReference}</strong>
+          <blockquote>“${story.memoryVerse}”</blockquote>
+          <button class="bible-verse-read-button" type="button" data-bible-read-verse aria-label="Read memory verse aloud">🔊 Read memory verse</button>
+        </aside>
+      ` : ""}
       <button class="bible-read-button" type="button" data-bible-read-aloud aria-label="Read ${escapeAttr(scene.title)} aloud">🔊 Read to me</button>
 
       <div class="bible-reader-actions">
@@ -2195,6 +2285,13 @@ function renderGame(worldId, activityId, roundIndex = 0) {
                </div>
                <button class="count-reset-button" type="button" data-count-reset>↺ Count again</button>
              </div>`
+          : round.gideonActivityRound
+          ? `<div class="gideon-answer-bank" aria-label="Answer box">
+               <div class="gideon-answer-bank-title">ANSWER BOX</div>
+               <div class="gideon-answer-bank-grid">
+                 ${GIDEON_ANSWER_BANK.map((item) => `<div class="gideon-answer-bank-item"><strong>${item.letter}.</strong><span>${item.text}</span></div>`).join("")}
+               </div>
+             </div>`
           : round.plantFoodRound
           ? `<button class="plant-food-picture-button" type="button" data-plant-food-speak="${escapeAttr(round.foodSpokenName)}" aria-label="Hear ${escapeAttr(round.foodName)}">
                <img class="plant-food-photo" src="${escapeAttr(round.foodImage)}" alt="${escapeAttr(round.foodName)}" loading="eager" decoding="async">
@@ -2299,6 +2396,14 @@ function renderGame(worldId, activityId, roundIndex = 0) {
           ${round.choices.map((choice, choiceIndex) => `
             <button class="choice-button count-number-choice" style="--choice-index:${choiceIndex}" type="button" data-number-choice="${choice}" aria-label="${NUMBER_WORDS[Number(choice)] || choice}. Tap to hear and choose this number.">
               <span aria-hidden="true">${choice}</span>
+            </button>
+          `).join("")}
+        </div>
+      ` : round.gideonActivityRound ? `
+        <div class="gideon-letter-grid" aria-label="Choose the letter of the correct answer">
+          ${round.choices.map((choice, choiceIndex) => `
+            <button class="choice-button gideon-letter-choice" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" aria-label="Answer ${escapeAttr(choice)}">
+              <strong>${choice}</strong>
             </button>
           `).join("")}
         </div>
@@ -3417,6 +3522,13 @@ document.addEventListener("click", (event) => {
     return;
   }
 
+  const bibleVerseReadButton = event.target.closest("[data-bible-read-verse]");
+  if (bibleVerseReadButton && currentView.type === "bible-story") {
+    const story = BIBLE_STORIES.find((item) => item.id === currentView.storyId);
+    if (story?.memoryVerse) speak(`Memory verse. ${story.memoryVerseReference}. ${story.memoryVerse}`);
+    return;
+  }
+
   const bibleReadButton = event.target.closest("[data-bible-read-aloud]");
   if (bibleReadButton && currentView.type === "bible-story") {
     const story = BIBLE_STORIES.find((item) => item.id === currentView.storyId);
@@ -3697,7 +3809,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=37", { updateViaCache: "none" })
+      .register("./service-worker.js?v=45", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });

@@ -1,11 +1,11 @@
-const CACHE_NAME = "adis-world-v44";
+const CACHE_NAME = "adis-world-v45";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=44",
+  "./styles.css?v=45",
   "./drawing-garden.css?v=37",
   "./outfit-check.css?v=43",
-  "./app.js?v=44",
+  "./app.js?v=45",
   "./drawing-garden.js?v=37",
   "./outfit-check.js?v=43",
   "./assets/character/adi-front-3d.webp?v=39",
@@ -18,6 +18,7 @@ const APP_SHELL = [
   "./manifest.json",
   "./assets/icons/icon.svg",
   "./assets/icons/adis-world-splash.jpg",
+  "./assets/blessing-garden/gideon/gideon-call.jpg",
   "./assets/discovery/plant-foods/mango.jpg",
   "./assets/discovery/plant-foods/banana.jpg",
   "./assets/discovery/plant-foods/pineapple.jpg",
