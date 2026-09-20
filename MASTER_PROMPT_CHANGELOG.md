@@ -665,3 +665,21 @@ Changed:
 Reason:
 
 - The previous preview could select a female-sounding system voice and the aggressive pitch reduction could make the narration sound robotic.
+
+
+## 1.16.3 — 2026-09-20
+
+Added:
+
+- Added a compact Sacred Narrator test panel in Blessing Garden.
+- The panel shows the currently selected system voice name.
+- Added three short comparison samples that all use the same selected system voice but vary rate and pitch:
+  - Sample 1: slow/deep;
+  - Sample 2: balanced;
+  - Sample 3: clear/warm.
+- Test playback cancels any currently playing narration before starting and temporarily disables the other sample buttons.
+- Test samples do not change narration preferences, Bible story progress, stars, or lesson state.
+
+Reason:
+
+- Comparing the same voice at several subtle pacing and pitch settings makes it easier to identify the most natural, reverent Sacred Narrator configuration on each Android/browser voice set.

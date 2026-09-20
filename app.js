@@ -1778,6 +1778,12 @@ function refreshPreferredBritishVoice() {
       ? `Using: ${preferredSacredVoice.name}`
       : "Using the best available English system voice";
   });
+
+  document.querySelectorAll("[data-sacred-test-voice-name]").forEach((node) => {
+    node.textContent = preferredSacredVoice?.name
+      ? `Selected voice: ${preferredSacredVoice.name}`
+      : "Selected voice: best available English system voice";
+  });
 }
 
 if ("speechSynthesis" in window) {
@@ -1863,6 +1869,37 @@ function speakBlessing(text, onDone, forceSacred = false) {
   window.speechSynthesis.speak(utterance);
 }
 
+function speakSacredTestSample(text, rate, pitch, onDone) {
+  if (!soundEnabled || !("speechSynthesis" in window)) {
+    if (typeof onDone === "function") onDone();
+    return;
+  }
+
+  refreshPreferredBritishVoice();
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = preferredSacredVoice?.lang || "en-GB";
+  if (preferredSacredVoice) utterance.voice = preferredSacredVoice;
+
+  utterance.rate = rate;
+  utterance.pitch = pitch;
+  utterance.volume = 1.0;
+
+  if (typeof onDone === "function") {
+    let finished = false;
+    const finishOnce = () => {
+      if (finished) return;
+      finished = true;
+      onDone();
+    };
+    utterance.onend = finishOnce;
+    utterance.onerror = finishOnce;
+  }
+
+  window.speechSynthesis.speak(utterance);
+}
+
 function renderBlessingVoiceSelector() {
   const sacredSelected = blessingVoiceMode === "sacred";
   return `
@@ -1883,6 +1920,24 @@ function renderBlessingVoiceSelector() {
       <button type="button" class="blessing-voice-preview" data-blessing-voice-preview aria-label="Preview Sacred Narrator voice">
         🔊 Preview Sacred Narrator
       </button>
+      <section class="blessing-voice-test" aria-label="Sacred Narrator test panel">
+        <div class="blessing-voice-test-head">
+          <strong>Voice test</strong>
+          <small data-sacred-test-voice-name>${preferredSacredVoice?.name ? `Selected voice: ${preferredSacredVoice.name}` : "Selected voice: finding best available voice…"}</small>
+        </div>
+        <div class="blessing-voice-test-grid">
+          <button type="button" class="blessing-voice-test-button" data-sacred-test rate="0.72" pitch="0.84" aria-label="Play slow deep Sacred Narrator sample">
+            <span>Sample 1</span><small>Slow • Deep</small>
+          </button>
+          <button type="button" class="blessing-voice-test-button" data-sacred-test rate="0.78" pitch="0.88" aria-label="Play balanced Sacred Narrator sample">
+            <span>Sample 2</span><small>Balanced</small>
+          </button>
+          <button type="button" class="blessing-voice-test-button" data-sacred-test rate="0.84" pitch="0.92" aria-label="Play clearer brighter Sacred Narrator sample">
+            <span>Sample 3</span><small>Clear • Warm</small>
+          </button>
+        </div>
+        <p class="blessing-voice-test-note">All three samples use the same selected system voice. Only pacing and pitch change.</p>
+      </section>
     </section>
   `;
 }
@@ -3597,6 +3652,31 @@ function toggleSound() {
 }
 
 document.addEventListener("click", (event) => {
+  const sacredTestButton = event.target.closest("[data-sacred-test]");
+  if (sacredTestButton) {
+    const rate = Number(sacredTestButton.getAttribute("rate")) || 0.78;
+    const pitch = Number(sacredTestButton.getAttribute("pitch")) || 0.88;
+    const allTestButtons = Array.from(document.querySelectorAll("[data-sacred-test]"));
+    allTestButtons.forEach((button) => {
+      button.disabled = true;
+      button.classList.remove("is-playing");
+    });
+    sacredTestButton.classList.add("is-playing");
+
+    speakSacredTestSample(
+      "The Lord is with you. Do not be afraid. Listen, and trust in God's word.",
+      rate,
+      pitch,
+      () => {
+        allTestButtons.forEach((button) => {
+          button.disabled = false;
+          button.classList.remove("is-playing");
+        });
+      }
+    );
+    return;
+  }
+
   const blessingVoicePreviewButton = event.target.closest("[data-blessing-voice-preview]");
   if (blessingVoicePreviewButton) {
     blessingVoicePreviewButton.disabled = true;
@@ -4004,7 +4084,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=50", { updateViaCache: "none" })
+      .register("./service-worker.js?v=51", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
