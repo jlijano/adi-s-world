@@ -597,3 +597,24 @@ Changed:
 Reason:
 
 - The child should clearly see which letter tiles have already been used while still being able to retry a letter that was tapped too early or incorrectly.
+
+
+## 1.15.0 — 2026-09-20
+
+Added:
+
+- Added Blessing Garden to the canonical world architecture.
+- Added a permanent **Blessing Garden Bible Lesson Package** workflow for future lesson imports.
+- A new Bible lesson is now treated as one linked package: source lesson → colored illustration → Bible Story → memory verse → story-linked activity → QA → deployment.
+- Raw black-and-white Bible lesson artwork must be colorized into a preschool-friendly illustration before app implementation.
+- When approval is requested, the colored image must be approved first and that exact approved image must then be implemented rather than regenerated.
+- Added a Biblical subject-accuracy rule so the illustration must match the actual role named in the story, such as depicting Gideon's visitor as an angel rather than Jesus.
+- Approved lesson images should be stored locally under a story-specific Blessing Garden asset folder and may be reused as both the story cover and memory-verse image.
+- Every new story follows the existing 5-page/5-star story-reader pattern by default, with narration, persistent progress, and duplicate-star prevention.
+- Every supplied memory verse is added to the story's Memory Verse section and, when appropriate, to Blessing Garden's Verse Time/verse-selection content.
+- Every supplied worksheet adds a separate story-linked Blessing Garden activity that preserves the worksheet's actual mechanic, such as answer-box letter selection, matching, sequencing, picture choice, or true/false.
+- Added a reusable QA checklist covering story, memory verse, activity, visual accuracy, audio, persistence, PWA cache updates, and Render deployment verification.
+
+Reason:
+
+- The Call of Gideon implementation established a repeatable content-production workflow: analyze the lesson pages, colorize the raw illustration, verify Biblical character accuracy, add the story, add its memory verse, recreate the worksheet activity, store the approved image locally, and deploy the complete package. Future Bible lessons should follow the same connected workflow instead of being implemented as unrelated one-off features.

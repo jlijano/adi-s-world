@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.14.2  
+**Version:** 1.15.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -50,6 +50,7 @@ Primary learning areas include:
 - memory and attention
 - social-emotional learning
 - everyday-life skills
+- Bible stories, memory verses, and faith-based learning in Blessing Garden
 
 ---
 
@@ -62,11 +63,12 @@ Treat these as the current canonical learning worlds unless the user explicitly 
 3. **Number Island** — counting, quantities, comparing, patterns, early math.
 4. **Drawing Garden** — tracing, lines, shapes, numbers, letters, fine-motor practice, creativity.
 5. **Discovery Lab** — science, nature, senses, weather, animals, experiments, cause and effect.
-6. **Robot Road** — sequencing, directional commands, patterns, repetition, debugging, early coding logic.
-7. **Puzzle Mountain** — puzzles, visual logic, spatial reasoning, sorting, mazes, pattern completion.
-8. **Memory Castle** — working memory, attention, matching, sequences, rule following.
-9. **Feelings Town** — emotions, empathy, sharing, turn-taking, self-regulation, social understanding.
-10. **Adventure World** — story-based missions combining multiple skills.
+6. **Blessing Garden** — Bible verses, Bible stories, memory verses, faith questions, and story-linked activities.
+7. **Robot Road** — sequencing, directional commands, patterns, repetition, debugging, early coding logic.
+8. **Puzzle Mountain** — puzzles, visual logic, spatial reasoning, sorting, mazes, pattern completion.
+9. **Memory Castle** — working memory, attention, matching, sequences, rule following.
+10. **Feelings Town** — emotions, empathy, sharing, turn-taking, self-regulation, social understanding.
+11. **Adventure World** — story-based missions combining multiple skills.
 
 ---
 
@@ -514,7 +516,7 @@ For risky or large changes, prefer a feature branch and pull request when practi
 
 ## 18. MVP Direction
 
-Do not attempt to finish all ten worlds at once.
+Do not attempt to finish all eleven worlds at once.
 
 Initial product-validation direction:
 
@@ -881,3 +883,223 @@ Plant Food Sort food prompts must use verified photographs of the named food. Il
 Category answer buttons should remain text-first and must not use decorative fruit or vegetable emoji that could be confused with the item being classified.
 
 When replacing an incorrect food image, use a new local filename and bump the PWA cache version so installed/offline clients cannot continue serving the old asset.
+
+
+
+---
+
+## Blessing Garden Bible Lesson Package — Permanent Standard
+
+Use this workflow whenever the user adds a new Bible lesson from workbook pages, lesson photos, raw line art, memory-verse pages, activity sheets, or similar source material.
+
+A new Bible lesson is treated as one linked **lesson package**, not as three unrelated features:
+
+**SOURCE MATERIAL → COLORED STORY IMAGE → BIBLE STORY → MEMORY VERSE → STORY-LINKED ACTIVITY → QA → DEPLOY**
+
+### 1. Inspect first
+
+Before changing code:
+
+- inspect the current `main` branch and the existing Blessing Garden implementation;
+- inspect the current Bible Stories, Verse Time, Bible Questions/activity structures, progress helpers, speech behavior, local assets, and service-worker cache;
+- preserve all existing worlds, games, Bible stories, verses, progress, and activities;
+- do not create a separate Bible app or parallel content system.
+
+### 2. Analyze all supplied lesson images together
+
+When the user provides multiple pages for one lesson, analyze them as one source package.
+
+Typical inputs may include:
+
+- a Bible lesson/story page;
+- a raw black-and-white illustration or coloring page;
+- a memory-verse page;
+- an activity or worksheet page.
+
+Extract and reconcile:
+
+- lesson title;
+- Bible reference;
+- main story events;
+- named people and roles;
+- memory verse and verse reference;
+- worksheet instructions;
+- answer bank or choices;
+- correct answers;
+- the actual learning mechanic used by the worksheet.
+
+Do not blindly OCR or copy page layout. Recreate the learning content in an age-appropriate app interaction.
+
+### 3. Raw Bible artwork must be colorized before implementation
+
+If the supplied lesson art is black-and-white, uncolored, or a coloring-page image:
+
+- create a child-friendly colored version first;
+- preserve the important composition, characters, objects, and story meaning;
+- use bright, warm, preschool-appropriate colors;
+- avoid frightening, graphic, violent, or overly realistic treatment;
+- do not add unrelated characters or change the Biblical event;
+- verify the identity and role of each Biblical figure from the lesson before finalizing the image.
+
+**Biblical subject accuracy is mandatory.**  
+For example, if the source story says an angel appeared to Gideon, the illustration must depict an angel rather than Jesus.
+
+When the user asks to approve the colored image first:
+
+1. generate or edit the colored image;
+2. show it for approval;
+3. do **not** update the app asset until the user approves it;
+4. after approval, implement that exact approved image rather than generating a different replacement.
+
+### 4. Store the approved image locally
+
+Once approved:
+
+- save the final image inside the repository under a story-specific Blessing Garden asset folder;
+- prefer a structure such as `assets/blessing-garden/<story-id>/`;
+- use the approved image as the story's primary/cover image unless the user specifies otherwise;
+- if the same image is intended for the memory verse, explicitly reference the same local asset;
+- avoid hotlinking when a local asset is practical;
+- update alt text whenever the approved image changes;
+- do not leave stale character descriptions such as “Jesus” when the image has been corrected to an angel.
+
+If source or licensing metadata is applicable, record it accurately. For user-provided workbook art or user-approved adaptations, identify it as a user-provided/adapted lesson reference rather than inventing an external license.
+
+### 5. Add the Bible story to Bible Stories
+
+Every new lesson package adds a new entry to **Blessing Garden → Bible Stories**.
+
+Unless the user requests another format, follow the established story-reader pattern:
+
+- title;
+- Bible reference;
+- short child-friendly summary;
+- approved primary image;
+- meaningful image alt text;
+- exactly 5 story scenes/pages;
+- short, faithful, age-appropriate narration for ages approximately 3–6;
+- automatic narration plus manual **Read to me**;
+- Back, Next, Finish Story, and Back to Bible Stories controls;
+- maximum 5 stars;
+- one star for each story page first completed;
+- no duplicate stars when replaying an already-seen page;
+- persisted story progress using the existing Adi's World localStorage/progress system;
+- completion state at 5/5 stars.
+
+The story reader itself remains a reading/listening experience. Do not insert quiz questions into the story pages.
+
+### 6. Add the lesson's memory verse
+
+Every lesson package with a supplied memory verse must add that verse in two places when appropriate:
+
+**A. Inside the Bible story**
+- show a clearly labeled **Memory Verse** section;
+- show the verse reference;
+- show the exact approved verse wording supplied by the lesson/user;
+- provide a **Read memory verse** audio control;
+- use the approved lesson image for the verse when the user requests it.
+
+**B. Blessing Garden's verse selection / Verse Time**
+- add the new memory verse to the existing verse content/selection system;
+- convert it into an age-appropriate Verse Time interaction that matches the existing mechanic;
+- preserve the actual verse meaning;
+- use a simple missing-word choice only when it is clear and developmentally appropriate;
+- do not remove existing verses just to add the new one.
+
+### 7. Add a separate story-linked activity
+
+Every lesson package with an activity sheet must add a corresponding activity to Blessing Garden.
+
+The activity must be based on the **actual worksheet rule**, not replaced with a generic quiz unless the worksheet itself is a generic quiz.
+
+Examples:
+
+- answer-box worksheet → show the answer box and let the child choose the letter beside the correct answer;
+- matching worksheet → recreate matching;
+- sequencing worksheet → recreate sequencing;
+- picture-choice worksheet → recreate picture choice;
+- true/false worksheet → recreate age-appropriate true/false interaction.
+
+For a worksheet with an answer bank:
+
+- preserve the answer-bank words and labels;
+- preserve the question order when it matters to the lesson;
+- encode the correct answers from the supplied worksheet/story;
+- provide audio for instructions/questions;
+- keep touch targets large and mobile friendly;
+- wrong answers should use the existing gentle retry pattern and should not reveal the answer immediately unless the activity standard explicitly requires it.
+
+The activity is separate from the Bible Story reader and appears in the Blessing Garden activity section as a story-specific practice activity.
+
+### 8. Keep the three content pieces linked
+
+For every new Bible lesson, verify all three parts are present and consistent:
+
+1. **Bible Story** — the lesson is readable/listenable in Bible Stories.
+2. **Memory Verse** — the verse is visible in the story and added to the verse selection where appropriate.
+3. **Activity** — a separate interactive activity practices content from that specific story.
+
+The title, Bible reference, character identities, terminology, and key facts must agree across all three.
+
+### 9. Audio behavior
+
+Reuse the existing Adi's World speech system.
+
+- Do not overlap narration.
+- If navigation waits for narration under the current global audio behavior, preserve that behavior.
+- Story narration, memory-verse audio, activity instructions, and answer audio must use the same established speech conventions.
+- Do not create a separate speech engine for Blessing Garden.
+
+### 10. QA checklist for every Bible lesson package
+
+Before deployment verify:
+
+**Story**
+- new story appears in Bible Stories;
+- primary image is the approved colored image;
+- story has exactly 5 pages unless explicitly changed;
+- story narration works;
+- 1 star is awarded per newly completed page;
+- replay does not duplicate stars;
+- completion reaches 5/5;
+- progress survives refresh.
+
+**Memory Verse**
+- correct reference is displayed;
+- verse wording matches the approved lesson source;
+- memory-verse image is correct;
+- Read memory verse works;
+- verse is added to Verse Time/verse selection when required.
+
+**Activity**
+- activity appears in Blessing Garden;
+- instructions match the supplied worksheet;
+- all questions/rounds are present;
+- answer bank or source mechanic is reproduced correctly;
+- answer key is verified against the lesson;
+- audio and retry behavior work;
+- scoring/progress uses the existing app system.
+
+**Visual accuracy**
+- image is colored and child friendly;
+- the Biblical character roles are correct;
+- no stale image or stale alt text remains;
+- no emoji or placeholder is used instead of the approved lesson image.
+
+**PWA**
+- local image is committed;
+- updated assets are cached where appropriate;
+- service-worker/cache version is bumped when necessary;
+- old cached artwork/content is replaced.
+
+### 11. Deployment
+
+For an implementation request:
+
+1. commit the completed lesson package to `main`;
+2. use a clear commit message naming the Bible lesson;
+3. trigger or confirm the Render deployment;
+4. do not claim the update is live until Render reports `live`;
+5. verify the deployed commit still contains the Bible story, verse, activity, and approved image.
+
+This workflow is the reusable baseline for future Blessing Garden lesson additions.
