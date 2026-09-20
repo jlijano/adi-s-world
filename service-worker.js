@@ -1,4 +1,4 @@
-const CACHE_NAME = "adis-world-v37";
+const CACHE_NAME = "adis-world-v38";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -8,6 +8,7 @@ const APP_SHELL = [
   "./app.js?v=37",
   "./drawing-garden.js?v=37",
   "./outfit-check.js?v=37",
+  "./assets/character/adi-front-3d.webp?v=38",
   "./styles.css",
   "./drawing-garden.css",
   "./outfit-check.css",
