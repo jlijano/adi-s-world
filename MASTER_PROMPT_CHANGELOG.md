@@ -649,3 +649,19 @@ Added:
 Reason:
 
 - Users should be able to hear the deep, warm, reverent Bible narration voice before starting a Bible story or memory verse.
+
+
+## 1.16.2 — 2026-09-20
+
+Changed:
+
+- Sacred Narrator now strongly prefers English voices whose system names indicate a male voice.
+- Common female voice identifiers are explicitly penalized/rejected when selecting the Sacred Narrator.
+- Natural, neural, enhanced, and premium system voices receive priority when available.
+- Sacred Narrator pitch changed from 0.72 to 0.88 and rate from 0.72 to 0.78 to reduce artificial/robotic processing while keeping a mature, reverent cadence.
+- Blessing Garden now displays the actual system voice name selected for Sacred Narrator so voice behavior can be verified on each device.
+- Updated the Sacred Narrator preview line for a gentler, more natural delivery.
+
+Reason:
+
+- The previous preview could select a female-sounding system voice and the aggressive pitch reduction could make the narration sound robotic.

@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.16.1  
+**Version:** 1.16.2  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -1136,6 +1136,7 @@ Implementation rules:
 - Keep normal Adi/game feedback on the standard voice unless the content being spoken is Scripture/story narration.
 - Reuse the existing Web Speech / speechSynthesis infrastructure rather than introducing a separate audio engine unless a future voice service is deliberately adopted.
 - Browser and Android system voices vary. Select the best available English male/mature-sounding voice heuristically and fall back gracefully when the ideal voice is unavailable.
+- Sacred Narrator voice selection must actively prefer known male voice identifiers and reject known female voice identifiers when browser voice names provide enough information. Prefer natural/neural/enhanced/premium system voices where available. Avoid extreme pitch shifting because it can make TTS sound robotic; use a near-natural lower pitch and slower rate instead.
 - A lower pitch and slightly slower rate may be used to create the intended mature, reverent delivery, but speech must remain natural and intelligible.
 - Never claim the browser voice is an exact age, gender, or celebrity voice when the platform does not expose reliable metadata.
 - Do not imitate or market the voice as a specific living actor or public figure.

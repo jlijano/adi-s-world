@@ -1682,6 +1682,46 @@ function scoreBritishVoice(voice) {
   return score;
 }
 
+const SACRED_MALE_VOICE_HINTS = [
+  "male",
+  "daniel",
+  "ryan",
+  "george",
+  "arthur",
+  "james",
+  "david",
+  "mark",
+  "alex",
+  "fred",
+  "ralph",
+  "bruce",
+  "oliver",
+  "thomas",
+  "aaron",
+  "guy"
+];
+
+const SACRED_FEMALE_VOICE_HINTS = [
+  "female",
+  "sonia",
+  "serena",
+  "samantha",
+  "victoria",
+  "karen",
+  "moira",
+  "fiona",
+  "tessa",
+  "ava",
+  "susan",
+  "zira",
+  "hazel",
+  "siri female"
+];
+
+function hasVoiceHint(name, hints) {
+  return hints.some((hint) => name.includes(hint));
+}
+
 function scoreSacredVoice(voice) {
   const name = (voice.name || "").toLowerCase();
   const lang = (voice.lang || "").toLowerCase();
@@ -1691,18 +1731,21 @@ function scoreSacredVoice(voice) {
   else if (lang.startsWith("en-gb")) score += 70;
   else if (lang.startsWith("en")) score += 30;
 
-  if (name.includes("male")) score += 80;
-  if (name.includes("daniel")) score += 70;
-  if (name.includes("ryan")) score += 65;
-  if (name.includes("george")) score += 60;
-  if (name.includes("arthur")) score += 58;
-  if (name.includes("james")) score += 55;
-  if (name.includes("david")) score += 52;
-  if (name.includes("mark")) score += 50;
-  if (name.includes("alex")) score += 45;
-  if (name.includes("google uk english male")) score += 75;
-  if (name.includes("whisper") || name.includes("novelty")) score -= 80;
-  if (voice.localService) score += 8;
+  const clearlyMale = hasVoiceHint(name, SACRED_MALE_VOICE_HINTS);
+  const clearlyFemale = hasVoiceHint(name, SACRED_FEMALE_VOICE_HINTS);
+
+  if (clearlyMale) score += 180;
+  if (clearlyFemale) score -= 300;
+
+  if (name.includes("google uk english male")) score += 140;
+  if (name.includes("natural")) score += 70;
+  if (name.includes("neural")) score += 70;
+  if (name.includes("enhanced")) score += 60;
+  if (name.includes("premium")) score += 55;
+  if (name.includes("microsoft")) score += 30;
+  if (name.includes("google")) score += 25;
+
+  if (name.includes("whisper") || name.includes("novelty") || name.includes("compact")) score -= 90;
 
   return score;
 }
@@ -1720,10 +1763,21 @@ function refreshPreferredBritishVoice() {
       .slice()
       .sort((a, b) => scoreBritishVoice(b) - scoreBritishVoice(a))[0] || null;
 
+  const maleEnglishVoices = englishVoices.filter((voice) => {
+    const name = (voice.name || "").toLowerCase();
+    return hasVoiceHint(name, SACRED_MALE_VOICE_HINTS) && !hasVoiceHint(name, SACRED_FEMALE_VOICE_HINTS);
+  });
+
   preferredSacredVoice =
-    englishVoices
+    (maleEnglishVoices.length ? maleEnglishVoices : englishVoices)
       .slice()
       .sort((a, b) => scoreSacredVoice(b) - scoreSacredVoice(a))[0] || preferredBritishVoice;
+
+  document.querySelectorAll("[data-sacred-voice-name]").forEach((node) => {
+    node.textContent = preferredSacredVoice?.name
+      ? `Using: ${preferredSacredVoice.name}`
+      : "Using the best available English system voice";
+  });
 }
 
 if ("speechSynthesis" in window) {
@@ -1789,10 +1843,10 @@ function speakBlessing(text, onDone, forceSacred = false) {
     utterance.voice = preferredSacredVoice;
   }
 
-  // Sacred Narrator: deep, warm, mature, slow and reverent.
-  // Browser/device TTS determines the exact available voice.
-  utterance.rate = 0.72;
-  utterance.pitch = 0.72;
+  // Sacred Narrator: mature, warm, calm and reverent.
+  // Keep pitch near natural range; extreme pitch-shifting sounds synthetic.
+  utterance.rate = 0.78;
+  utterance.pitch = 0.88;
   utterance.volume = 1.0;
 
   if (typeof onDone === "function") {
@@ -1815,7 +1869,8 @@ function renderBlessingVoiceSelector() {
     <section class="blessing-voice-panel" aria-label="Bible narration voice">
       <div class="blessing-voice-copy">
         <strong>🎙️ Bible narration voice</strong>
-        <small>Sacred Narrator uses the deepest, warmest mature English voice available on this device.</small>
+        <small>Sacred Narrator prefers a natural-sounding mature male English voice available on this device.</small>
+        <small class="blessing-voice-name" data-sacred-voice-name>${preferredSacredVoice?.name ? `Using: ${preferredSacredVoice.name}` : "Finding the best available voice…"}</small>
       </div>
       <div class="blessing-voice-options" role="group" aria-label="Choose Bible narration voice">
         <button type="button" class="blessing-voice-option ${sacredSelected ? "is-active" : ""}" data-blessing-voice="sacred" aria-pressed="${sacredSelected}">
@@ -3547,7 +3602,7 @@ document.addEventListener("click", (event) => {
     blessingVoicePreviewButton.disabled = true;
     blessingVoicePreviewButton.textContent = "🔊 Playing preview…";
     speakBlessing(
-      "Welcome to Blessing Garden. Listen carefully as we read God's word together.",
+      "Welcome to Blessing Garden. Let us listen quietly as we read God's word together.",
       () => {
         blessingVoicePreviewButton.disabled = false;
         blessingVoicePreviewButton.textContent = "🔊 Preview Sacred Narrator";
@@ -3949,7 +4004,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=49", { updateViaCache: "none" })
+      .register("./service-worker.js?v=50", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
