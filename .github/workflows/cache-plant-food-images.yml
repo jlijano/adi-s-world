@@ -29,12 +29,7 @@ jobs:
             local local_name="$1"
             local commons_name="$2"
             local encoded
-            encoded="$(python - "$commons_name" <<'PY'
-import sys
-from urllib.parse import quote
-print(quote(sys.argv[1], safe=""))
-PY
-)"
+            encoded="$(python -c 'import sys; from urllib.parse import quote; print(quote(sys.argv[1], safe=""))' "$commons_name")"
             echo "Downloading $commons_name -> $local_name"
             curl -L --fail --retry 3 --retry-delay 2 \
               "https://commons.wikimedia.org/wiki/Special:Redirect/file/${encoded}?width=900" \
