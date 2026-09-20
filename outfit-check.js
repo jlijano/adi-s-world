@@ -120,6 +120,16 @@
         <div class="adi-outfit-avatar adi-outfit-avatar-render" id="outfit-avatar" style="--adi-turn:${rotation}deg" role="img" aria-label="Adi in her Outfit Check look">
           <div class="adi-shadow"></div>
           <img class="adi-3d-render" src="${ADI_3D_FRONT}" alt="" aria-hidden="true">
+          <div class="adi-wardrobe-layer" aria-hidden="true">
+            <span class="wardrobe-top"></span>
+            <span class="wardrobe-bottom"></span>
+            <span class="wardrobe-headband"></span>
+            <span class="wardrobe-necklace"></span>
+            <span class="wardrobe-wrist"></span>
+            <span class="wardrobe-watch"></span>
+            <span class="wardrobe-shoe wardrobe-shoe-left"></span>
+            <span class="wardrobe-shoe wardrobe-shoe-right"></span>
+          </div>
         </div>
 
         <button type="button" class="outfit-stage-arrow outfit-stage-arrow-right" data-outfit-turn="12" aria-label="Turn Adi right">›</button>
@@ -143,6 +153,13 @@
         <span>${CATEGORY_LABELS[category]}</span>
       </button>
     `).join("");
+  }
+
+  function outfitSummary() {
+    return Object.keys(OUTFIT_OPTIONS).map((category) => {
+      const selected = optionFor(category, outfitState[category]);
+      return `${CATEGORY_LABELS[category]}: ${selected.label}`;
+    }).join(" • ");
   }
 
   function renderOptions() {
@@ -170,10 +187,12 @@
     const optionsHost = document.querySelector(".outfit-options-grid");
     const savedNote = document.querySelector(".outfit-save-note");
     const itemsTitle = document.querySelector(".outfit-items-title-row h3");
+    const currentLook = document.querySelector(".outfit-current-look");
     if (avatarHost) avatarHost.innerHTML = renderAvatar();
     if (tabsHost) tabsHost.innerHTML = renderCategoryTabs();
     if (optionsHost) optionsHost.innerHTML = renderOptions();
     if (itemsTitle) itemsTitle.textContent = CATEGORY_LABELS[activeCategory];
+    if (currentLook) currentLook.textContent = outfitSummary();
     if (savedNote) {
       savedNote.textContent = "Saved on this device ✓";
       window.setTimeout(() => {
@@ -221,6 +240,7 @@
             <button class="outfit-reset-button" type="button" data-outfit-reset>↶ Reset Look</button>
             <button class="outfit-save-button" type="button" data-outfit-save>✓ Save Outfit</button>
           </div>
+          <p class="outfit-current-look" aria-live="polite">${outfitSummary()}</p>
           <p class="outfit-save-note">Your look is saved on this device.</p>
         </div>
       </section>
