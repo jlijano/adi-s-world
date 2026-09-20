@@ -1,5 +1,27 @@
 # Adi's World Master Prompt Changelog
 
+## 1.14.0 — 2026-09-20
+
+Added:
+
+- First Discovery Lab game: **Plant Food Sort**.
+- 20-food lesson pool with 10-round randomized sessions, five Fruit answers and five Vegetable answers per session.
+- Familiar-to-local difficulty progression using foods from the source lesson, including mango, banana, pineapple, papaya, chico, guava, calamansi, lanzones, jackfruit, coconut, eggplant, ampalaya, squash, cucumber, malunggay, patola, kangkong, carrot, broccoli, and string beans.
+- Large tap-to-hear food card plus two large Fruit/Vegetable classification choices.
+- Discovery-specific correct feedback, calm retry behavior, persistent scoring, and **Great discovering!** completion messaging.
+- Careful culinary-group wording for foods that are botanically fruits but commonly treated as vegetables.
+- Instruction-to-game transitions now wait for spoken How to Play audio to finish when sound is enabled.
+- Discovery Lab world cards now receive the existing Discovery Lab visual theme class.
+
+Changed:
+
+- PWA cache version bumped to v43 and core app/style cache-busting query versions updated to v43.
+
+Reason:
+
+- Converts the approved plant-food worksheet lesson into a touch-first, audio-supported science classification game while preserving Adi's World's existing scoring, retry, accessibility, and mobile UX standards.
+
+
 ## 1.13.1 — 2026-09-20
 
 Changed:
