@@ -3233,3 +3233,424 @@ button:focus-visible {
     animation: none;
   }
 }
+
+
+/* ===== 2026-09-20 Soft Toy UI Redesign — Worlds first pass ===== */
+:root {
+  --bg: #f8f5ef;
+  --surface: #fffdf9;
+  --ink: #4b4747;
+  --muted: #857d7a;
+  --primary: #7fb7df;
+  --primary-dark: #5d97c1;
+  --accent: #efa9bd;
+  --shadow: 0 10px 24px rgba(105, 82, 74, .15), 0 2px 5px rgba(105, 82, 74, .08);
+  --radius-xl: 30px;
+  --radius-lg: 24px;
+}
+
+html,
+body {
+  background: #f8f5ef;
+}
+
+body {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,255,255,.9), transparent 27%),
+    radial-gradient(circle at 86% 12%, rgba(255,228,235,.34), transparent 25%),
+    linear-gradient(180deg, #faf7f2 0%, #f7f3ed 100%);
+}
+
+.app-shell {
+  padding-bottom: calc(112px + var(--safe-bottom));
+}
+
+.topbar {
+  min-height: 92px;
+  padding: 14px max(20px, calc((100vw - 1120px) / 2));
+  background: rgba(250, 247, 242, .93);
+  border-bottom: 0;
+  backdrop-filter: blur(18px);
+}
+
+.brand-button {
+  gap: 12px;
+}
+
+.brand-mark {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #f6c8d5 0%, #eeb1c3 45%, #d8a28f 100%);
+  border: 1px solid rgba(151, 106, 94, .2);
+  box-shadow:
+    inset 5px 6px 8px rgba(255,255,255,.55),
+    inset -5px -6px 8px rgba(140,84,76,.18),
+    0 8px 12px rgba(114,83,74,.22);
+}
+
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  inset: 17px;
+  border-radius: 50%;
+  background: #faf7f2;
+  box-shadow: inset 1px 2px 5px rgba(112,78,70,.22);
+}
+
+.brand-copy strong {
+  color: #78a9cd;
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+}
+
+.brand-copy small {
+  margin-top: 2px;
+  color: #9e9692;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.topbar-actions {
+  gap: 14px;
+}
+
+.star-pill {
+  min-height: 54px;
+  padding: 0 14px 0 8px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.72);
+  box-shadow: 0 7px 16px rgba(99,78,69,.10);
+}
+
+.star-pill span {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  margin-left: -7px;
+  font-size: 31px;
+  filter: drop-shadow(0 4px 3px rgba(111,77,64,.25));
+}
+
+.star-pill strong {
+  color: #59504e;
+  font-size: 18px;
+}
+
+.icon-button {
+  min-width: 58px;
+  min-height: 58px;
+  background: transparent;
+  box-shadow: none;
+  font-size: 36px;
+  filter: drop-shadow(0 4px 3px rgba(63,115,153,.18));
+}
+
+.screen {
+  width: min(100%, 1120px);
+  padding: 22px 20px calc(140px + var(--safe-bottom));
+}
+
+.worlds-gallery {
+  margin-top: 0 !important;
+}
+
+.worlds-gallery .section-heading {
+  display: block;
+  margin: 14px 0 20px;
+  text-align: center;
+}
+
+.worlds-gallery .section-heading > div {
+  width: 100%;
+}
+
+.worlds-gallery .section-heading h2 {
+  color: #4d4948;
+  font-size: clamp(30px, 3vw, 40px);
+  font-weight: 950;
+  letter-spacing: -.035em;
+  line-height: 1;
+}
+
+.worlds-gallery .section-heading p {
+  margin-top: 7px;
+  color: #6f6966;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.worlds-gallery .world-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.worlds-gallery .world-card {
+  min-height: 190px;
+  padding: 16px 18px 18px;
+  border: 1px solid rgba(177, 122, 139, .08);
+  border-radius: 25px;
+  background:
+    radial-gradient(circle at 52% 20%, rgba(255,255,255,.72), transparent 35%),
+    linear-gradient(180deg, #fbe9ee 0%, #f5c9d5 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.72),
+    0 9px 14px rgba(126,89,99,.18),
+    0 3px 4px rgba(126,89,99,.10);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.worlds-gallery .world-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 13px 20px rgba(126,89,99,.20),
+    0 4px 5px rgba(126,89,99,.11);
+}
+
+.worlds-gallery .world-card:active {
+  transform: translateY(0) scale(.985);
+}
+
+.worlds-gallery .world-card.is-locked {
+  opacity: 1;
+}
+
+.worlds-gallery .world-card .world-icon {
+  display: grid;
+  width: 100%;
+  min-height: 116px;
+  place-items: center;
+  margin: -4px 0 2px;
+  font-size: 74px;
+  line-height: 1;
+  transform: translateY(1px);
+  filter:
+    drop-shadow(0 7px 3px rgba(97,71,64,.20))
+    saturate(.92);
+}
+
+.worlds-gallery .world-card strong {
+  max-width: calc(100% - 74px);
+  color: #4a4544;
+  font-size: 20px;
+  font-weight: 950;
+  letter-spacing: -.025em;
+  line-height: 1.02;
+}
+
+.worlds-gallery .world-card small {
+  display: none;
+}
+
+.worlds-gallery .world-card .status {
+  top: auto;
+  right: 14px;
+  bottom: 14px;
+  min-width: 65px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #9ccbed 0%, #72add7 100%);
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    0 5px 9px rgba(64,118,154,.28);
+  font-size: 12px;
+  font-weight: 950;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(49,91,121,.18);
+}
+
+.worlds-gallery .world-card.is-locked .status {
+  background: linear-gradient(180deg, #ef8d91 0%, #d85f68 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.48),
+    0 5px 9px rgba(159,74,78,.24);
+}
+
+.worlds-gallery .world-card.discovery,
+.worlds-gallery .world-card.blessing,
+.worlds-gallery .world-card.robot,
+.worlds-gallery .world-card.puzzle,
+.worlds-gallery .world-card.home,
+.worlds-gallery .world-card.word,
+.worlds-gallery .world-card.number,
+.worlds-gallery .world-card.drawing,
+.worlds-gallery .world-card.memory,
+.worlds-gallery .world-card.feelings,
+.worlds-gallery .world-card.adventure {
+  background:
+    radial-gradient(circle at 52% 20%, rgba(255,255,255,.72), transparent 35%),
+    linear-gradient(180deg, #fbe9ee 0%, #f5c9d5 100%);
+}
+
+.bottom-nav {
+  left: 50%;
+  bottom: max(0px, var(--safe-bottom));
+  width: min(1120px, calc(100% - 20px));
+  min-height: 88px;
+  transform: translateX(-50%);
+  padding: 5px 12px 7px;
+  border: 1px solid rgba(133,111,102,.09);
+  border-bottom: 0;
+  border-radius: 28px 28px 0 0;
+  background: rgba(255,255,255,.90);
+  box-shadow: 0 -7px 24px rgba(87,68,61,.10);
+  backdrop-filter: blur(18px);
+}
+
+.nav-button {
+  position: relative;
+  min-height: 75px;
+  border-radius: 24px;
+  color: #bbb5b2;
+  font-size: 14px;
+  font-weight: 900;
+  gap: 2px;
+}
+
+.nav-button > span:first-child {
+  font-size: 32px;
+  line-height: 1;
+  filter: grayscale(.75) opacity(.72);
+}
+
+.nav-button.is-active {
+  color: #3d3938;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 7px 18px rgba(87,68,61,.10);
+}
+
+.nav-button.is-active > span:first-child {
+  filter: none;
+  transform: translateY(-2px) scale(1.05);
+}
+
+@media (max-width: 920px) {
+  .worlds-gallery .world-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .topbar {
+    min-height: 78px;
+    padding: 10px 12px;
+  }
+
+  .brand-mark {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+  }
+
+  .brand-mark::after {
+    inset: 14px;
+  }
+
+  .brand-copy strong {
+    font-size: 18px;
+  }
+
+  .brand-copy small {
+    font-size: 10px;
+  }
+
+  .star-pill {
+    min-height: 46px;
+    padding-right: 10px;
+  }
+
+  .star-pill span {
+    width: 36px;
+    height: 36px;
+    font-size: 27px;
+  }
+
+  .icon-button {
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 30px;
+  }
+
+  .screen {
+    padding: 14px 12px calc(126px + var(--safe-bottom));
+  }
+
+  .worlds-gallery .section-heading {
+    margin: 8px 0 16px;
+  }
+
+  .worlds-gallery .section-heading h2 {
+    font-size: 29px;
+  }
+
+  .worlds-gallery .section-heading p {
+    font-size: 14px;
+  }
+
+  .worlds-gallery .world-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+  }
+
+  .worlds-gallery .world-card {
+    min-height: 164px;
+    padding: 12px 13px 14px;
+    border-radius: 21px;
+  }
+
+  .worlds-gallery .world-card .world-icon {
+    min-height: 100px;
+    font-size: 58px;
+  }
+
+  .worlds-gallery .world-card strong {
+    max-width: calc(100% - 58px);
+    font-size: 16px;
+  }
+
+  .worlds-gallery .world-card .status {
+    right: 10px;
+    bottom: 10px;
+    min-width: 54px;
+    padding: 7px 9px;
+    font-size: 10px;
+  }
+
+  .bottom-nav {
+    width: calc(100% - 10px);
+    min-height: 80px;
+    padding-inline: 6px;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .nav-button {
+    min-height: 68px;
+    font-size: 12px;
+  }
+
+  .nav-button > span:first-child {
+    font-size: 27px;
+  }
+}
+
+@media (max-width: 360px) {
+  .brand-copy small {
+    display: none;
+  }
+
+  .worlds-gallery .world-card {
+    min-height: 150px;
+  }
+
+  .worlds-gallery .world-card .world-icon {
+    min-height: 90px;
+    font-size: 52px;
+  }
+}
