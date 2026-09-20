@@ -615,7 +615,7 @@ const LETTER_FIND_LEVELS = [
 
 const PLANT_FOOD_POOL = [
   { name: "Mango", spokenName: "mango", image: "./assets/discovery/plant-foods/mango.jpg", category: "Fruit", difficulty: 1 },
-  { name: "Banana", spokenName: "banana", image: "./assets/discovery/plant-foods/banana.jpg", category: "Fruit", difficulty: 1 },
+  { name: "Banana", spokenName: "banana", image: "./assets/discovery/plant-foods/banana-photo.jpg", category: "Fruit", difficulty: 1 },
   { name: "Pineapple", spokenName: "pineapple", image: "./assets/discovery/plant-foods/pineapple.jpg", category: "Fruit", difficulty: 1 },
   { name: "Carrot", spokenName: "carrot", image: "./assets/discovery/plant-foods/carrot.jpg", category: "Vegetable", difficulty: 1 },
   { name: "Broccoli", spokenName: "broccoli", image: "./assets/discovery/plant-foods/broccoli.jpg", category: "Vegetable", difficulty: 1 },
@@ -2411,7 +2411,6 @@ function renderGame(worldId, activityId, roundIndex = 0) {
         <div class="plant-food-choice-grid" aria-label="Choose fruit or vegetable">
           ${round.choices.map((choice, choiceIndex) => `
             <button class="plant-food-choice-button" style="--choice-index:${choiceIndex}" type="button" data-choice="${escapeAttr(choice)}" aria-label="${escapeAttr(choice)}">
-              <span class="plant-food-choice-icon" aria-hidden="true">${choice === "Fruit" ? "🍎" : "🥕"}</span>
               <strong>${choice}</strong>
               <small>${choice === "Fruit" ? "Fruit group" : "Vegetable group"}</small>
             </button>
