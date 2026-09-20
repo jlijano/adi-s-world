@@ -10,7 +10,7 @@ const worlds = [
   { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "open" },
   { id: "word", name: "Word Forest", icon: "🌳", note: "Letters, sounds & words", status: "open" },
   { id: "number", name: "Number Island", icon: "🏝️", note: "Counting & early math", status: "open" },
-  { id: "drawing", name: "Drawing Garden", icon: "🎨", note: "Tracing & creativity", status: "soon" },
+  { id: "drawing", name: "Drawing Garden", icon: "🎨", note: "Tracing & creativity", status: "open" },
   { id: "discovery", name: "Discovery Lab", icon: "🔬", note: "Science & curiosity", status: "open" },
   { id: "blessing", name: "Blessing Garden", icon: "🕊️", note: "Bible verses, stories & faith questions", status: "open" },
   { id: "robot", name: "Robot Road", icon: "🤖", note: "Sequences & coding", status: "soon" },
@@ -1788,7 +1788,7 @@ function renderBlessingSystemVoiceOptions() {
     ...voices.map((voice) => {
       const id = voiceStableId(voice);
       const selected = id === blessingSystemVoiceId ? " selected" : "";
-      return `<option value="${escapeAttr(id)}"${selected}>${escapeHtml(voice.name || "Unnamed voice")} — ${escapeHtml(voice.lang || "English")}</option>`;
+      return `<option value="${escapeAttr(id)}"${selected}>${escapeAttr(voice.name || "Unnamed voice")} — ${escapeAttr(voice.lang || "English")}</option>`;
     })
   ];
   select.innerHTML = options.join("");
@@ -1953,7 +1953,7 @@ function renderBlessingVoiceSelector() {
           <option value="">Auto-select from preference</option>
           ${getEnglishSystemVoices().map((voice) => {
             const id = voiceStableId(voice);
-            return `<option value="${escapeAttr(id)}" ${id === blessingSystemVoiceId ? "selected" : ""}>${escapeHtml(voice.name || "Unnamed voice")} — ${escapeHtml(voice.lang || "English")}</option>`;
+            return `<option value="${escapeAttr(id)}" ${id === blessingSystemVoiceId ? "selected" : ""}>${escapeAttr(voice.name || "Unnamed voice")} — ${escapeAttr(voice.lang || "English")}</option>`;
           }).join("")}
         </select>
         <small class="blessing-system-voice-help">If Male still sounds female, choose a different installed voice here and preview it. The app will use this exact voice for Bible reading.</small>
@@ -4149,7 +4149,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=53", { updateViaCache: "none" })
+      .register("./service-worker.js?v=54", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
