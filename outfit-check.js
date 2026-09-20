@@ -1,6 +1,6 @@
 (() => {
   const OUTFIT_STORAGE_KEY = "adis-world-outfit-v1";
-  const ADI_3D_FRONT = "./assets/character/adi-front-3d.webp?v=38";
+  const ADI_3D_FRONT = "./assets/character/adi-front-3d.webp?v=39";
 
   const DEFAULT_OUTFIT = Object.freeze({
     top: "pink-donut",
