@@ -31,9 +31,11 @@ for (const id of ["home","word","number","drawing","discovery","blessing","robot
   check(app.includes(`id: "${id}"`), `World definition exists: ${id}`);
 }
 
-for (const group of ["home","word","number","drawing","discovery","blessing","puzzle"]) {
+for (const group of ["home","word","number","discovery","blessing","puzzle"]) {
   check(new RegExp(`\\n  ${group}: \\[|\\n  ${group}: \\{`).test(app), `Activity group exists: ${group}`);
 }
+const drawingModule = fs.readFileSync("drawing-garden.js", "utf8");
+check(drawingModule.includes("activities.drawing = ["), "Drawing activity group is registered by drawing-garden.js");
 
 check(app.includes("renderHome()"), "Home renderer is present");
 check(app.includes("renderWorlds()"), "Worlds renderer is present");
