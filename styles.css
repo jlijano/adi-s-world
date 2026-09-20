@@ -3204,3 +3204,26 @@ button:focus-visible {
 @media (max-width: 380px) {
   .blessing-voice-options { grid-template-columns: 1fr; }
 }
+
+.blessing-voice-preview {
+  min-height: 48px;
+  width: 100%;
+  border: 2px solid rgba(138,90,25,.18);
+  border-radius: 14px;
+  background: #fff9ea;
+  color: #6f4518;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+.blessing-voice-preview:hover {
+  background: #fff4d8;
+}
+.blessing-voice-preview:disabled {
+  opacity: .7;
+  cursor: default;
+}
+.blessing-voice-preview:focus-visible {
+  outline: 4px solid rgba(183,122,32,.24);
+  outline-offset: 2px;
+}

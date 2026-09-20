@@ -1,6 +1,6 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.16.0  
+**Version:** 1.16.1  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
@@ -1129,6 +1129,7 @@ Implementation rules:
 
 - Sacred Narrator is the default Blessing Garden narration mode unless the user changes it.
 - Provide a visible option to switch between **Sacred Narrator** and **Standard Voice**.
+- Provide a short **Preview Sacred Narrator** button inside the Blessing Garden voice selector so the user can hear the Sacred Narrator before starting a Bible story or memory verse. The preview must always use the Sacred Narrator profile even if Standard Voice is currently selected, must not start or change story progress, and should stop/replace any currently playing preview or narration through the existing speechSynthesis cancellation behavior.
 - Persist the selected Blessing Garden narration mode locally.
 - Use Sacred Narrator for actual Bible Story scene narration and Memory Verse read-aloud.
 - Use Sacred Narrator for Verse Time verse/question narration where the verse itself is being read.

@@ -635,3 +635,17 @@ Added:
 Reason:
 
 - Blessing Garden Scripture and story reading should feel natural, peaceful, dignified, easy for young children to understand, and distinct from ordinary game narration.
+
+
+## 1.16.1 — 2026-09-20
+
+Added:
+
+- Added a short **Preview Sacred Narrator** button to the Blessing Garden voice selector.
+- The preview plays the Sacred Narrator profile even when Standard Voice is currently selected.
+- Preview playback does not start a story, alter story progress, award stars, or change the saved narration preference.
+- The button shows a temporary playing state and re-enables when playback finishes.
+
+Reason:
+
+- Users should be able to hear the deep, warm, reverent Bible narration voice before starting a Bible story or memory verse.

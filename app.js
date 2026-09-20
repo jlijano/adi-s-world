@@ -1768,8 +1768,8 @@ function speak(text, onDone) {
   window.speechSynthesis.speak(utterance);
 }
 
-function speakBlessing(text, onDone) {
-  if (blessingVoiceMode !== "sacred") {
+function speakBlessing(text, onDone, forceSacred = false) {
+  if (!forceSacred && blessingVoiceMode !== "sacred") {
     speak(text, onDone);
     return;
   }
@@ -1825,6 +1825,9 @@ function renderBlessingVoiceSelector() {
           Standard Voice
         </button>
       </div>
+      <button type="button" class="blessing-voice-preview" data-blessing-voice-preview aria-label="Preview Sacred Narrator voice">
+        🔊 Preview Sacred Narrator
+      </button>
     </section>
   `;
 }
@@ -3539,6 +3542,21 @@ function toggleSound() {
 }
 
 document.addEventListener("click", (event) => {
+  const blessingVoicePreviewButton = event.target.closest("[data-blessing-voice-preview]");
+  if (blessingVoicePreviewButton) {
+    blessingVoicePreviewButton.disabled = true;
+    blessingVoicePreviewButton.textContent = "🔊 Playing preview…";
+    speakBlessing(
+      "Welcome to Blessing Garden. Listen carefully as we read God's word together.",
+      () => {
+        blessingVoicePreviewButton.disabled = false;
+        blessingVoicePreviewButton.textContent = "🔊 Preview Sacred Narrator";
+      },
+      true
+    );
+    return;
+  }
+
   const blessingVoiceButton = event.target.closest("[data-blessing-voice]");
   if (blessingVoiceButton) {
     const mode = blessingVoiceButton.dataset.blessingVoice === "standard" ? "standard" : "sacred";
@@ -3931,7 +3949,7 @@ soundButton.textContent = soundEnabled ? "🔊" : "🔇";
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./service-worker.js?v=48", { updateViaCache: "none" })
+      .register("./service-worker.js?v=49", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
