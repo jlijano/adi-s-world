@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .label{font:700 24px Arial,sans-serif;fill:#7a3150}.small{font:600 16px Arial,sans-serif;fill:#8c5a6c}
+      .skin{fill:#ffc7a3;stroke:#38251f;stroke-width:4}.hair{fill:#3a221f;stroke:#231713;stroke-width:5}
+      .pink{fill:#f45a98;stroke:#8d2f5a;stroke-width:4}.blue{fill:#1766aa;stroke:#0b3d68;stroke-width:4}
+      .white{fill:#fff;stroke:#8d8d8d;stroke-width:3}.shoe{fill:#ff8bb8;stroke:#8d2f5a;stroke-width:4}
+      .panel{fill:#fff;stroke:#f4b6cb;stroke-width:4}.eye{fill:#2a1713;stroke:#111;stroke-width:3}
+      .line{fill:none;stroke:#38251f;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+      .mouth{fill:#e63e64;stroke:#7a2437;stroke-width:3}
+    </style>
+    <g id="head-front">
+      <ellipse class="hair" cx="0" cy="-80" rx="76" ry="72"/>
+      <ellipse class="hair" cx="-72" cy="-78" rx="44" ry="52"/><ellipse class="hair" cx="72" cy="-78" rx="44" ry="52"/>
+      <circle class="pink" cx="-91" cy="-111" r="15"/><path class="pink" d="M-105 -120 q-16 -14 -26 0 q10 21 28 16z"/><path class="pink" d="M-79 -120 q16 -14 26 0 q-10 21 -28 16z"/>
+      <circle class="pink" cx="91" cy="-111" r="15"/><path class="pink" d="M77 -120 q-16 -14 -26 0 q10 21 28 16z"/><path class="pink" d="M105 -120 q16 -14 26 0 q-10 21 -28 16z"/>
+      <ellipse class="skin" cx="0" cy="-55" rx="61" ry="57"/>
+      <path class="hair" d="M-57 -92 q57 -48 114 0 q-5 -51 -57 -58 q-52 7 -57 58z"/>
+      <path class="hair" d="M-47 -90 q-8 18 0 31 q15 -11 21 -31z"/><path class="hair" d="M-10 -103 q-8 19 -2 34 q15 -10 20 -33z"/><path class="hair" d="M23 -101 q-7 17 -1 31 q14 -9 18 -28z"/>
+      <ellipse class="eye" cx="-24" cy="-54" rx="14" ry="19"/><ellipse class="eye" cx="24" cy="-54" rx="14" ry="19"/>
+      <circle fill="#fff" cx="-19" cy="-61" r="5"/><circle fill="#fff" cx="29" cy="-61" r="5"/>
+      <circle fill="#f28d9f" cx="-43" cy="-36" r="9" opacity=".6"/><circle fill="#f28d9f" cx="43" cy="-36" r="9" opacity=".6"/>
+    </g>
+    <g id="torso-front">
+      <path class="pink" d="M-48 4 q48 -18 96 0 l12 78 q-60 18 -120 0z"/>
+      <circle fill="#f5a43a" stroke="#8d5a21" stroke-width="4" cx="0" cy="46" r="22"/>
+      <circle fill="#f45a98" cx="0" cy="46" r="13"/><circle fill="#fff" cx="0" cy="46" r="5"/>
+      <path class="blue" d="M-50 78 h100 l9 55 q-28 12 -56 2 q-28 10 -59 -2z"/>
+      <rect fill="#f0a000" stroke="#754b00" stroke-width="3" x="-10" y="74" width="20" height="12" rx="5"/>
+    </g>
+    <g id="legs-neutral">
+      <path class="skin" d="M-35 132 l25 0 l2 70 h-27z"/><path class="skin" d="M10 132 h25 l0 70 h-27z"/>
+      <path class="white" d="M-39 190 h34 v18 h-34z"/><path class="white" d="M5 190 h34 v18 h-34z"/>
+      <path class="shoe" d="M-44 204 h44 q7 18 -4 26 h-44 q-8 -12 4 -26z"/><path class="shoe" d="M0 204 h44 q12 14 2 26 h-45 q-9 -12 -1 -26z"/>
+      <path stroke="#fff" stroke-width="4" d="M-35 211 h27M9 211 h27"/>
+    </g>
+    <g id="arms-neutral">
+      <path class="skin" d="M-49 12 q-25 21 -18 72 q6 18 18 0 q-4 -37 10 -55z"/>
+      <path class="skin" d="M49 12 q25 21 18 72 q-6 18 -18 0 q4 -37 -10 -55z"/>
+    </g>
+  </defs>
+
+  <rect width="1600" height="900" fill="#fff8fb"/>
+  <text x="50" y="48" font-family="Arial,sans-serif" font-size="34" font-weight="700" fill="#d93e7b">ADI — MAIN CHARACTER SPRITE REFERENCE</text>
+  <text x="50" y="78" class="small">Canonical Adi’s World reference • twin pigtails • pink bows • donut shirt • denim shorts • pink sneakers</text>
+
+  <!-- panels -->
+  <g transform="translate(20 100)"><rect class="panel" width="380" height="350" rx="22"/><text x="22" y="34" class="label">1. NEUTRAL FRONT</text>
+    <g transform="translate(190 175) scale(.72)"><use href="#head-front"/><use href="#torso-front"/><use href="#arms-neutral"/><use href="#legs-neutral"/><path class="mouth" d="M-13 -27 q13 11 26 0 q-3 18 -26 0z"/></g></g>
+
+  <g transform="translate(410 100)"><rect class="panel" width="380" height="350" rx="22"/><text x="22" y="34" class="label">2. WALKING</text>
+    <g transform="translate(190 175) scale(.72) rotate(-2)"><use href="#head-front"/><use href="#torso-front"/>
+      <path class="skin" d="M-48 14 q-35 10 -54 44 q-6 17 9 17 q25 -20 49 -35z"/><path class="skin" d="M48 14 q31 9 53 31 q8 14 -4 20 q-28 -14 -53 -25z"/>
+      <path class="skin" d="M-30 132 l24 0 l-13 70 h-27z"/><path class="skin" d="M8 132 h25 l30 50 q5 16 -10 20 l-24 -17z"/>
+      <path class="white" d="M-49 190 h31 v17 h-31z"/><path class="white" d="M39 174 l28 16 -8 15 -29 -16z"/>
+      <path class="shoe" d="M-56 204 h44 q5 16 -6 24 h-43 q-8 -10 5 -24z"/><path class="shoe" d="M55 192 l39 21 q3 14 -11 19 l-39 -22z"/>
+      <path class="mouth" d="M-12 -25 q12 10 24 0 q-2 15 -24 0z"/></g></g>
+
+  <g transform="translate(800 100)"><rect class="panel" width="380" height="350" rx="22"/><text x="22" y="34" class="label">3. HAPPY</text>
+    <g transform="translate(190 175) scale(.72)"><use href="#head-front"/><use href="#torso-front"/>
+      <path class="line" d="M-36 -56 q12 16 24 0M12 -56 q12 16 24 0"/><path class="mouth" d="M-21 -24 q21 20 42 0 q-6 28 -42 0z"/>
+      <path class="skin" d="M-48 16 q-36 1 -59 -29 q-8 -13 4 -20 q34 19 60 24z"/><path class="skin" d="M48 16 q36 1 59 -29 q8 -13 -4 -20 q-34 19 -60 24z"/>
+      <use href="#legs-neutral"/></g></g>
+
+  <g transform="translate(1190 100)"><rect class="panel" width="390" height="350" rx="22"/><text x="22" y="34" class="label">4. TALKING</text>
+    <g transform="translate(195 175) scale(.72)"><use href="#head-front"/><use href="#torso-front"/><use href="#legs-neutral"/>
+      <path class="skin" d="M-48 14 q-28 23 -31 61 q2 16 15 6 q7 -30 26 -48z"/><path class="skin" d="M48 14 q31 8 47 34 q7 13 -6 18 q-20 -16 -43 -25z"/>
+      <ellipse class="mouth" cx="0" cy="-23" rx="13" ry="18"/></g></g>
+
+  <g transform="translate(20 470)"><rect class="panel" width="380" height="350" rx="22"/><text x="22" y="34" class="label">5. CHEERING</text>
+    <g transform="translate(190 175) scale(.72)"><use href="#head-front"/><use href="#torso-front"/>
+      <path class="line" d="M-36 -56 q12 16 24 0M12 -56 q12 16 24 0"/><path class="mouth" d="M-21 -23 q21 22 42 0 q-6 27 -42 0z"/>
+      <path class="skin" d="M-47 12 q-34 -36 -43 -79 q1 -16 15 -5 q16 37 42 63z"/><path class="skin" d="M47 12 q34 -36 43 -79 q-1 -16 -15 -5 q-16 37 -42 63z"/>
+      <path class="skin" d="M-35 132 h25 l-2 70 h-27z"/><path class="skin" d="M10 132 h25 l18 51 q4 18 -11 19 l-27 -31z"/>
+      <path class="white" d="M-43 190 h34 v18 h-34z"/><path class="white" d="M37 176 l25 12 -8 17 -25 -13z"/>
+      <path class="shoe" d="M-48 204 h44 q8 17 -4 26 h-44 q-7 -11 4 -26z"/><path class="shoe" d="M52 188 l38 20 q4 15 -11 20 l-37 -21z"/></g></g>
+
+  <g transform="translate(410 470)"><rect class="panel" width="380" height="350" rx="22"/><text x="22" y="34" class="label">6. TOP VIEW</text>
+    <g transform="translate(190 170) scale(.95)">
+      <ellipse class="hair" cx="0" cy="0" rx="78" ry="70"/><ellipse class="hair" cx="-76" cy="0" rx="43" ry="40"/><ellipse class="hair" cx="76" cy="0" rx="43" ry="40"/>
+      <circle class="pink" cx="-91" cy="-27" r="14"/><circle class="pink" cx="91" cy="-27" r="14"/>
+      <ellipse class="pink" cx="0" cy="66" rx="46" ry="32"/><ellipse class="blue" cx="0" cy="96" rx="49" ry="25"/>
+      <ellipse class="shoe" cx="-25" cy="126" rx="20" ry="12"/><ellipse class="shoe" cx="25" cy="126" rx="20" ry="12"/>
+      <path class="hair" d="M-62 -28 q62 -52 124 0 q-18 -62 -62 -65 q-45 3 -62 65z"/>
+    </g><text x="77" y="315" class="small">Overhead reference for map / exploration scenes</text></g>
+
+  <g transform="translate(800 470)"><rect class="panel" width="380" height="350" rx="22"/><text x="22" y="34" class="label">7. SIDE VIEW</text>
+    <g transform="translate(190 175) scale(.72)">
+      <ellipse class="hair" cx="-10" cy="-80" rx="68" ry="70"/><ellipse class="hair" cx="61" cy="-78" rx="46" ry="53"/>
+      <circle class="pink" cx="72" cy="-110" r="14"/><path class="pink" d="M60 -118 q-16 -12 -24 1 q9 18 26 14z"/><path class="pink" d="M84 -118 q16 -12 24 1 q-9 18 -26 14z"/>
+      <ellipse class="skin" cx="-2" cy="-55" rx="54" ry="57"/><path class="hair" d="M-55 -92 q39 -45 97 -17 q-18 -41 -59 -43 q-38 8 -38 60z"/>
+      <ellipse class="eye" cx="25" cy="-55" rx="12" ry="18"/><circle fill="#fff" cx="29" cy="-61" r="4"/><path class="mouth" d="M34 -24 q9 6 15 -2"/>
+      <path class="pink" d="M-41 4 q40 -15 70 5 l15 76 q-46 14 -90 -3z"/><circle fill="#f5a43a" stroke="#8d5a21" stroke-width="4" cx="18" cy="45" r="19"/>
+      <path class="blue" d="M-43 78 h86 l8 54 q-42 14 -91 0z"/>
+      <path class="skin" d="M-37 15 q-24 25 -16 68 q6 17 18 0 q-4 -34 10 -54z"/><path class="skin" d="M28 17 q27 21 24 60 q-4 17 -17 2 q0 -29 -15 -48z"/>
+      <path class="skin" d="M-27 132 h24 l-3 70 h-26z"/><path class="skin" d="M12 132 h24 l4 70 h-27z"/>
+      <path class="white" d="M-35 190 h33 v18 h-33z"/><path class="white" d="M6 190 h34 v18 h-34z"/>
+      <path class="shoe" d="M-40 204 h44 q8 17 -4 26 h-44 q-7 -11 4 -26z"/><path class="shoe" d="M4 204 h44 q12 13 2 26 h-45 q-9 -12 -1 -26z"/>
+    </g></g>
+
+  <g transform="translate(1190 470)"><rect class="panel" width="390" height="350" rx="22"/><text x="22" y="34" class="label">8. NEUTRAL BACK</text>
+    <g transform="translate(195 175) scale(.72)">
+      <ellipse class="hair" cx="0" cy="-80" rx="76" ry="72"/><ellipse class="hair" cx="-72" cy="-78" rx="44" ry="52"/><ellipse class="hair" cx="72" cy="-78" rx="44" ry="52"/>
+      <circle class="pink" cx="-91" cy="-111" r="15"/><circle class="pink" cx="91" cy="-111" r="15"/>
+      <path class="hair" d="M-62 -110 q62 -40 124 0 l-8 72 q-54 35 -108 0z"/>
+      <path class="pink" d="M-48 2 q48 -17 96 0 l11 80 q-59 17 -118 0z"/><path class="blue" d="M-50 78 h100 l9 55 q-28 12 -56 2 q-28 10 -59 -2z"/>
+      <rect class="blue" x="-34" y="89" width="28" height="28" rx="4"/><rect class="blue" x="8" y="89" width="28" height="28" rx="4"/>
+      <use href="#arms-neutral"/><use href="#legs-neutral"/>
+    </g></g>
+
+  <text x="50" y="870" class="small">REFERENCE RULE: keep face, pigtails, pink bows, donut shirt, denim shorts, socks, pink shoes, proportions, and palette consistent across all Adi sprites.</text>
+</svg>
