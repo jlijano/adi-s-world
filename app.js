@@ -1565,7 +1565,7 @@ function setActiveNav(name) {
 }
 
 function worldCard(world) {
-  const cssClass = ["word", "number", "puzzle"].includes(world.id) ? world.id : "";
+  const cssClass = ["home", "word", "number", "puzzle"].includes(world.id) ? world.id : "";
   const stateClass = world.status === "open" ? "is-open" : "is-locked";
   return `
     <button class="world-card ${cssClass} ${stateClass}" type="button" data-world="${world.id}" aria-label="${world.name}">
@@ -1699,6 +1699,7 @@ function renderWorld(worldId) {
       </div>`}
     </section>
   `;
+  window.scrollTo({ top: 0, behavior: "auto" });
   screen.focus({ preventScroll: true });
 }
 
