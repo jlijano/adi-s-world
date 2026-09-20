@@ -36,3 +36,57 @@
 @keyframes adiIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@media(prefers-reduced-motion:reduce){.adi-body-3d{animation:none}.adi-outfit-avatar{transition:none}}
 @media(min-width:760px){.outfit-check-layout{grid-template-columns:minmax(330px,.95fr) minmax(0,1.05fr);align-items:start}.outfit-avatar-wrap{min-height:560px;position:sticky;top:14px}.adi-outfit-avatar{bottom:58px;transform:translateX(-50%) scale(1.08) perspective(800px) rotateY(var(--adi-turn))}.outfit-options-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:420px){.outfit-avatar-wrap{min-height:455px}.adi-outfit-avatar{bottom:32px;transform:translateX(-50%) scale(.88) perspective(800px) rotateY(var(--adi-turn))}.outfit-options-grid{grid-template-columns:1fr}.room-window{right:18px;top:34px;transform:scale(.82);transform-origin:top right}.room-shelf{left:18px;transform:scale(.85);transform-origin:top left}}
+
+
+/* Outfit Check v2 — approved 3D Addi render */
+.outfit-avatar-v2 .adi-outfit-avatar-render{
+  bottom:46px;
+  width:min(78%,330px);
+  height:auto;
+  aspect-ratio:3/4;
+  display:grid;
+  place-items:end center;
+  transform:translateX(-50%) perspective(900px) rotateY(var(--adi-turn));
+  transform-origin:50% 78%;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.outfit-avatar-v2 .adi-3d-render{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center bottom;
+  filter:drop-shadow(0 14px 14px rgba(78,46,61,.12));
+  animation:adi3dIdle 2.8s ease-in-out infinite;
+  user-select:none;
+  pointer-events:none;
+}
+.outfit-avatar-v2 .adi-shadow{
+  left:50%;
+  bottom:6px;
+  width:42%;
+  height:18px;
+  opacity:.65;
+  z-index:-1;
+}
+@keyframes adi3dIdle{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-4px) scale(1.004)}
+}
+@media(prefers-reduced-motion:reduce){
+  .outfit-avatar-v2 .adi-3d-render{animation:none}
+}
+@media(min-width:760px){
+  .outfit-avatar-v2 .adi-outfit-avatar-render{
+    bottom:60px;
+    width:min(76%,360px);
+    transform:translateX(-50%) perspective(900px) rotateY(var(--adi-turn));
+  }
+}
+@media(max-width:420px){
+  .outfit-avatar-v2 .adi-outfit-avatar-render{
+    bottom:38px;
+    width:min(82%,300px);
+    transform:translateX(-50%) perspective(900px) rotateY(var(--adi-turn));
+  }
+}
