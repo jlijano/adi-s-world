@@ -1,15 +1,177 @@
 import * as THREE from "./assets/vendor/three/three.module.js";
-import { GLTFLoader } from "./assets/vendor/three/GLTFLoader.js";
 
 (() => {
-  const GLB_B64 = "Z2xURgIAAAB4JAAA9BAAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MjA0LCJtYXgiOlszOV0sIm1pbiI6WzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MSwiY291bnQiOjQwLCJtYXgiOlswLjc2NTU4NTcyMDUzOTA5Myw0LjIwMDY1MDY5MTk4NjA4NCwwLjcyMzA1MzE1NzMyOTU1OTNdLCJtaW4iOlstMC43NjU1ODU3MjA1MzkwOTMsMC40OTQxMTU0NDIwMzc1ODI0LC0wLjcyMzA1MzE1NzMyOTU1OTNdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjoyLCJjb3VudCI6MTgwLCJtYXgiOlszNV0sIm1pbiI6WzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmZXaWV3IjozLCJjb3VudCI6MzYsIm1heCI6WzEuMzk0NzAxOTU3NzAyNjM2Nyw0LjM1NTQ1NTM5ODU1OTU3LDAuNjQ1NTg1NzE1NzcwNzIxNF0sIm1pbiI6Wy0xLjM5NDcwMTk1NzcwMjYzNjcsMy4xNjQ1NDQzNDM5NDgzNjQzLC0wLjg4NTU4NTcyNTMwNzQ2NDZdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3Ijo0LCJjb3VudCI6MTkyLCJtYXgiOlszN10sIm1pbiI6WzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmZXaWV3Ijo1LCJjb3VudCI6MzgsIm1heCI6WzAuNTU1MTk1MjcxOTY4ODQxNiwyLjM2NzY1MzYwODMyMjE0MzYsMC41NTAwMDAwMTE5MjA5MjldLCJtaW4iOlstMC41NTUxOTUyNzE5Njg4NDE2LC0wLjAwNzU5NzYyMTA2NDYzMzEzMSwtMC41NTAwMDAwMTE5MjA5MjldfSx7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3Ijo2LCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZmZXJWaWV3Ijo3LCJjb3VudCI6OCwibWF4IjpbMC42MDAwMDAwMjM4NDE4NTc5LDEuNDI0OTk5OTUyMzE2Mjg0MiwwLjMyNDk5OTk4ODA3OTA3MTA0XSwibWluIjpbLTAuNjAwMDAwMDIzODQxODU3OSwwLjg3NSwtMC4zMjQ5OTk5ODgwNzkwNzEwNF19LHsiY29tcG9uZW50VHlwZSI6NTEyNSwidHlwZSI6IlNDQUxBUiIsImJ1ZmZlclZpZXciOjgsImNvdW50IjoxMjAsIm1heCI6WzIzXSwibWluIjpbMF19LHsiY29tcG9uZW50VHlwZSI6NTEyNiwidHlwZSI6IlZFQzMiLCJieXRlT2Zmc2V0IjowLCJidWZmZXJWaWV3Ijo5LCJjb3VudCI6MjQsIm1heCI6WzAuNTExMzk2NDA4MDgxMDU0NywzLjY1MzkyODk5NTEzMjQ0NjMsMC44MDk1NDU1NzY1NzI0MTgyXSwibWluIjpbLTAuNTExMzk2NDA4MDgxMDU0NywzLjE4NjA3MDkxOTAzNjg2NTIsMC42OTA0NTQ0MjM0Mjc1ODE4XX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZmZXJWaWV3IjoxMCwiY291bnQiOjI0LCJtYXgiOlswLjM5NjU1ODU4Mjc4Mjc0NTM2LDMuNDk2NTU4NjY2MjI5MjQ4LDAuOTg4Mjc5MjgzMDQ2NzIyNF0sIm1pbiI6Wy0wLjM5NjU1ODU4Mjc4Mjc0NTM2LDMuMzQzNDQxNDg2MzU4NjQyNiwwLjkxMTcyMDY5MzExMTQxOTddfV0sIm1lc2hlcyI6W3sibmFtZSI6IlNraW4iLCJleHRyYXMiOnsic2hhcGUiOiJyYWRpdXMifSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MX0sImluZGljZXMiOjAsIm1vZGUiOjQsIm1hdGVyaWFsIjowfV19LHsibmFtZSI6IkhhaXIiLCJleHRyYXMiOnsic2hhcGUiOiJyYWRpdXMifSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6M30sImluZGljZXMiOjIsIm1vZGUiOjQsIm1hdGVyaWFsIjoxfV19LHsibmFtZSI6IlBpbmsiLCJleHRyYXMiOnt9LCJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjo1fSwiaW5kaWNlcyI6NCwibW9kZSI6NCwibWF0ZXJpYWwiOjJ9XX0seyJuYW1lIjoiRGVuaW0iLCJleHRyYXMiOnsic2hhcGUiOiJib3giLCJleHRlbnRzIjpbMS4yLDAuNTUsMC42NV19LCJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjo3fSwiaW5kaWNlcyI6NiwibW9kZSI6NCwibWF0ZXJpYWwiOjN9XX0seyJuYW1lIjoiRXllcyIsImV4dHJhcyI6eyJzaGFwZSI6InJhZGl1cyJ9LCJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjo5fSwiaW5kaWNlcyI6OCwibW9kZSI6NCwibWF0ZXJpYWwiOjR9XX0seyJuYW1lIjoiUHVwaWxzIiwiZXh0cmFzIjp7InNoYXBlIjoicmFkaXVzIn0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEwfSwiaW5kaWNlcyI6OCwibW9kZSI6NCwibWF0ZXJpYWwiOjV9XX1dLCJtYXRlcmlhbHMiOlt7InBick1ldGFsbGljUm91Z2huZXNzIjp7ImJhc2VDb2xvckZhY3RvciI6WzEuMCwwLjY5MDE5NjA3ODQzMTM3MjUsMC41MjE1Njg2Mjc0NTA5ODA0LDEuMF0sInJvdWdobmVzc0ZhY3RvciI6MC43LCJtZXRhbGxpY0ZhY3RvciI6MC4wfSwiZG91YmxlU2lkZWQiOmZhbHNlfSx7InBick1ldGFsbGljUm91Z2huZXNzIjp7ImJhc2VDb2xvckZhY3RvciI6WzAuMTYwNzg0MzEzNzI1NDkwMiwwLjA1NDkwMTk2MDc4NDMxMzcyNSwwLjAzMTM3MjU0OTAxOTYwNzg0LDEuMF0sInJvdWdobmVzc0ZhY3RvciI6MC43LCJtZXRhbGxpY0ZhY3RvciI6MC4wfSwiZG91YmxlU2lkZWQiOmZhbHNlfSx7InBick1ldGFsbGljUm91Z2huZXNzIjp7ImJhc2VDb2xvckZhY3RvciI6WzAuOTYwNzg0MzEzNzI1NDkwMiwwLjIsMC40NzA1ODgyMzUyOTQxMTc2NCwxLjBdLCJyb3VnaG5lc3NGYWN0b3IiOjAuNywibWV0YWxsaWNGYWN0b3IiOjAuMH0sImRvdWJsZVNpZGVkIjpmYWxzZX0seyJwYnJNZXRhbGxpY1JvdWdobmVzcyI6eyJiYXNlQ29sb3JGYWN0b3IiOlswLjEwMTk2MDc4NDMxMzcyNTQ5LDAuMzI5NDExNzY0NzA1ODgyMzUsMC42NzA1ODgyMzUyOTQxMTc2LDEuMF0sInJvdWdobmVzc0ZhY3RvciI6MC43LCJtZXRhbGxpY0ZhY3RvciI6MC4wfSwiZG91YmxlU2lkZWQiOmZhbHNlfSx7InBick1ldGFsbGljUm91Z2huZXNzIjp7ImJhc2VDb2xvckZhY3RvciI6WzAuOTgwMzkyMTU2ODYyNzQ1MSwwLjk4MDM5MjE1Njg2Mjc0NTEsMS4wLDEuMF0sInJvdWdobmVzc0ZhY3RvciI6MC43LCJtZXRhbGxpY0ZhY3RvciI6MC4wfSwiZG91YmxlU2lkZWQiOmZhbHNlfSx7InBick1ldGFsbGljUm91Z2huZXNzIjp7ImJhc2VDb2xvckZhY3RvciI6WzAuMDMxMzcyNTQ5MDE5NjA3ODQsMC4wMTk2MDc4NDMxMzcyNTQ5LDAuMDE5NjA3ODQzMTM3MjU0OSwxLjBdLCJyb3VnaG5lc3NGYWN0b3IiOjAuNywibWV0YWxsaWNGYWN0b3IiOjAuMH0sImRvdWJsZVNpZGVkIjpmYWxzZX1dLCJub2RlcyI6W3sibmFtZSI6IndvcmxkIiwiY2hpbGRyZW4iOlsxLDIsMyw0LDUsNl19LHsibmFtZSI6IlNraW4iLCJtZXNoIjowfSx7Im5hbWUiOiJIYWlyIiwibWVzaCI6MX0seyJuYW1lIjoiUGluayIsIm1lc2giOjJ9LHsibmFtZSI6IkRlbmltIiwibWVzaCI6M30seyJuYW1lIjoiRXllcyIsIm1lc2giOjR9LHsibmFtZSI6IlB1cGlscyIsIm1lc2giOjV9XSwiYnVmZmVycyI6W3siYnl0ZUxlbmd0aCI6NDk2OH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjo4MTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0Ijo4MTYsImJ5dGVMZW5ndGgiOjQ4MH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjEyOTYsImJ5dGVMZW5ndGgiOjcyMH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjIwMTYsImJ5dGVMZW5ndGgiOjQzMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI0NDgsImJ5dGVMZW5ndGgiOjc2OH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjMyMTYsImJ5dGVMZW5ndGgiOjQ1Nn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjM2NzIsImJ5dGVMZW5ndGgiOjE0NH0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjM4MTYsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MzkxMiwiYnl0ZUxlbmd0aCI6NDgwfSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6NDM5MiwiYnl0ZUxlbmd0aCI6Mjg4fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6NDY4MCwiYnl0ZUxlbmd0aCI6Mjg4fV19IGgTAABCSU4AAAAAAAsAAAAFAAAAAAAAAAUAAAABAAAAAAAAAAEAAAAHAAAAAAAAAAcAAAAKAAAAAAAAAAoAAAALAAAAAQAAAAUAAAAJAAAABQAAAAsAAAAEAAAACwAAAAoAAAACAAAACgAAAAcAAAAGAAAABwAAAAEAAAAIAAAAAwAAAAkAAAAEAAAAAwAAAAQAAAACAAAAAwAAAAIAAAAGAAAAAwAAAAYAAAAIAAAAAwAAAAgAAAAJAAAABAAAAAkAAAAFAAAAAgAAAAQAAAALAAAABgAAAAIAAAAKAAAACAAAAAYAAAAHAAAACQAAAAgAAAABAAAADQAAAAwAAAAQAAAADQAAABAAAAAOAAAADgAAABAAAAARAAAADgAAABEAAAAPAAAAEAAAAAwAAAASAAAAEAAAABIAAAARAAAAEQAAABIAAAATAAAAEQAAABMAAAAPAAAAEgAAAAwAAAAUAAAAEgAAABQAAAATAAAAEwAAABQAAAAVAAAAEwAAABUAAAAPAAAAFAAAAAwAAAAWAAAAFAAAABYAAAAVAAAAFQAAABYAAAAXAAAAFQAAABcAAAAPAAAAFgAAAAwAAAAYAAAAFgAAABgAAAAXAAAAFwAAABgAAAAZAAAAFwAAABkAAAAPAAAAGAAAAAwAAAANAAAAGAAAAA0AAAAZAAAAGQAAAA0AAAAOAAAAGQAAAA4AAAAPAAAAGwAAABoAAAAeAAAAGwAAAB4AAAAcAAAAHAAAAB4AAAAfAAAAHAAAAB8AAAAdAAAAHgAAABoAAAAgAAAAHgAAACAAAAAfAAAAHwAAACAAAAAhAAAAHwAAACEAAAAdAAAAIAAAABoAAAAiAAAAIAAAACIAAAAhAAAAIQAAACIAAAAjAAAAIQAAACMAAAAdAAAAIgAAABoAAAAkAAAAIgAAACQAAAAjAAAAIwAAACQAAAAlAAAAIwAAACUAAAAdAAAAJAAAABoAAAAmAAAAJAAAACYAAAAlAAAAJQAAACYAAAAnAAAAJQAAACcAAAAdAAAAJgAAABoAAAAbAAAAJgAAABsAAAAnAAAAJwAAABsAAAAcAAAAJwAAABwAAAAdAAAAxEHyvrtrhkAAAAAAxEHyPrtrhkAAAAAAxEHyvlb1H0AAAAAAxEHyPlb1H0AAAAAAAAAAANLANEADGjk/AAAAAPsLeEADGjk/AAAAANLANEADGjm/AAAAAPsLeEADGjm/bf1DP2ZmVkBWzOS+bf1DP2ZmVkBWzOQ+bf1Dv2ZmVkBWzOS+bf1Dv2ZmVkBWzOQ+mpmZvmZmJj8zM7O+j8L1vWZmJj8zM7O+j8L1vWZmJj8zM7M+mpmZvmZmJj8zM7M+PQpXvnROTj8zM7O+PQpXvnROTj8zM7M+FK7HvnROTj8zM7O+FK7HvnROTj8zM7M+j8L1vmZmJj8zM7O+j8L1vmZmJj8zM7M+FK7HvrP8/D4zM7O+FK7HvrP8/D4zM7M+PQpXvrP8/D4zM7O+PQpXvrP8/D4zM7M+mpmZPmZmJj8zM7O+j8L1PmZmJj8zM7O+j8L1PmZmJj8zM7M+mpmZPmZmJj8zM7M+FK7HPnROTj8zM7O+FK7HPnROTj8zM7M+PQpXPnROTj8zM7O+PQpXPnROTj8zM7M+j8L1PWZmJj8zM7O+j8L1PWZmJj8zM7M+PQpXPrP8/D4zM7O+PQpXPrP8/D4zM7M+FK7HPrP8/D4zM7O+FK7HPrP8/D4zM7M+AAAAAAsAAAAFAAAAAAAAAAUAAAABAAAAAAAAAAEAAAAHAAAAAAAAAAcAAAAKAAAAAAAAAAoAAAALAAAAAQAAAAUAAAAJAAAABQAAAAsAAAAEAAAACwAAAAoAAAACAAAACgAAAAcAAAAGAAAABwAAAAEAAAAIAAAAAwAAAAkAAAAEAAAAAwAAAAQAAAACAAAAAwAAAAIAAAAGAAAAAwAAAAYAAAAIAAAAAwAAAAgAAAAJAAAABAAAAAkAAAAFAAAAAgAAAAQAAAALAAAABgAAAAIAAAAKAAAACAAAAAYAAAAHAAAACQAAAAgAAAABAAAADAAAABcAAAARAAAADAAAABEAAAANAAAADAAAAA0AAAATAAAADAAAABMAAAAWAAAADAAAABYAAAAXAAAADQAAABEAAAAVAAAAEQAAABcAAAAQAAAAFwAAABYAAAAOAAAAFgAAABMAAAASAAAAEwAAAA0AAAAUAAAADwAAABUAAAAQAAAADwAAABAAAAAOAAAADwAAAA4AAAASAAAADwAAABIAAAAUAAAADwAAABQAAAAVAAAAEAAAABUAAAARAAAADgAAABAAAAAXAAAAEgAAAA4AAAAWAAAAFAAAABIAAAATAAAAFQAAABQAAAANAAAAGAAAACMAAAAdAAAAGAAAAB0AAAAZAAAAGAAAABkAAAAfAAAAGAAAAB8AAAAiAAAAGAAAACIAAAAjAAAAGQAAAB0AAAAhAAAAHQAAACMAAAAcAAAAIwAAACIAAAAaAAAAIgAAAB8AAAAeAAAAHwAAABkAAAAgAAAAGwAAACEAAAAcAAAAGwAAABwAAAAaAAAAGwAAABoAAAAeAAAAGwAAAB4AAAAgAAAAGwAAACAAAAAhAAAAHAAAACEAAAAdAAAAGgAAABwAAAAjAAAAHgAAABoAAAAiAAAAIAAAAB4AAAAfAAAAIQAAACAAAAAZAAAAJDQBv+Rfi0CPwvW9JDQBP+Rfi0CPwvW9JDQBv+WHSkCPwvW9JDQBP+WHSkCPwvW9AAAAAFYWWUAbRSU/AAAAAKwYhEAbRSU/AAAAAFYWWUC/tWK/AAAAAKwYhEC/tWK/Ug5RP9ejcEA02Re/Ug5RP9ejcEAg0bQ+Ug5Rv9ejcEA02Re/Ug5Rv9ejcEAg0bQ+ZzmfvyYwhkAK16O8M41BvyYwhkAK16O8Zzmfv045TUAK16O8M41Bv045TUAK16O8AACAv+1IWUCKN7M+AACAv1YogECKN7M+AACAv+1IWUBrsse+AACAv1YogEBrsse+0PQav83MbEBjqX6+0PQav83MbECgs1U+mIWyv83MbEBjqX6+mIWyv83MbECgs1U+M41BPyYwhkAK16O8ZzmfPyYwhkAK16O8M41BP045TUAK16O8ZzmfP045TUAK16O8AACAP+1IWUCKN7M+AACAP1YogECKN7M+AACAP+1IWUBrsse+AACAP1YogEBrsse+mIWyP83MbEBjqX6+mIWyP83MbECgs1U+0PQaP83MbEBjqX6+0PQaP83MbECgs1U+AQAAAAAAAAAEAAAAAQAAAAQAAAACAAAAAgAAAAQAAAAFAAAAAgAAAAUAAAADAAAABAAAAAAAAAAGAAAABAAAAAYAAAAFAAAABQAAAAYAAAAHAAAABQAAAAcAAAADAAAABgAAAAAAAAAIAAAABgAAAAgAAAAHAAAABwAAAAgAAAAJAAAABwAAAAkAAAADAAAACAAAAAAAAAAKAAAACAAAAAoAAAAJAAAACQAAAAoAAAALAAAACQAAAAsAAAADAAAACgAAAAAAAAAMAAAACgAAAAwAAAALAAAACwAAAAwAAAANAAAACwAAAA0AAAADAAAADAAAAAAAAAABAAAADAAAAAEAAAANAAAADQAAAAEAAAACAAAADQAAAAIAAAADAAAADgAAABkAAAATAAAADgAAABMAAAAPAAAADgAAAA8AAAAVAAAADgAAABUAAAAYAAAADgAAABgAAAAZAAAADwAAABMAAAAXAAAAEwAAABkAAAASAAAAGQAAABgAAAAQAAAAGAAAABUAAAAUAAAAFQAAAA8AAAAWAAAAEQAAABcAAAASAAAAEQAAABIAAAAQAAAAEQAAABAAAAAUAAAAEQAAABQAAAAWAAAAEQAAABYAAAAXAAAAEgAAABcAAAATAAAAEAAAABIAAAAZAAAAFAAAABAAAAAYAAAAFgAAABQAAAAVAAAAFwAAABYAAAAPAAAAGgAAACUAAAAfAAAAGgAAAB8AAAAbAAAAGgAAABsAAAAhAAAAGgAAACEAAAAkAAAAGgAAACQAAAAlAAAAGwAAAB8AAAAjAAAAHwAAACUAAAAeAAAAJQAAACQAAAAcAAAAJAAAACEAAAAgAAAAIQAAABsAAAAiAAAAHQAAACMAAAAeAAAAHQAAAB4AAAAcAAAAHQAAABwAAAAgAAAAHQAAACAAAAAiAAAAHQAAACIAAAAjAAAAHgAAACMAAAAfAAAAHAAAAB4AAAAlAAAAIAAAABwAAAAkAAAAIgAAACAAAAAhAAAAIwAAACIAAAAbAAAAAAAAADMz8z/NzAy/cT0KPzMz8z/NzAy/cT0KPzMz8z/NzAw/AAAAADMz8z/NzAw/cT2KPqOHF0DNzAy/cT2KPqOHF0DNzAw/cT2KvqOHF0DNzAy/cT2KvqOHF0DNzAw/cT0KvzMz8z/NzAy/cT0KvzMz8z/NzAw/cT2Kvh9Xtz/NzAy/cT2Kvh9Xtz/NzAw/cT2KPh9Xtz/NzAy/cT2KPh9Xtz/NzAw/MFrqvjuKfT7NzMw9BrIRvjuKfT7NzMw9MFrqvnf1+LvNzMw9BrIRvnf1+LvNzMw9mpmZvsSCKD3x/c8+mpmZvt6hSz7x/c8+mpmZvsSCKD0VL1O+mpmZvt6hSz4VL1O+MoU3vY/C9T2gz7a9MoU3vY/C9T1OGpQ+RyEOv4/C9T2gz7a9RyEOv4/C9T1OGpQ+BrIRPjuKfT7NzMw9MFrqPjuKfT7NzMw9BrIRPnf1+LvNzMw9MFrqPnf1+LvNzMw9mpmZPsSCKD3x/c8+mpmZPt6hSz7x/c8+mpmZPsSCKD0VL1O+mpmZPt6hSz4VL1O+RyEOP4/C9T2gz7a9RyEOP4/C9T1OGpQ+MoU3PY/C9T2gz7a9MoU3PY/C9T1OGpQ+AQAAAAMAAAAAAAAABAAAAAEAAAAAAAAAAAAAAAMAAAACAAAAAgAAAAQAAAAAAAAAAQAAAAcAAAADAAAABQAAAAEAAAAEAAAABQAAAAcAAAABAAAAAwAAAAcAAAACAAAABgAAAAQAAAACAAAAAgAAAAcAAAAGAAAABgAAAAUAAAAEAAAABwAAAAUAAAAGAAAAmpkZvwAAYD9mZqa+mpkZvwAAYD9mZqY+mpkZv2Zmtj9mZqa+mpkZv2Zmtj9mZqY+mpkZPwAAYD9mZqa+mpkZPwAAYD9mZqY+mpkZP2Zmtj9mZqa+mpkZP2Zmtj9mZqY+AAAAAAsAAAAFAAAAAAAAAAUAAAABAAAAAAAAAAEAAAAHAAAAAAAAAAcAAAAKAAAAAAAAAAoAAAALAAAAAQAAAAUAAAAJAAAABQAAAAsAAAAEAAAACwAAAAoAAAACAAAACgAAAAcAAAAGAAAABwAAAAEAAAAIAAAAAwAAAAkAAAAEAAAAAwAAAAQAAAACAAAAAwAAAAIAAAAGAAAAAwAAAAYAAAAIAAAAAwAAAAgAAAAJAAAABAAAAAkAAAAFAAAAAgAAAAQAAAALAAAABgAAAAIAAAAKAAAACAAAAAYAAAAHAAAACQAAAAgAAAABAAAADAAAABcAAAARAAAADAAAABEAAAANAAAADAAAAA0AAAATAAAADAAAABMAAAAWAAAADAAAABYAAAAXAAAADQAAABEAAAAVAAAAEQAAABcAAAAQAAAAFwAAABYAAAAOAAAAFgAAABMAAAASAAAAEwAAAA0AAAAUAAAADwAAABUAAAAQAAAADwAAABAAAAAOAAAADwAAAA4AAAASAAAADwAAABIAAAAUAAAADwAAABQAAAAVAAAAEAAAABUAAAARAAAADgAAABAAAAAXAAAAEgAAAA4AAAAWAAAAFAAAABIAAAATAAAAFQAAABQAAAANAAAAe2fgvvnZaUAAAEA/Mo1OvvnZaUAAAEA/e2fgvpboS0AAAEA/Mo1OvpboS0AAAEA/CtejvoygUUBhPk8/CtejvgQiZEBhPk8/CtejvoygUUCfwTA/CtejvgQiZECfwTA/p7ADvkjhWkAzlDY/p7ADvkjhWkDNa0k/4OoCv0jhWkAzlDY/4OoCv0jhWkDNa0k/Mo1OPvnZaUAAAEA/e2fgPvnZaUAAAEA/Mo1OPpboS0AAAEA/e2fgPpboS0AAAEA/CtejPoygUUBhPk8/CtejPgQiZEBhPk8/CtejPoygUUCfwTA/CtejPgQiZECfwTA/4OoCP0jhWkAzlDY/4OoCP0jhWkDNa0k/p7ADPkjhWkAzlDY/p7ADPkjhWkDNa0k/0RC8vp7HX0AzM3M/Q52Lvp7HX0AzM3M/0RC8vvL6VUAzM3M/Q52LvvL6VUAzM3M/Ctejvg/aV0Df/3w/CtejvoHoXUDf/3w/Ctejvg/aV0CHZmk/CtejvoHoXUCHZmk/tkh5vkjhWkDCJG0/tkh5vkjhWkClQXk/ugnLvkjhWkDCJG0/ugnLvkjhWkClQXk/Q52LPp7HX0AzM3M/0RC8Pp7HX0AzM3M/Q52LPvL6VUAzM3M/0RC8PvL6VUAzM3M/CtejPg/aV0Df/3w/CtejPoHoXUDf/3w/CtejPg/aV0CHZmk/CtejPoHoXUCHZmk/ugnLPkjhWkDCJG0/ugnLPkjhWkClQXk/tkh5PkjhWkDCJG0/tkh5PkjhWkClQXk/";
   const state = { host:null, renderer:null, scene:null, camera:null, model:null, angle:0, frame:0, resizeObserver:null, dragging:false, lastX:0, ready:false };
 
-  function decodeGlb() {
-    const bin = atob(GLB_B64);
-    const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i += 1) bytes[i] = bin.charCodeAt(i);
-    return bytes.buffer;
+  const C = {
+    skin: 0xf4b08f,
+    skinLight: 0xffc3a7,
+    hair: 0x3b1d16,
+    hairHi: 0x5a2b21,
+    pink: 0xf15d9a,
+    pinkDark: 0xd94482,
+    denim: 0x3f78b8,
+    denimDark: 0x2b5f99,
+    white: 0xffffff,
+    eyeWhite: 0xfffbf7,
+    iris: 0x4a2a18,
+    pupil: 0x0b0705,
+    cheek: 0xf08e91,
+    yellow: 0xf4c64f,
+    sole: 0xf6e8ee,
+    purple: 0x8a63d2
+  };
+
+  function mat(color, roughness=.62, metalness=0) {
+    return new THREE.MeshStandardMaterial({ color, roughness, metalness });
+  }
+
+  function mesh(geometry, material, pos, scale, rot=[0,0,0], name="") {
+    const m = new THREE.Mesh(geometry, material);
+    m.position.set(...pos);
+    m.scale.set(...scale);
+    m.rotation.set(...rot);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    if (name) m.name = name;
+    return m;
+  }
+
+  function sphere(group, color, pos, scale, name="") {
+    const g = new THREE.SphereGeometry(1, 36, 24);
+    const m = mesh(g, mat(color), pos, scale, [0,0,0], name);
+    group.add(m); return m;
+  }
+
+  function cyl(group, color, pos, scale, rot=[0,0,0], name="") {
+    const g = new THREE.CylinderGeometry(1,1,2,28);
+    const m = mesh(g, mat(color), pos, scale, rot, name);
+    group.add(m); return m;
+  }
+
+  function box(group, color, pos, scale, rot=[0,0,0], name="") {
+    const g = new THREE.BoxGeometry(2,2,2,4,4,4);
+    const m = mesh(g, mat(color), pos, scale, rot, name);
+    group.add(m); return m;
+  }
+
+  function torus(group, color, pos, scale, rot=[0,0,0], name="") {
+    const g = new THREE.TorusGeometry(1,0.28,18,36);
+    const m = mesh(g, mat(color,.5), pos, scale, rot, name);
+    group.add(m); return m;
+  }
+
+  function cone(group, color, pos, scale, rot=[0,0,0], name="") {
+    const g = new THREE.ConeGeometry(1,2,24);
+    const m = mesh(g, mat(color,.55), pos, scale, rot, name);
+    group.add(m); return m;
+  }
+
+  function bow(group, x, y, z, rotY=0) {
+    const b = new THREE.Group();
+    b.position.set(x,y,z); b.rotation.y = rotY;
+    sphere(b,C.pink,[0,0,0],[.12,.12,.10]);
+    cone(b,C.pink,[-.14,0,0],[.13,.13,.08],[0,0,Math.PI/2]);
+    cone(b,C.pink,[.14,0,0],[.13,.13,.08],[0,0,-Math.PI/2]);
+    group.add(b);
+  }
+
+  function buildAddi() {
+    const root = new THREE.Group();
+    root.name = "AddiCharacter";
+
+    // Body proportions: chibi/preschool character.
+    sphere(root,C.skin,[0,3.55,0],[1.05,.94,.92],"Head");
+    sphere(root,C.hair,[0,3.82,-.22],[1.12,.90,.82],"HairCap");
+
+    // Hair bangs.
+    for (let i=-2;i<=2;i++) {
+      sphere(root,C.hairHi,[i*.25,4.08,.69],[.21,.34,.16],`Bang_${i}`);
+    }
+
+    // Pigtails.
+    sphere(root,C.hair,[-1.03,3.72,-.05],[.50,.62,.44],"Pigtail_L");
+    sphere(root,C.hair,[ 1.03,3.72,-.05],[.50,.62,.44],"Pigtail_R");
+    sphere(root,C.hair,[-1.19,3.48,.02],[.34,.48,.31],"PigtailTip_L");
+    sphere(root,C.hair,[ 1.19,3.48,.02],[.34,.48,.31],"PigtailTip_R");
+    bow(root,-.83,4.08,.36,-.15);
+    bow(root,.83,4.08,.36,.15);
+
+    // Ears.
+    sphere(root,C.skin,[-1.01,3.53,.09],[.18,.28,.12],"Ear_L");
+    sphere(root,C.skin,[1.01,3.53,.09],[.18,.28,.12],"Ear_R");
+
+    // Eyes with glossy layered geometry.
+    for (const x of [-.39,.39]) {
+      sphere(root,C.eyeWhite,[x,3.68,.79],[.31,.39,.13]);
+      sphere(root,C.iris,[x,3.66,.89],[.19,.26,.08]);
+      sphere(root,C.pupil,[x,3.66,.95],[.11,.17,.05]);
+      sphere(root,C.white,[x-.05,3.78,1.00],[.045,.06,.025]);
+    }
+
+    // Brows.
+    box(root,C.hair,[-.39,4.03,.80],[.22,.025,.035],[0,0,.08]);
+    box(root,C.hair,[.39,4.03,.80],[.22,.025,.035],[0,0,-.08]);
+
+    // Nose and smile.
+    sphere(root,C.skinLight,[0,3.44,.91],[.07,.09,.06],"Nose");
+    torus(root,0x9b2f3e,[0,3.22,.87],[.22,.11,.08],[Math.PI/2,0,0],"Smile");
+    box(root,C.skin,[0,3.31,.92],[.30,.09,.07],[0,0,0],"SmileMask");
+
+    // Cheeks.
+    sphere(root,C.cheek,[-.66,3.35,.79],[.16,.09,.045]);
+    sphere(root,C.cheek,[.66,3.35,.79],[.16,.09,.045]);
+
+    // Neck.
+    cyl(root,C.skin,[0,2.80,0],[.18,.18,.18]);
+
+    // Shirt / torso.
+    sphere(root,C.pink,[0,2.42,0],[.65,.72,.50],"Top_PinkDonut");
+    sphere(root,C.pinkDark,[-.64,2.45,0],[.22,.30,.24],"Sleeve_L");
+    sphere(root,C.pinkDark,[.64,2.45,0],[.22,.30,.24],"Sleeve_R");
+
+    // Donut emblem.
+    torus(root,0xf2a16b,[0,2.48,.50],[.23,.23,.07],[Math.PI/2,0,0],"Donut");
+    torus(root,0xf68bb8,[0,2.48,.55],[.18,.18,.045],[Math.PI/2,0,0],"DonutFrosting");
+
+    // Arms and hands.
+    cyl(root,C.skin,[-.78,2.05,0],[.17,.50,.17],[0,0,-.35],"Arm_L");
+    cyl(root,C.skin,[.78,2.05,0],[.17,.50,.17],[0,0,.35],"Arm_R");
+    sphere(root,C.skin,[-.94,1.70,.02],[.22,.22,.20],"Hand_L");
+    sphere(root,C.skin,[.94,1.70,.02],[.22,.22,.20],"Hand_R");
+
+    // Wrist accessories to match reference.
+    torus(root,C.pink,[-.84,1.82,.03],[.18,.18,.08],[Math.PI/2,0,0],"Bracelet");
+    box(root,C.purple,[.86,1.85,.03],[.19,.14,.12],[0,0,.30],"Watch");
+
+    // Shorts.
+    box(root,C.denim,[0,1.52,0],[.69,.38,.50],[0,0,0],"Bottom_DenimShorts");
+    box(root,C.denimDark,[0,1.78,.49],[.58,.035,.03],[0,0,0],"ShortsWaist");
+    sphere(root,C.yellow,[0,1.79,.54],[.055,.055,.025],"ShortsButton");
+
+    // Legs.
+    cyl(root,C.skin,[-.34,.85,0],[.22,.48,.22],[0,0,0],"Leg_L");
+    cyl(root,C.skin,[.34,.85,0],[.22,.48,.22],[0,0,0],"Leg_R");
+
+    // Socks.
+    cyl(root,C.white,[-.34,.40,0],[.23,.16,.23],[0,0,0],"Sock_L");
+    cyl(root,C.white,[.34,.40,0],[.23,.16,.23],[0,0,0],"Sock_R");
+
+    // Shoes.
+    sphere(root,C.pink,[-.37,.17,.16],[.38,.20,.55],"Shoe_L");
+    sphere(root,C.pink,[.37,.17,.16],[.38,.20,.55],"Shoe_R");
+    box(root,C.white,[-.37,.06,.19],[.38,.06,.57],[0,0,0],"Sole_L");
+    box(root,C.white,[.37,.06,.19],[.38,.06,.57],[0,0,0],"Sole_R");
+    sphere(root,C.yellow,[-.37,.19,.60],[.07,.07,.035],"ShoeHeart_L");
+    sphere(root,C.yellow,[.37,.19,.60],[.07,.07,.035],"ShoeHeart_R");
+
+    // Necklace.
+    torus(root,0xe8c66d,[0,2.83,.46],[.27,.18,.05],[Math.PI/2,0,0],"Necklace");
+    sphere(root,C.pink,[0,2.64,.55],[.08,.08,.04],"Pendant");
+
+    // Slight character tilt/pose similar to reference.
+    root.rotation.z = -.02;
+    return root;
   }
 
   function setStatus(text, kind="") {
@@ -31,135 +193,84 @@ import { GLTFLoader } from "./assets/vendor/three/GLTFLoader.js";
     syncAngleLabel();
   }
 
-  function rotateBy(degrees) {
-    setAngle(state.angle + degrees);
-  }
+  function rotateBy(degrees) { setAngle(state.angle + degrees); }
 
   function resize() {
     if (!state.host || !state.renderer || !state.camera) return;
     const rect = state.host.getBoundingClientRect();
-    const w = Math.max(1, rect.width);
-    const h = Math.max(1, rect.height);
+    const w = Math.max(1, rect.width), h = Math.max(1, rect.height);
     state.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    state.renderer.setSize(w, h, false);
-    state.camera.aspect = w / h;
+    state.renderer.setSize(w,h,false);
+    state.camera.aspect = w/h;
     state.camera.updateProjectionMatrix();
   }
 
   function animate() {
     if (!state.host?.isConnected) return;
-    state.renderer?.render(state.scene, state.camera);
-    state.frame = requestAnimationFrame(animate);
+    state.renderer?.render(state.scene,state.camera);
+    state.frame=requestAnimationFrame(animate);
   }
 
   function bindPointer(canvas) {
-    canvas.addEventListener("pointerdown", (e) => {
-      state.dragging = true;
-      state.lastX = e.clientX;
-      canvas.setPointerCapture?.(e.pointerId);
-    });
-    canvas.addEventListener("pointermove", (e) => {
-      if (!state.dragging) return;
-      const dx = e.clientX - state.lastX;
-      state.lastX = e.clientX;
-      rotateBy(dx * 0.7);
-    });
-    const end = (e) => {
-      state.dragging = false;
-      canvas.releasePointerCapture?.(e.pointerId);
-    };
-    canvas.addEventListener("pointerup", end);
-    canvas.addEventListener("pointercancel", end);
+    canvas.addEventListener("pointerdown",(e)=>{state.dragging=true;state.lastX=e.clientX;canvas.setPointerCapture?.(e.pointerId);});
+    canvas.addEventListener("pointermove",(e)=>{if(!state.dragging)return;const dx=e.clientX-state.lastX;state.lastX=e.clientX;rotateBy(dx*.7);});
+    const end=(e)=>{state.dragging=false;canvas.releasePointerCapture?.(e.pointerId);};
+    canvas.addEventListener("pointerup",end); canvas.addEventListener("pointercancel",end);
   }
 
   function destroy() {
-    if (state.frame) cancelAnimationFrame(state.frame);
+    if(state.frame) cancelAnimationFrame(state.frame);
     state.resizeObserver?.disconnect();
     state.renderer?.dispose();
-    if (state.host) state.host.innerHTML = "";
-    Object.assign(state, { host:null, renderer:null, scene:null, camera:null, model:null, frame:0, resizeObserver:null, dragging:false, ready:false });
+    if(state.host) state.host.innerHTML="";
+    Object.assign(state,{host:null,renderer:null,scene:null,camera:null,model:null,frame:0,resizeObserver:null,dragging:false,ready:false,angle:0});
   }
 
   function mount(hostOrId) {
     destroy();
-    const host = typeof hostOrId === "string" ? document.getElementById(hostOrId) : hostOrId;
-    if (!host) return false;
-    state.host = host;
-    host.innerHTML = '<div class="adi-three-status">Loading real 3D Addi…</div>';
+    const host=typeof hostOrId==="string"?document.getElementById(hostOrId):hostOrId;
+    if(!host) return false;
+    state.host=host;
+    host.innerHTML='<div class="adi-three-status">Building Addi in real 3D…</div>';
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
-    camera.position.set(0, 2.25, 8.7);
-    camera.lookAt(0, 2.1, 0);
+    try {
+      const scene=new THREE.Scene();
+      const camera=new THREE.PerspectiveCamera(28,1,.1,100);
+      camera.position.set(0,2.35,8.6);
+      camera.lookAt(0,2.25,0);
 
-    const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:"high-performance" });
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.domElement.className = "adi-three-canvas";
-    renderer.domElement.setAttribute("aria-label", "Real-time 3D Addi character. Drag left or right to rotate 360 degrees.");
-    renderer.domElement.setAttribute("role", "img");
-    host.prepend(renderer.domElement);
+      const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:"high-performance"});
+      renderer.outputEncoding=THREE.sRGBEncoding;
+      renderer.shadowMap.enabled=true;
+      renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+      renderer.domElement.className="adi-three-canvas";
+      renderer.domElement.setAttribute("role","img");
+      renderer.domElement.setAttribute("aria-label","Real 3D Addi character. Drag to rotate 360 degrees.");
+      host.prepend(renderer.domElement);
 
-    scene.add(new THREE.HemisphereLight(0xffffff, 0xd7bfd2, 2.0));
-    const key = new THREE.DirectionalLight(0xffffff, 2.2);
-    key.position.set(3, 6, 5);
-    key.castShadow = true;
-    scene.add(key);
-    const fill = new THREE.DirectionalLight(0xffd7e8, 1.0);
-    fill.position.set(-4, 3, 2);
-    scene.add(fill);
+      scene.add(new THREE.HemisphereLight(0xffffff,0xe7cbd7,1.7));
+      const key=new THREE.DirectionalLight(0xffffff,2.0); key.position.set(3,6,5); key.castShadow=true; scene.add(key);
+      const fill=new THREE.DirectionalLight(0xffd5e7,.9); fill.position.set(-4,4,3); scene.add(fill);
+      const rim=new THREE.DirectionalLight(0xcbd8ff,.65); rim.position.set(0,4,-5); scene.add(rim);
 
-    const ground = new THREE.Mesh(
-      new THREE.CircleGeometry(2.15, 48),
-      new THREE.MeshStandardMaterial({ color:0xf5c7d9, roughness:0.95, metalness:0 })
-    );
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = -0.02;
-    ground.receiveShadow = true;
-    scene.add(ground);
+      const ground=new THREE.Mesh(new THREE.CircleGeometry(2.2,64),new THREE.MeshStandardMaterial({color:0xf4bfd3,roughness:.92}));
+      ground.rotation.x=-Math.PI/2; ground.position.y=-.02; ground.receiveShadow=true; scene.add(ground);
 
-    state.scene = scene;
-    state.camera = camera;
-    state.renderer = renderer;
-    bindPointer(renderer.domElement);
-
-    const loader = new GLTFLoader();
-    loader.parse(decodeGlb(), "", (gltf) => {
-      const model = gltf.scene;
-      model.traverse((node) => {
-        if (node.isMesh) {
-          node.castShadow = true;
-          node.receiveShadow = true;
-          if (node.material) {
-            node.material.side = THREE.FrontSide;
-            node.material.needsUpdate = true;
-          }
-        }
-      });
-      const box = new THREE.Box3().setFromObject(model);
-      const size = box.getSize(new THREE.Vector3());
-      const center = box.getCenter(new THREE.Vector3());
-      model.position.set(-center.x, -box.min.y, -center.z);
-      const targetHeight = 4.8;
-      const scale = targetHeight / Math.max(size.y, 0.001);
-      model.scale.setScalar(scale);
+      const model=buildAddi();
       scene.add(model);
-      state.model = model;
-      state.ready = true;
-      setAngle(0);
-      setStatus("Real 3D model ready • drag to rotate 360°", "ready");
-    }, (err) => {
-      console.error("Adi GLB parse error", err);
-      setStatus("Could not load the 3D model.", "error");
-    });
 
-    state.resizeObserver = new ResizeObserver(resize);
-    state.resizeObserver.observe(host);
-    resize();
-    animate();
-    return true;
+      state.scene=scene; state.camera=camera; state.renderer=renderer; state.model=model; state.ready=true;
+      bindPointer(renderer.domElement);
+      state.resizeObserver=new ResizeObserver(resize); state.resizeObserver.observe(host);
+      resize(); setAngle(0); animate();
+      setStatus("Addi 3D ready • drag to rotate 360°","ready");
+      return true;
+    } catch(err) {
+      console.error("Addi 3D build error",err);
+      setStatus("Could not initialize Addi 3D.","error");
+      return false;
+    }
   }
 
-  window.Adi3D = { mount, destroy, rotateBy, setAngle, getAngle:() => state.angle, isReady:() => state.ready };
+  window.Adi3D={mount,destroy,rotateBy,setAngle,getAngle:()=>state.angle,isReady:()=>state.ready};
 })();
