@@ -2037,7 +2037,7 @@ function setActiveNav(name) {
 
 function visualCardArtwork(kind, label) {
   if (kind === "word") {
-    return `<img class="card-illustration-svg" src="assets/worlds/word-forest-card.svg?v=73" alt="" aria-hidden="true" decoding="async">`;
+    return `<img class="card-illustration-svg" src="assets/worlds/word-forest-card.svg?v=74" alt="" aria-hidden="true" decoding="async">`;
   }
   const seed = [...String(kind || label || "adi")].reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const variants = [
@@ -2082,7 +2082,6 @@ function worldCard(world) {
     return `
       <button class="world-card world-card-visual world-card-icon-only ${cssClass} ${stateClass}" type="button" data-world="${world.id}" aria-label="${world.name}">
         ${visualCardArtwork(world.id, world.name)}
-        <span class="status">${world.status === "open" ? "PLAY" : "SOON"}</span>
       </button>`;
   }
 
