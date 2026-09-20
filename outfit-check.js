@@ -70,9 +70,18 @@
     shoes: "👟"
   };
 
+  const AVATAR_VIEWS = [
+    { id: "front", label: "Front", turn: 0 },
+    { id: "three-quarter-right", label: "3/4 Right", turn: 1 },
+    { id: "right", label: "Right", turn: 2 },
+    { id: "back", label: "Back", turn: 3 },
+    { id: "left", label: "Left", turn: 4 },
+    { id: "three-quarter-left", label: "3/4 Left", turn: 5 }
+  ];
+
   let outfitState = loadOutfit();
   let activeCategory = "top";
-  let rotation = 0;
+  let avatarViewIndex = 0;
 
   function loadOutfit() {
     try {
@@ -104,6 +113,32 @@
     ].join(" ");
   }
 
+  function currentAvatarView() {
+    return AVATAR_VIEWS[avatarViewIndex];
+  }
+
+  function setAvatarView(index) {
+    avatarViewIndex = (index + AVATAR_VIEWS.length) % AVATAR_VIEWS.length;
+    const host = document.querySelector(".outfit-avatar-host");
+    if (host) host.innerHTML = renderAvatar();
+  }
+
+  function renderViewRail() {
+    return AVATAR_VIEWS.map((view, index) => `
+      <button
+        type="button"
+        class="outfit-view-thumb ${index === avatarViewIndex ? "is-active" : ""}"
+        data-outfit-view="${index}"
+        aria-pressed="${index === avatarViewIndex}"
+        aria-label="Show Adi ${view.label} view">
+        <span class="outfit-view-mini view-${view.id}" aria-hidden="true">
+          <img src="${ADI_3D_FRONT}" alt="">
+        </span>
+        <span>${view.label}</span>
+      </button>
+    `).join("");
+  }
+
   function renderAvatar() {
     return `
       <div class="outfit-avatar-wrap outfit-avatar-v2">
@@ -115,9 +150,9 @@
           <span class="room-plush">🐰</span>
         </div>
 
-        <button type="button" class="outfit-stage-arrow outfit-stage-arrow-left" data-outfit-turn="-12" aria-label="Turn Adi left">‹</button>
+        <button type="button" class="outfit-stage-arrow outfit-stage-arrow-left" data-outfit-turn="-1" aria-label="Turn Adi left">‹</button>
 
-        <div class="adi-outfit-avatar adi-outfit-avatar-render" id="outfit-avatar" style="--adi-turn:${rotation}deg" role="img" aria-label="Adi in her Outfit Check look">
+        <div class="adi-outfit-avatar adi-outfit-avatar-render" id="outfit-avatar" data-avatar-view="${currentAvatarView().id}" role="img" aria-label="Adi in her Outfit Check look">
           <div class="adi-shadow"></div>
           <img class="adi-3d-render adi-3d-render-phase3" src="${ADI_3D_FRONT}" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
           <div class="adi-wardrobe-layer" aria-hidden="true">
@@ -132,12 +167,16 @@
           </div>
         </div>
 
-        <button type="button" class="outfit-stage-arrow outfit-stage-arrow-right" data-outfit-turn="12" aria-label="Turn Adi right">›</button>
+        <button type="button" class="outfit-stage-arrow outfit-stage-arrow-right" data-outfit-turn="1" aria-label="Turn Adi right">›</button>
+
+        <div class="outfit-view-rail" role="group" aria-label="Adi view angles">
+          ${renderViewRail()}
+        </div>
 
         <div class="outfit-turn-controls" aria-label="Turn Adi">
-          <button type="button" data-outfit-turn="-12" aria-label="Turn Adi left">↶</button>
-          <span>Turn Adi</span>
-          <button type="button" data-outfit-turn="12" aria-label="Turn Adi right">↷</button>
+          <button type="button" data-outfit-turn="-1" aria-label="Turn Adi left">↶</button>
+          <span>${currentAvatarView().label}</span>
+          <button type="button" data-outfit-turn="1" aria-label="Turn Adi right">↷</button>
         </div>
       </div>`;
   }
@@ -268,11 +307,15 @@
       return;
     }
 
+    const viewButton = event.target.closest("[data-outfit-view]");
+    if (viewButton && currentView?.type === "outfit-check") {
+      setAvatarView(Number(viewButton.dataset.outfitView || 0));
+      return;
+    }
+
     const turnButton = event.target.closest("[data-outfit-turn]");
     if (turnButton && currentView?.type === "outfit-check") {
-      rotation = Math.max(-24, Math.min(24, rotation + Number(turnButton.dataset.outfitTurn || 0)));
-      const avatar = document.getElementById("outfit-avatar");
-      if (avatar) avatar.style.setProperty("--adi-turn", rotation + "deg");
+      setAvatarView(avatarViewIndex + Number(turnButton.dataset.outfitTurn || 0));
       return;
     }
 
@@ -292,7 +335,7 @@
     if (resetButton && currentView?.type === "outfit-check") {
       outfitState = { ...DEFAULT_OUTFIT };
       activeCategory = "top";
-      rotation = 0;
+      avatarViewIndex = 0;
       saveOutfit();
       updateOutfitUI();
       if (typeof speak === "function") speak("Adi is back in her default outfit.");
