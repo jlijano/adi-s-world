@@ -10,13 +10,18 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
   - Verified `service-worker.js` parses successfully.
   - Completed on commit `454ff0820722325e04f64d101c3b41a0de5bd1c1`.
 
-- [ ] **2. Standardize cache/version handling**
-  - Align `index.html`, `service-worker.js`, service-worker registration, and cache names.
-  - Eliminate scattered manual version numbers that can serve stale UI/code.
+- [x] **2. Standardize cache/version handling**
+  - Unified core app references to application version `v78`.
+  - Aligned `index.html`, service-worker cache version, and service-worker registration.
+  - Kept content-specific asset query versions separate where they are intentionally used for artwork refreshes.
+  - Completed across commits `142d368d48611b4a574c24199d2cfe5509e0c2c0`, `c27d8c446ed87937f23f17d552f3c94de9cdc7b6`, and `21054ed2927acda3d834b56284642038f5372486`.
 
-- [ ] **3. Fix service-worker asset fallback behavior**
-  - Do not return `index.html` for failed image/CSS/JS/asset requests.
-  - Use cached asset, controlled fallback, or normal error response instead.
+- [x] **3. Fix service-worker asset fallback behavior**
+  - Failed non-navigation requests no longer receive `index.html`.
+  - Navigation requests may still fall back to cached `index.html` for offline app routing.
+  - Failed uncached assets now return an explicit HTTP 503 Offline response.
+  - Verified service-worker syntax and fallback logic after the change.
+  - Completed on commit `c27d8c446ed87937f23f17d552f3c94de9cdc7b6`.
 
 - [ ] **4. Add deployment syntax validation**
   - Validate core JavaScript, service worker, and manifest before production deployment.
@@ -109,4 +114,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 2 — Standardize cache/version handling.
+**Next:** Item 4 — Add deployment syntax validation.
