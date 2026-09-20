@@ -1538,7 +1538,7 @@ function updateSessionScore(delta) {
 }
 
 let progress = loadProgress();
-let soundEnabled = localStorage.getItem(SOUND_KEY) !== "off";
+let soundEnabled = window.AdiAudio?.isEnabled?.() ?? localStorage.getItem(SOUND_KEY) !== "off";
 let blessingVoiceMode = "standard";
 let blessingVoiceGender = "neutral";
 let blessingVoicePitch = 1.0;
@@ -1655,13 +1655,13 @@ function stopStorySpeech() {
 
 function afterCurrentStorySpeech(callback) {
   if (typeof callback !== "function") return;
-  if (!soundEnabled || !("speechSynthesis" in window) || !window.speechSynthesis.speaking) {
+  if (!soundEnabled || !window.AdiAudio?.isSpeaking?.()) {
     callback();
     return;
   }
 
   const waitUntilDone = () => {
-    if (window.speechSynthesis.speaking) {
+    if (window.AdiAudio?.isSpeaking?.()) {
       window.setTimeout(waitUntilDone, 60);
       return;
     }
@@ -1842,38 +1842,12 @@ if ("speechSynthesis" in window) {
 }
 
 function speak(text, onDone) {
-  if (!soundEnabled || !("speechSynthesis" in window)) {
-    if (typeof onDone === "function") onDone();
+  if (window.AdiAudio) {
+    window.AdiAudio.speak(text, { onDone });
     return;
   }
 
-  refreshPreferredBritishVoice();
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = preferredBritishVoice?.lang || "en";
-
-  if (preferredBritishVoice) {
-    utterance.voice = preferredBritishVoice;
-  }
-
-  // Neutral, normal delivery: no accent target, no gender target, no pitch effect.
-  utterance.rate = 0.90;
-  utterance.pitch = 1.0;
-  utterance.volume = 1.0;
-
-  if (typeof onDone === "function") {
-    let finished = false;
-    const finishOnce = () => {
-      if (finished) return;
-      finished = true;
-      onDone();
-    };
-    utterance.onend = finishOnce;
-    utterance.onerror = finishOnce;
-  }
-
-  window.speechSynthesis.speak(utterance);
+  if (typeof onDone === "function") onDone();
 }
 
 function speakBlessing(text, onDone) {
@@ -1907,50 +1881,18 @@ function getAdiChildVoice() {
 }
 
 function speakAdiGreeting(onDone) {
-  if (!soundEnabled || !("speechSynthesis" in window)) {
+  if (!window.AdiAudio) {
     if (typeof onDone === "function") onDone();
     return;
   }
 
-  window.speechSynthesis.cancel();
-  const voice = getAdiChildVoice();
-  const lang = voice?.lang || "en";
-
-  // Use two short phrases instead of one long sentence. The tiny pause makes
-  // Adi sound warmer and more conversational, rather than like a TTS prompt.
-  const hello = new SpeechSynthesisUtterance("Hi!");
-  const intro = new SpeechSynthesisUtterance("My name is Adi.");
-
-  [hello, intro].forEach((utterance) => {
-    utterance.lang = lang;
-    if (voice) utterance.voice = voice;
-    utterance.volume = 0.96;
-  });
-
-  // Gentle child-like delivery: soft pace, only a slight lift in pitch.
-  hello.rate = 0.82;
-  hello.pitch = 1.08;
-  intro.rate = 0.84;
-  intro.pitch = 1.06;
-
-  let finished = false;
-  const finishOnce = () => {
-    if (finished) return;
-    finished = true;
-    if (typeof onDone === "function") onDone();
-  };
-
-  hello.onend = () => {
-    window.setTimeout(() => {
-      if (!soundEnabled) return finishOnce();
-      intro.onend = finishOnce;
-      intro.onerror = finishOnce;
-      window.speechSynthesis.speak(intro);
-    }, 180);
-  };
-  hello.onerror = finishOnce;
-
-  window.speechSynthesis.speak(hello);
+  window.AdiAudio.speakSequence(
+    [
+      { text: "Hi!", rate: 0.86, pitch: 1.02, volume: 0.96, pauseMs: 170 },
+      { text: "My name is Adi.", rate: 0.88, pitch: 1.0, volume: 0.96 }
+    ],
+    { onDone }
+  );
 }
 
 let adiHomeGreetingTimer = null;
@@ -1999,7 +1941,7 @@ function runAfterInstructionSpeech(callback) {
     callback();
   };
 
-  if (!soundEnabled || !("speechSynthesis" in window)) {
+  if (!soundEnabled || !window.AdiAudio?.supported?.()) {
     if (instructionSpeechTimer) {
       window.clearTimeout(instructionSpeechTimer);
       instructionSpeechTimer = null;
@@ -2019,7 +1961,7 @@ function runAfterInstructionSpeech(callback) {
   }
 
   const waitUntilDone = () => {
-    if (window.speechSynthesis.speaking) {
+    if (window.AdiAudio?.isSpeaking?.()) {
       window.setTimeout(waitUntilDone, 60);
       return;
     }
@@ -3732,6 +3674,65 @@ function renderProgress() {
   screen.focus({ preventScroll: true });
 }
 
+function renderSettings() {
+  currentView = { type: "settings" };
+  setActiveNav("");
+  const settings = window.AdiAudio?.getSettings?.() || { enabled: soundEnabled, ratePreset: "normal", supported: false };
+
+  screen.innerHTML = `
+    <section class="settings-hero">
+      <span class="eyebrow">App preferences</span>
+      <h1>⚙️ Settings</h1>
+      <p>Choose how Adi's World sounds on this device.</p>
+    </section>
+
+    <section class="settings-panel" aria-labelledby="audio-settings-title">
+      <div class="settings-heading">
+        <div>
+          <h2 id="audio-settings-title">🔊 Sound & Voice</h2>
+          <p>These preferences are saved on this device.</p>
+        </div>
+      </div>
+
+      <button class="setting-row setting-toggle ${settings.enabled ? "is-on" : ""}" type="button" data-setting-sound aria-pressed="${settings.enabled ? "true" : "false"}">
+        <span class="setting-copy">
+          <strong>Sound</strong>
+          <small>Instructions, encouragement, and read-aloud voice</small>
+        </span>
+        <span class="setting-value" data-setting-value>${settings.enabled ? "On" : "Off"}</span>
+      </button>
+
+      <div class="setting-row setting-stack">
+        <span class="setting-copy">
+          <strong>Speaking speed</strong>
+          <small>Change how quickly instructions are spoken.</small>
+        </span>
+        <div class="setting-choice-group" role="group" aria-label="Speaking speed">
+          ${[
+            ["slow", "Slow"],
+            ["normal", "Normal"],
+            ["quick", "Quick"]
+          ].map(([value, label]) => `
+            <button class="setting-choice ${settings.ratePreset === value ? "is-selected" : ""}" type="button" data-speech-rate="${value}" aria-pressed="${settings.ratePreset === value ? "true" : "false"}">${label}</button>
+          `).join("")}
+        </div>
+      </div>
+
+      <button class="secondary-button settings-test-button" type="button" data-test-voice ${settings.supported && settings.enabled ? "" : "disabled"}>
+        ▶️ Test voice
+      </button>
+    </section>
+
+    <section class="settings-note">
+      <strong>Natural system voice</strong>
+      <p>Adi's World uses the best available English system voice on this device. No special accent or gender is forced.</p>
+    </section>
+  `;
+
+  syncAudioSettingsUI();
+  screen.focus({ preventScroll: true });
+}
+
 function gentleMessage(message) {
   const original = screen.innerHTML;
   screen.innerHTML = `
@@ -3747,13 +3748,30 @@ function gentleMessage(message) {
   }, 0);
 }
 
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-  localStorage.setItem(SOUND_KEY, soundEnabled ? "on" : "off");
+function syncAudioSettingsUI() {
+  const settings = window.AdiAudio?.getSettings?.() || { enabled: soundEnabled, ratePreset: "normal" };
+  soundEnabled = settings.enabled;
   soundButton.textContent = soundEnabled ? "🔊" : "🔇";
   soundButton.setAttribute("aria-label", soundEnabled ? "Turn sound off" : "Turn sound on");
-  if (soundEnabled) speak("Sound on");
-  else if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+
+  const soundToggle = document.querySelector("[data-setting-sound]");
+  if (soundToggle) {
+    soundToggle.classList.toggle("is-on", soundEnabled);
+    soundToggle.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
+    soundToggle.querySelector("[data-setting-value]").textContent = soundEnabled ? "On" : "Off";
+  }
+
+  document.querySelectorAll("[data-speech-rate]").forEach((button) => {
+    const selected = button.dataset.speechRate === settings.ratePreset;
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-pressed", selected ? "true" : "false");
+  });
+}
+
+function toggleSound() {
+  if (!window.AdiAudio) return;
+  window.AdiAudio.setEnabled(!window.AdiAudio.isEnabled());
+  syncAudioSettingsUI();
 }
 
 document.addEventListener("click", (event) => {
@@ -3782,10 +3800,33 @@ document.addEventListener("click", (event) => {
       case "show-progress":
         renderProgress();
         break;
+      case "show-settings":
+        renderSettings();
+        break;
       case "back-world":
         renderWorld(action.dataset.worldId);
         break;
     }
+    return;
+  }
+
+  const soundSettingButton = event.target.closest("[data-setting-sound]");
+  if (soundSettingButton) {
+    toggleSound();
+    if (currentView.type === "settings") renderSettings();
+    return;
+  }
+
+  const speechRateButton = event.target.closest("[data-speech-rate]");
+  if (speechRateButton) {
+    window.AdiAudio?.setRatePreset?.(speechRateButton.dataset.speechRate, { preview: true });
+    syncAudioSettingsUI();
+    return;
+  }
+
+  const testVoiceButton = event.target.closest("[data-test-voice]");
+  if (testVoiceButton) {
+    speak("Hi! Welcome to Adi's World. Let's learn and play together.");
     return;
   }
 
@@ -4130,7 +4171,8 @@ document.addEventListener("click", (event) => {
 });
 
 soundButton.addEventListener("click", toggleSound);
-soundButton.textContent = soundEnabled ? "🔊" : "🔇";
+window.addEventListener("adi-audio-settings-changed", syncAudioSettingsUI);
+syncAudioSettingsUI();
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
@@ -4143,7 +4185,7 @@ if ("serviceWorker" in navigator) {
     });
 
     navigator.serviceWorker
-      .register("./service-worker.js?v=78", { updateViaCache: "none" })
+      .register("./service-worker.js?v=79", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
