@@ -5,7 +5,7 @@ These images are stored locally in `assets/discovery/plant-foods/` so the Discov
 | Local asset | Food | Wikimedia Commons source | Author / source | License |
 |---|---|---|---|---|
 | mango.jpg | Mango | File:Green Mango fruit.jpg | Fatimah Bello | CC0 1.0 |
-| banana.jpg | Banana | File:Banana fruit.jpeg | Tshrinivasan | CC BY-SA 3.0 |
+| banana-photo.jpg | Banana | File:Banana Bunch.jpg | Anish Sheela | CC BY 4.0 |
 | pineapple.jpg | Pineapple | File:Pineapple fruit.jpg | Mibrahim74 | Creative Commons attribution license (see source page) |
 | carrot.jpg | Carrot | File:Carrot vegetable on white background.jpg | Titus Tscharntke | Public domain |
 | broccoli.jpg | Broccoli | File:Broccoli vegetable.jpg | Jon Sullivan | Public domain |
@@ -27,7 +27,7 @@ These images are stored locally in `assets/discovery/plant-foods/` so the Discov
 
 Source pages:
 - https://commons.wikimedia.org/wiki/File:Green_Mango_fruit.jpg
-- https://commons.wikimedia.org/wiki/File:Banana_fruit.jpeg
+- https://commons.wikimedia.org/wiki/File:Banana_Bunch.jpg
 - https://commons.wikimedia.org/wiki/File:Pineapple_fruit.jpg
 - https://commons.wikimedia.org/wiki/File:Carrot_vegetable_on_white_background.jpg
 - https://commons.wikimedia.org/wiki/File:Broccoli_vegetable.jpg
