@@ -68,26 +68,9 @@
     shoes: "👟"
   };
 
-  const AVATAR_VIEWS = [
-    { id: "front", label: "Front", angle: 0 },
-    { id: "three-quarter-right", label: "3/4 Right", angle: -45 },
-    { id: "right", label: "Right", angle: -90 },
-    { id: "back", label: "Back", angle: 180 },
-    { id: "left", label: "Left", angle: 90 },
-    { id: "three-quarter-left", label: "3/4 Left", angle: 45 }
-  ];
 
   let outfitState = loadOutfit();
   let activeCategory = "top";
-  let threeMounted = false;
-
-  function ensure3D() {
-    if (threeMounted) return;
-    threeMounted = true;
-    const wrap = document.querySelector(".outfit-avatar-wrap");
-    wrap?.classList.add("is-3d-active");
-    window.Adi3D?.mount("adi-three-stage");
-  }
 
   function loadOutfit() {
     try {
@@ -106,50 +89,15 @@
     return OUTFIT_OPTIONS[category].find((item) => item.id === id) || OUTFIT_OPTIONS[category][0];
   }
 
-  function renderViewRail() {
-    return AVATAR_VIEWS.map((view) => `
-      <button
-        type="button"
-        class="outfit-view-thumb ${view.angle === 0 ? "is-active" : ""}"
-        data-outfit-angle="${view.angle}"
-        aria-label="Turn Adi to ${view.label}">
-        <span class="outfit-view-mini view-${view.id}" aria-hidden="true">
-          <img src="assets/character/adi-front-3d.webp" alt="">
-        </span>
-        <span>${view.label}</span>
-      </button>
-    `).join("");
-  }
-
   function renderAvatar() {
     return `
-      <div class="outfit-avatar-wrap outfit-avatar-v2 outfit-avatar-real3d">
+      <div class="outfit-avatar-wrap outfit-avatar-v2 outfit-avatar-empty">
         <div class="outfit-room-backdrop" aria-hidden="true">
           <span class="room-window"></span>
           <span class="room-shelf"></span>
           <span class="room-rug"></span>
           <span class="room-poster">A Brighter<br>Tomorrow<br>with Adi! ♡</span>
           <span class="room-plush">🐰</span>
-        </div>
-
-        <button type="button" class="outfit-stage-arrow outfit-stage-arrow-left" data-outfit-turn="-45" aria-label="Rotate real 3D Addi left">‹</button>
-
-        <div class="adi-front-stage" aria-label="Adi front view">
-          <img class="adi-front-reference" src="assets/character/adi-front-3d.webp" alt="Adi standing in her room wearing her default outfit">
-        </div>
-
-        <div class="adi-three-stage" id="adi-three-stage" aria-hidden="true"></div>
-
-        <button type="button" class="outfit-stage-arrow outfit-stage-arrow-right" data-outfit-turn="45" aria-label="Rotate real 3D Addi right">›</button>
-
-        <div class="outfit-view-rail" role="group" aria-label="Real 3D angle presets">
-          ${renderViewRail()}
-        </div>
-
-        <div class="outfit-turn-controls" aria-label="Rotate Addi 360 degrees">
-          <button type="button" data-outfit-turn="-45" aria-label="Rotate Addi left 45 degrees">↶</button>
-          <span><strong>Turn Adi</strong><small>tap an arrow or a view</small></span>
-          <button type="button" data-outfit-turn="45" aria-label="Rotate Addi right 45 degrees">↷</button>
         </div>
       </div>`;
   }
@@ -257,7 +205,6 @@
     `;
     window.scrollTo({ top: 0, behavior: "auto" });
     screen.focus({ preventScroll: true });
-    threeMounted = false;
   };
 
   document.addEventListener("click", (event) => {
@@ -279,23 +226,6 @@
       return;
     }
 
-    const angleButton = event.target.closest("[data-outfit-angle]");
-    if (angleButton && currentView?.type === "outfit-check") {
-      ensure3D();
-      window.Adi3D?.setAngle(Number(angleButton.dataset.outfitAngle || 0));
-      document.querySelectorAll(".outfit-view-thumb").forEach((button) => {
-        button.classList.toggle("is-active", button === angleButton);
-      });
-      return;
-    }
-
-    const turnButton = event.target.closest("[data-outfit-turn]");
-    if (turnButton && currentView?.type === "outfit-check") {
-      ensure3D();
-      window.Adi3D?.rotateBy(Number(turnButton.dataset.outfitTurn || 0));
-      return;
-    }
-
     const saveButton = event.target.closest("[data-outfit-save]");
     if (saveButton && currentView?.type === "outfit-check") {
       saveOutfit();
@@ -314,7 +244,6 @@
       activeCategory = "top";
       saveOutfit();
       updateOutfitUI();
-      window.Adi3D?.setAngle(0);
       if (typeof speak === "function") speak("Adi is back in her default outfit.");
     }
   });
