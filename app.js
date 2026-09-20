@@ -1922,10 +1922,6 @@ function greetAdiAtHome() {
   };
 
   speakAdiGreeting(returnToIdle);
-
-  if (!soundEnabled || !("speechSynthesis" in window)) {
-    returnToIdle();
-  }
 }
 
 function renderBlessingVoiceSelector() {
