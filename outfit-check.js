@@ -51,13 +51,23 @@
   };
 
   const CATEGORY_LABELS = {
-    top: "Top",
-    bottom: "Bottom",
-    headband: "Headband",
+    top: "Tops",
+    bottom: "Bottoms",
+    headband: "Head",
     necklace: "Necklace",
     wrist: "Wrist",
     watch: "Watch",
     shoes: "Shoes"
+  };
+
+  const CATEGORY_ICONS = {
+    top: "👕",
+    bottom: "🩳",
+    headband: "🎀",
+    necklace: "📿",
+    wrist: "💠",
+    watch: "⌚",
+    shoes: "👟"
   };
 
   let outfitState = loadOutfit();
@@ -101,11 +111,19 @@
           <span class="room-window"></span>
           <span class="room-shelf"></span>
           <span class="room-rug"></span>
+          <span class="room-poster">A Brighter<br>Tomorrow<br>with Adi! ♡</span>
+          <span class="room-plush">🐰</span>
         </div>
-        <div class="adi-outfit-avatar adi-outfit-avatar-render" id="outfit-avatar" style="--adi-turn:${rotation}deg" role="img" aria-label="3D-style Adi in her default Outfit Check look">
+
+        <button type="button" class="outfit-stage-arrow outfit-stage-arrow-left" data-outfit-turn="-12" aria-label="Turn Adi left">‹</button>
+
+        <div class="adi-outfit-avatar adi-outfit-avatar-render" id="outfit-avatar" style="--adi-turn:${rotation}deg" role="img" aria-label="Adi in her Outfit Check look">
           <div class="adi-shadow"></div>
           <img class="adi-3d-render" src="${ADI_3D_FRONT}" alt="" aria-hidden="true">
         </div>
+
+        <button type="button" class="outfit-stage-arrow outfit-stage-arrow-right" data-outfit-turn="12" aria-label="Turn Adi right">›</button>
+
         <div class="outfit-turn-controls" aria-label="Turn Adi">
           <button type="button" data-outfit-turn="-12" aria-label="Turn Adi left">↶</button>
           <span>Turn Adi</span>
@@ -121,7 +139,8 @@
         class="outfit-category-button ${activeCategory === category ? "is-active" : ""}"
         data-outfit-category="${category}"
         aria-pressed="${activeCategory === category}">
-        ${CATEGORY_LABELS[category]}
+        <span class="outfit-category-icon" aria-hidden="true">${CATEGORY_ICONS[category]}</span>
+        <span>${CATEGORY_LABELS[category]}</span>
       </button>
     `).join("");
   }
@@ -135,7 +154,9 @@
           class="outfit-option-card ${selected ? "is-selected" : ""}"
           data-outfit-option="${option.id}"
           aria-pressed="${selected}">
-          <span class="outfit-swatch" style="--swatch:${option.swatch}" aria-hidden="true"></span>
+          <span class="outfit-item-preview" style="--swatch:${option.swatch}" aria-hidden="true">
+            <span class="outfit-item-glyph">${CATEGORY_ICONS[activeCategory]}</span>
+          </span>
           <strong>${option.label}</strong>
           <span class="outfit-option-check" aria-hidden="true">${selected ? "✓" : ""}</span>
         </button>
@@ -148,9 +169,11 @@
     const tabsHost = document.querySelector(".outfit-category-tabs");
     const optionsHost = document.querySelector(".outfit-options-grid");
     const savedNote = document.querySelector(".outfit-save-note");
+    const itemsTitle = document.querySelector(".outfit-items-title-row h3");
     if (avatarHost) avatarHost.innerHTML = renderAvatar();
     if (tabsHost) tabsHost.innerHTML = renderCategoryTabs();
     if (optionsHost) optionsHost.innerHTML = renderOptions();
+    if (itemsTitle) itemsTitle.textContent = CATEGORY_LABELS[activeCategory];
     if (savedNote) {
       savedNote.textContent = "Saved on this device ✓";
       window.setTimeout(() => {
@@ -164,14 +187,14 @@
     currentView = { type: "outfit-check", worldId: "home", activityId: "outfit-check" };
     setActiveNav("worlds");
     screen.innerHTML = `
-      <div class="back-row">
-        <button class="back-button" type="button" data-action="back-world" data-world-id="home">← Adi's Home</button>
+      <div class="outfit-page-head">
+        <button class="back-button outfit-back-button" type="button" data-action="back-world" data-world-id="home">← Adi's Home</button>
+        <header class="activity-header outfit-check-header">
+          <span class="eyebrow">ADI'S HOME</span>
+          <h1><span aria-hidden="true">👗</span> Outfit Check</h1>
+          <p class="helper-text">Dress Adi, mix her clothes and accessories, and make a look you love.</p>
+        </header>
       </div>
-      <header class="activity-header outfit-check-header">
-        <span class="eyebrow">Adi's Home</span>
-        <h1>👗 Outfit Check</h1>
-        <p class="helper-text">Dress Adi, mix her clothes and accessories, and make a look you love.</p>
-      </header>
 
       <section class="outfit-check-layout" aria-label="Outfit Check">
         <div class="outfit-avatar-host">${renderAvatar()}</div>
@@ -182,11 +205,23 @@
               <span class="eyebrow">Closet</span>
               <h2>Choose an item</h2>
             </div>
-            <button class="outfit-reset-button" type="button" data-outfit-reset>Reset</button>
           </div>
+
           <div class="outfit-category-tabs" role="group" aria-label="Outfit categories">${renderCategoryTabs()}</div>
-          <div class="outfit-options-grid" aria-live="polite">${renderOptions()}</div>
-          <p class="outfit-save-note">3D Addi base is active. Outfit layers remain saved locally and will be migrated to the 3D model next.</p>
+
+          <section class="outfit-items-panel">
+            <div class="outfit-items-title-row">
+              <h3>${CATEGORY_LABELS[activeCategory]}</h3>
+              <span>Tap an item to preview it</span>
+            </div>
+            <div class="outfit-options-grid" aria-live="polite">${renderOptions()}</div>
+          </section>
+
+          <div class="outfit-action-row">
+            <button class="outfit-reset-button" type="button" data-outfit-reset>↶ Reset Look</button>
+            <button class="outfit-save-button" type="button" data-outfit-save>✓ Save Outfit</button>
+          </div>
+          <p class="outfit-save-note">Your look is saved on this device.</p>
         </div>
       </section>
     `;
@@ -218,6 +253,18 @@
       rotation = Math.max(-24, Math.min(24, rotation + Number(turnButton.dataset.outfitTurn || 0)));
       const avatar = document.getElementById("outfit-avatar");
       if (avatar) avatar.style.setProperty("--adi-turn", rotation + "deg");
+      return;
+    }
+
+    const saveButton = event.target.closest("[data-outfit-save]");
+    if (saveButton && currentView?.type === "outfit-check") {
+      saveOutfit();
+      const savedNote = document.querySelector(".outfit-save-note");
+      if (savedNote) savedNote.textContent = "Outfit saved ✓";
+      if (typeof speak === "function") speak("Outfit saved.");
+      window.setTimeout(() => {
+        if (savedNote) savedNote.textContent = "Your look is saved on this device.";
+      }, 1400);
       return;
     }
 
