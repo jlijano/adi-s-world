@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   --bg: #f7f6ff;
   --surface: #ffffff;
   --ink: #24304a;
@@ -20,6 +21,7 @@
 html {
   min-height: 100%;
   background: var(--bg);
+  color-scheme: light;
 }
 
 body {
@@ -344,7 +346,18 @@ button:focus-visible {
   box-shadow: var(--shadow);
 }
 
-.world-hero.home { background: linear-gradient(135deg, #d75b39 0%, #e97a52 52%, #f29a72 100%); }
+.world-hero.home {
+  background: linear-gradient(135deg, #f3ecff 0%, #ffe9f4 52%, #eaf4ff 100%);
+  color: var(--ink);
+  border: 1px solid rgba(108, 92, 231, .10);
+}
+.world-hero.home .eyebrow {
+  color: #6555cc;
+  opacity: 1;
+}
+.world-hero.home p {
+  color: var(--muted);
+}
 .world-hero.word { background: linear-gradient(135deg, #26a269, #54c98a); }
 .world-hero.number { background: linear-gradient(135deg, #2a8fe3, #58b9f2); }
 .world-hero.puzzle { background: linear-gradient(135deg, #ef8d32, #f3b050); }
