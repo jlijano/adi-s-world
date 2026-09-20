@@ -1,10 +1,10 @@
 # Adi's World — Master Project Prompt
 
-**Version:** 1.17.2  
+**Version:** 1.18.0  
 **Status:** Active  
 **Repository:** https://github.com/jlijano/adi-s-world  
 **Default branch:** main  
-**Last baseline update:** 2026-09-19
+**Last baseline update:** 2026-09-20
 
 ---
 
@@ -723,7 +723,7 @@ Current canonical project foundation:
 - Implemented MVP baseline: mobile-first responsive PWA shell with Word Forest, Number Island, and Puzzle Mountain playable activities; local star/progress tracking; optional browser speech; offline app-shell caching
 - Primary UI targets: Android phones first, tablets second, with responsive desktop compatibility
 - Launch experience: show a short, child-friendly splash/loading screen using Adi's World visual identity before revealing the main app; use the approved Adi's World reference splash artwork as the primary loading icon; keep it lightweight, non-blocking beyond necessary loading, and respectful of reduced-motion settings
-- Voice standard: use a neutral British English (en-GB) voice when available, with clear enunciation, natural pitch, and a slightly slower child-friendly speaking pace; gracefully fall back to the best available English voice when the device lacks a British voice
+- Voice standard: use one standard, natural-sounding English system voice with clear diction, normal pitch, and a slightly slower child-friendly pace. Do not target, force, or simulate a particular accent or gender. Prefer the best natural English voice already available on the device/browser and fall back gracefully without repeated voice-selection experiments
 - Find the Letter standard: support the full A–Z alphabet, randomize targets and answer positions every time the activity is opened, and use 10 total rounds per play session. Rounds 1–3 use 3 visible choices, rounds 4–6 use 4 choices, and rounds 7–10 use 5 choices; use 10 distinct target letters per session when possible; keep the interaction playful with gentle motion, clear progress, and positive feedback
 - Star scoring standard: calculate stars from actual game performance. Each correct answer adds 1 session star and each incorrect attempt removes 1 session star. Session stars must never go below 0. When the activity is completed, add the final session-star total to the child's persistent star total. Store the best score for each activity for display, while still allowing new stars to be earned on later completed sessions.
 - First Sound standard: cover all letters A–Z using age-appropriate example words and visual cues, randomize the 10 target letters and answer positions every time the activity is opened, and use the same 10-round difficulty progression as Find the Letter: rounds 1–3 show 3 letter choices, rounds 4–6 show 4, and rounds 7–10 show 5. Show the spelling of the pictured word directly below the visual cue (for example, 🍎 with “Apple”). When the child taps a letter choice, play a simple child-friendly letter-sound cue (for example, “D, duh, duh”; “O, o, o”; “G, guh, guh”), then show a large Yes/No confirmation dialog asking whether that is the answer they want. Only a confirmed Yes submits the answer and affects scoring; No closes the dialog with no score change. Apply the same performance-based star scoring and playful transitions.
@@ -1107,80 +1107,57 @@ This workflow is the reusable baseline for future Blessing Garden lesson additio
 
 ---
 
-## Blessing Garden Sacred Narrator — Permanent Voice Standard
-
-Bible stories and Bible verses must support a dedicated **Sacred Narrator** option.
-
-The Sacred Narrator is defined by general voice qualities, not by impersonating a specific real person:
-
-- male;
-- mature/elderly character, approximately 70–80 in perceived age;
-- deep, warm vocal tone;
-- calm and reverent;
-- slow enough for young children to understand;
-- very clear pronunciation and diction;
-- natural pauses;
-- gentle, solemn delivery appropriate for Scripture;
-- never theatrical, frightening, booming, or exaggerated.
-
-The intended feeling is peaceful, dignified, comforting, and holy.
-
-Implementation rules:
-
-- Sacred Narrator is the default Blessing Garden narration mode unless the user changes it.
-- Provide a visible option to switch between **Sacred Narrator** and **Standard Voice**.
-- Provide a short **Preview Sacred Narrator** button inside the Blessing Garden voice selector so the user can hear the Sacred Narrator before starting a Bible story or memory verse.
-- Blessing Garden should include a compact **Sacred Narrator test panel** showing the selected system voice name and three short comparison samples using the same selected voice at different rate/pitch combinations. Test playback must not change the saved narration mode, story progress, stars, or lesson state. The preview must always use the Sacred Narrator profile even if Standard Voice is currently selected, must not start or change story progress, and should stop/replace any currently playing preview or narration through the existing speechSynthesis cancellation behavior.
-- Persist the selected Blessing Garden narration mode locally.
-- Use Sacred Narrator for actual Bible Story scene narration and Memory Verse read-aloud.
-- Use Sacred Narrator for Verse Time verse/question narration where the verse itself is being read.
-- Keep normal Adi/game feedback on the standard voice unless the content being spoken is Scripture/story narration.
-- Reuse the existing Web Speech / speechSynthesis infrastructure rather than introducing a separate audio engine unless a future voice service is deliberately adopted.
-- Browser and Android system voices vary. Select the best available English male/mature-sounding voice heuristically and fall back gracefully when the ideal voice is unavailable.
-- Sacred Narrator voice selection must actively prefer known male voice identifiers and reject known female voice identifiers when browser voice names provide enough information. Prefer natural/neural/enhanced/premium system voices where available. Avoid extreme pitch shifting because it can make TTS sound robotic; use a near-natural lower pitch and slower rate instead.
-- A lower pitch and slightly slower rate may be used to create the intended mature, reverent delivery, but speech must remain natural and intelligible.
-- Never claim the browser voice is an exact age, gender, or celebrity voice when the platform does not expose reliable metadata.
-- Do not imitate or market the voice as a specific living actor or public figure.
-- Do not allow overlapping Bible narration; existing audio-completion/navigation rules remain in effect.
-
-
 ---
 
-## Blessing Garden Bible Voice Calibration — Permanent Standard
+## Standard Voice and Credit-Conservation Rule — Permanent Standard
 
-Blessing Garden must provide an in-app **Bible Voice Calibration** panel for Bible stories and memory verses.
+Adi's World uses **one standard narration system** across all worlds, including Blessing Garden.
 
-Controls:
+### Voice behavior
 
-- **Voice preference:** Male / Female.
-- **Tone / Pitch:** Low ↔ High adjustable control.
-- **Reading Speed:** Slow ↔ Fast adjustable control.
-- **Selected system voice name:** visibly show the browser/device voice currently being used.
-- **Preview Current Voice:** play a short Scripture-style preview using the current gender, pitch, and speed settings.
+- Use a natural, neutral, easy-to-understand English system voice.
+- Do not require a male voice, female voice, elderly voice, deep voice, celebrity-like voice, or any other gender/age character.
+- Do not require or simulate a British, Filipino, American, or other specific accent.
+- Do not use pitch shifting to try to transform one perceived gender into another.
+- Keep pitch near the system voice's natural setting and use only a modestly slower speaking rate when it improves comprehension for young children.
+- Prefer the best natural-sounding installed English voice already available on the current device/browser.
+- If the platform exposes only a female-sounding voice, a male-sounding voice, or otherwise limited choices, use the best available natural voice rather than repeatedly trying to force another result.
+- Bible stories, memory verses, Verse Time, game instructions, feedback, and Adi narration all reuse the same established speech system unless a future voice technology is deliberately approved.
+- Do not create a separate Blessing Garden narrator mode, Sacred Narrator mode, gender selector, accent selector, pitch-calibration experience, voice-comparison panel, or voice-cloning placeholder unless the user explicitly reintroduces that requirement.
 
-Behavior:
+### Naturalness standard
 
-- Save gender preference, pitch, and reading speed locally and reuse them for future Bible Story and Memory Verse narration.
-- Changing gender must immediately reselect the best available matching English system voice.
-- Pitch and speed changes must affect actual Bible narration, not only the preview.
-- Previewing must not change stars, story progress, current lesson state, or narration mode.
-- The calibration controls apply to the custom Bible/Sacred narration mode; Standard Voice remains available as a fallback.
-- Browser speech APIs do not expose reliable gender metadata. Use known system voice-name hints to prefer male/female voices, but clearly show the actual selected system voice so users can verify the result.
-- Because Web Speech does not reliably expose gender, Male/Female controls are preferences only. Also provide an **Exact System Voice** selector populated from the device's installed English voices. When the user selects one, persist and use that exact voice for Bible Story and Memory Verse narration until changed.
-- If no voice clearly matching the requested gender is installed, gracefully use the best available English voice rather than breaking narration.
-- Avoid extreme pitch/rate values that significantly reduce intelligibility.
+The priority order is:
 
+**UNDERSTANDABLE → NATURAL → CONSISTENT → DEVICE-COMPATIBLE**
 
-### Interim personal narrator baseline
+Avoid robotic delivery by:
 
-Until private voice cloning is available, the default Blessing Garden male narrator must:
+- using a normal or near-normal pitch;
+- avoiding extreme rate changes;
+- keeping sentences short;
+- using punctuation and pauses in the text itself;
+- allowing the platform voice to speak naturally rather than over-processing it.
 
-- auto-select the deepest available installed male-sounding English system voice;
-- prioritize voice names containing deep/baritone/bass/mature/narrator hints and known male identifiers;
-- use the user's approved Vocaroo voice sample as a **delivery reference** for measured pacing, conversational intonation, clear Filipino-English cadence, and natural phrasing;
-- never claim that system TTS reproduces the user's actual timbre, accent, or identity;
-- default to approximately rate 0.78 and pitch 0.86 unless the user calibrates them;
-- retain the Exact System Voice override for device-specific correction;
-- show a clear in-app note that this is an interim system-voice fallback;
-- state that the user's private cloned voice will replace the system fallback once voice cloning is available and authorized;
-- do not commit or expose the user's raw private voice recording in the public repository unless the user explicitly requests that.
+### Credit and iteration protection
+
+Voice experimentation must be conservative.
+
+- Do not automatically cycle through multiple voices, accents, gender guesses, pitch settings, or preview samples.
+- Do not generate repeated previews merely to search for a "better" voice.
+- Do not retry an unsupported voice characteristic after the platform has demonstrated that it cannot reliably provide it.
+- Do not spend generation/API credits on voice cloning, accent emulation, voice conversion, or repeated voice tests unless the user explicitly requests the feature again and the selected technology can actually support it.
+- Prefer one implementation attempt using the established standard voice, followed by functional verification.
+- When a device/browser limitation prevents a requested voice characteristic, preserve working narration and document the limitation instead of repeatedly tuning around it.
+- Never claim that an installed system voice has a guaranteed gender, age, accent, or identity when the platform does not expose reliable metadata.
+
+### Audio completion behavior
+
+Existing audio-flow rules remain mandatory:
+
+- do not overlap narration;
+- stop or replace speech cleanly when appropriate;
+- when a transition is defined to wait for spoken instructions, allow the current instruction to finish before loading the next screen;
+- audio preview or narration must never change stars, progress, or lesson state.
+
+This standard supersedes the former Sacred Narrator, Bible Voice Calibration, exact-gender selection, accent-targeting, Vocaroo-reference, and interim voice-cloning rules.
