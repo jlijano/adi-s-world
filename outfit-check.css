@@ -90,3 +90,82 @@
     transform:translateX(-50%) perspective(900px) rotateY(var(--adi-turn));
   }
 }
+
+
+/* Outfit Check v2.1 — theme color correction */
+.outfit-check-header,
+.outfit-check-layout,
+.outfit-avatar-wrap,
+.outfit-closet,
+.outfit-category-button,
+.outfit-option-card,
+.outfit-reset-button,
+.outfit-turn-controls,
+.outfit-turn-controls button {
+  color-scheme: light;
+}
+
+.outfit-check-header h1,
+.outfit-closet-heading h2,
+.outfit-option-card strong,
+.outfit-turn-controls span {
+  color: #24304a;
+}
+
+.outfit-check-header .eyebrow {
+  color: #6555cc;
+}
+
+.outfit-check-header .helper-text,
+.outfit-save-note {
+  color: #6f7890;
+}
+
+.outfit-avatar-wrap {
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255,255,255,.96), rgba(255,255,255,.42) 32%, transparent 56%),
+    linear-gradient(180deg, #fff7fb 0%, #f8efff 58%, #f3dccb 58%, #f3dccb 100%);
+}
+
+.outfit-closet {
+  background: #ffffff;
+  color: #24304a;
+}
+
+.outfit-category-button {
+  background: #f7f3fb;
+  color: #62566d;
+  border-color: transparent;
+}
+
+.outfit-category-button.is-active {
+  background: #f0edff;
+  color: #5445ca;
+  border-color: #8d7cf0;
+}
+
+.outfit-option-card {
+  background: #ffffff;
+  color: #24304a;
+  border-color: #ebe7f4;
+}
+
+.outfit-option-card.is-selected {
+  background: #f7f4ff;
+  border-color: #8d7cf0;
+}
+
+.outfit-reset-button {
+  background: #f2eff8;
+  color: #544f68;
+}
+
+.outfit-turn-controls {
+  background: rgba(255,255,255,.96);
+  color: #24304a;
+}
+
+.outfit-turn-controls button {
+  background: #f1edff;
+  color: #5445ca;
+}
