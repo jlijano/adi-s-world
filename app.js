@@ -4143,7 +4143,7 @@ if ("serviceWorker" in navigator) {
     });
 
     navigator.serviceWorker
-      .register("./service-worker.js?v=73", { updateViaCache: "none" })
+      .register("./service-worker.js?v=78", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
