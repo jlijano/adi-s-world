@@ -1,5 +1,24 @@
 # Adi's World Master Prompt Changelog
 
+## 1.14.1 — 2026-09-20
+
+Fixed:
+
+- Replaced all Plant Food Sort food emoji stand-ins with accurate locally stored photographs.
+- Added dedicated images for all 20 foods, including calamansi, lanzones, chico, jackfruit, ampalaya, malunggay, patola, kangkong, and string beans.
+- Added Wikimedia Commons source/license credits for the local image set.
+- Added all Plant Food Sort photographs to the PWA app shell for offline availability after caching.
+
+Changed:
+
+- Plant Food Sort now renders responsive real-image cards with `object-fit: contain` rather than emoji.
+- PWA cache version bumped to v44.
+
+Reason:
+
+- Generic emoji can visually misidentify foods, such as showing an orange for calamansi. Discovery Lab visual prompts must match the named learning item accurately.
+
+
 ## 1.14.0 — 2026-09-20
 
 Added:
