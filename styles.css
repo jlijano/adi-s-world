@@ -3019,10 +3019,6 @@ button:focus-visible {
 
 .plant-food-choice-button:active { transform: scale(.97); }
 
-.plant-food-choice-icon {
-  font-size: 40px;
-  line-height: 1;
-}
 
 .plant-food-choice-button strong { font-size: 20px; }
 
