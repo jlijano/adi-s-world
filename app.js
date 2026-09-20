@@ -2122,6 +2122,16 @@ function renderWorld(worldId) {
     </section>
 
 
+    ${worldId === "home" ? `
+    <section class="adi-home-character-section" aria-label="Interactive Adi">
+      <button class="adi-home-character-button" type="button" data-adi-home-character aria-label="Tap Adi to say hi">
+        <img class="adi-home-character-image" data-adi-home-image src="${ADI_HOME_IDLE_IMAGE}" alt="Adi standing and smiling" decoding="async">
+        <span class="adi-home-tap-hint" aria-hidden="true">Tap Adi 👋</span>
+      </button>
+      <p class="adi-home-character-help">Tap Adi and she’ll wave and say “Hi!”</p>
+    </section>
+    ` : ""}
+
     <section class="section" aria-labelledby="activity-heading">
       <div class="section-heading">
         <div>
