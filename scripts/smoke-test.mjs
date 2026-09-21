@@ -49,6 +49,7 @@ check(app.includes("gameSession.score = Math.max(0"), "Session score cannot go b
 check(app.includes("progress.stars"), "Persistent star tracking is present");
 check(app.includes("localStorage"), "Local progress storage is present");
 check(app.includes("function renderSettings()"), "Settings screen renderer is present");
+check(!app.includes("https://commons.wikimedia.org/wiki/Special:Redirect/file/"), "Bible Story images are local");
 check(app.includes("window.AdiAudio"), "App routes speech through centralized audio manager");
 check(audio.includes("window.AdiAudio"), "Central audio manager exports its API");
 check(audio.includes("setRatePreset") && audio.includes("setEnabled"), "Audio settings controls are supported");
