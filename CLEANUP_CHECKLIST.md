@@ -56,8 +56,19 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
   - Verified deployment validation and automated smoke tests both pass.
   - Completed across commits `d9537c3ab0a3fe7714db266003f504f8d660c915`, `0be46b67174a28815561d66cba0c4ba69303df80`, `b422d4da07cbe486d6bfb6073eb1de3b7c04c751`, `c376fabe3b5530bb2be6e09579526b9dae10a392`, `7754ea3247141d69e1098326d50bd77277b69069`, and `94644b9058dd98e9731c80c32b56385fb9f47ebc`.
 
-- [ ] **8. Audit every playable game end-to-end**
-  - Setup, instructions, wrong answer, correct answer, score, completion, replay, and navigation.
+- [x] **8. Audit every playable game end-to-end**
+  - Audited all currently playable Word Forest, Number Island, Drawing Garden, Discovery Lab, Blessing Garden, Puzzle Mountain, Bible Story, and Outfit Check flows from entry through completion/back navigation.
+  - Fixed stale visible scores after generic wrong answers and Build the Word completion.
+  - Fixed Build the Word reset so locked slots fully unlock.
+  - Fixed Build the Word and Match the Sound audio sequencing so letter sounds are not immediately cancelled by feedback speech.
+  - Prevented duplicate rapid-tap confirmation dialogs in First Sound and Picture Match and restored choices correctly on cancel.
+  - Added a safe guard for missing/empty round data so a malformed activity returns to its world instead of breaking the game view.
+  - Fixed Free Drawing undo state so undo recalculates remaining drawing distance/strokes and an empty canvas cannot be finished.
+  - Added `scripts/audit-game-flows.mjs` with permanent coverage for all currently playable activities, custom handlers, reset paths, completion paths, Bible Story navigation, Outfit Check persistence, and Drawing Garden completion.
+  - Added the game-flow audit to the GitHub Actions quality gate.
+  - Bumped app/PWA cache version to `v81`.
+  - Verified deployment validation, playable game-flow audit, and automated smoke tests all pass together.
+  - Completed across commits `30f1140533fcd2512010a605368e956a8c766cbe`, `3eaea78223f1ff508c3ee0992e8d1052251b3028`, `25bafed44d4e653b22a012eab46858be324b89df`, `6478553c268f6ec1d1850c7c821b5c34d2b4b46f`, `e640eea02c803ef1dbce2c6f440390d1028f9b59`, `33fb6a58e54235d3e40e440a8affecdb6d86a2a9`, and `797a329489d7fe5c0dba95ded60c3b2e5d9b7d32`.
 
 - [ ] **9. Audit mobile/tablet responsive behavior**
   - Android phones first, tablets second, plus desktop compatibility.
@@ -133,4 +144,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 8 — Audit every playable game end-to-end.
+**Next:** Item 9 — Audit mobile/tablet responsive behavior.
