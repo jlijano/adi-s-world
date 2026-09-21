@@ -203,3 +203,35 @@
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
+
+@media (max-width: 360px) {
+  .drawing-target-grid.letter-tracing,
+  .drawing-target-grid.number-tracing {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .drawing-target-grid.shape-tracing,
+  .drawing-target-grid.word-writing {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .drawing-actions,
+  .drawing-actions.three,
+  .drawing-actions.four {
+    grid-template-columns: 1fr;
+  }
+
+  .drawing-actions.three .drawing-done-button,
+  .drawing-actions.four .drawing-done-button {
+    grid-column: auto;
+  }
+
+  .brush-size-row {
+    grid-template-columns: 1fr;
+  }
+
+  .colour-swatch {
+    width: 44px;
+    height: 44px;
+  }
+}
