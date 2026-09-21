@@ -70,8 +70,18 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
   - Verified deployment validation, playable game-flow audit, and automated smoke tests all pass together.
   - Completed across commits `30f1140533fcd2512010a605368e956a8c766cbe`, `3eaea78223f1ff508c3ee0992e8d1052251b3028`, `25bafed44d4e653b22a012eab46858be324b89df`, `6478553c268f6ec1d1850c7c821b5c34d2b4b46f`, `e640eea02c803ef1dbce2c6f440390d1028f9b59`, `33fb6a58e54235d3e40e440a8affecdb6d86a2a9`, and `797a329489d7fe5c0dba95ded60c3b2e5d9b7d32`.
 
-- [ ] **9. Audit mobile/tablet responsive behavior**
-  - Android phones first, tablets second, plus desktop compatibility.
+- [x] **9. Audit mobile/tablet responsive behavior**
+  - Audited the current responsive CSS across phone widths down to 320–360px and common tablet widths.
+  - Hardened the top bar so branding, star count, sound, and Settings controls can shrink without horizontal overflow.
+  - Added phone-specific activity-card compaction, world-header sizing, comparison-game tightening, stacked Bible Story navigation, and responsive confirmation dialogs.
+  - Added a dedicated 700–1023px tablet layout for content width, world grids, activity grids, Bible Story grids, and game/settings panels.
+  - Improved Drawing Garden on narrow phones by reducing tracing-picker columns and stacking drawing/brush controls.
+  - Improved Outfit Check on narrow phones by reducing stage height/insets and keeping category controls touch-friendly and horizontally scrollable.
+  - Added `scripts/audit-responsive-layout.mjs` to permanently validate viewport configuration, safe-area handling, phone/tablet breakpoints, overflow guards, touch targets, canvas scaling, dialogs, Drawing Garden, and Outfit Check.
+  - Added the responsive-layout audit to the GitHub Actions quality gate.
+  - Bumped app/PWA cache version to `v82`.
+  - Verified deployment validation, game-flow audit, responsive-layout audit, and smoke tests all pass together.
+  - Completed across commits `57c7d5bf7dfeb068c4363cc82f0fab52a1615cd5`, `f0bbdc3191769f238f7f251a9a7465b447d92771`, `979fed7843c2294418c153cf17709274cfb5ae96`, `cb47f5e6e6cf08832142e8ad91820668a79e2603`, `bb087a8576a97ce4e1cece98ab1fc3942e8612f3`, `8ea580f9f53a661a31ffd72a3a2b067a9fba197a`, `29c19c34ededb75d499a60212e3cf2b05a0ac78e`, and `939b541f0ad130bef0fd4ce0502ba652fa264a02`.
 
 - [ ] **10. Verify tracing/drawing input logic**
   - Make tracing tolerant of realistic child input and verify touch/stylus behavior.
@@ -144,4 +154,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 9 — Audit mobile/tablet responsive behavior.
+**Next:** Item 10 — Verify tracing/drawing input logic.
