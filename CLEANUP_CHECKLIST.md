@@ -47,8 +47,14 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
   - Extended deployment validation and smoke tests to cover the new audio manager and Settings UI.
   - Completed across commits `6b4a5203069359536baa4de8036e21e3e66c727b`, `563f483b4980a0cf0877c65dd0a94904a29b641e`, `65c081e7edd62f5e85c1931f52b0c9ea92afef36`, `eb6e2717a3f98ceaafd77ef11d3d498b60bba2bb`, `486c51eabf31fc34e9ca5bfdf09268eb0441366a`, `cbc9cc88e723bb1f03a4cff9240f3f25bae72b9a`, `2940eafe4849a182725a8b47e0b62c2f5905e225`, and `46792d901ffc04dfeec5519abbcafd68457d327b`.
 
-- [ ] **7. Localize external Bible Story images**
-  - Store approved story illustrations under local `assets/` paths for offline reliability.
+- [x] **7. Localize external Bible Story images**
+  - Cached the five externally hosted Bible Story illustrations under `assets/blessing-garden/stories/`.
+  - Added `CREDITS.md` for the local Bible Story artwork sources and public-domain notes.
+  - Replaced all 30 external Wikimedia image-load URLs in Bible Story covers/scenes with local asset paths while keeping source-page metadata for attribution.
+  - Added all local Bible Story assets to the PWA app shell and bumped the app/cache version to `v80`.
+  - Added a smoke-test assertion that rejects external Wikimedia Bible Story image redirects.
+  - Verified deployment validation and automated smoke tests both pass.
+  - Completed across commits `d9537c3ab0a3fe7714db266003f504f8d660c915`, `0be46b67174a28815561d66cba0c4ba69303df80`, `b422d4da07cbe486d6bfb6073eb1de3b7c04c751`, `c376fabe3b5530bb2be6e09579526b9dae10a392`, `7754ea3247141d69e1098326d50bd77277b69069`, and `94644b9058dd98e9731c80c32b56385fb9f47ebc`.
 
 - [ ] **8. Audit every playable game end-to-end**
   - Setup, instructions, wrong answer, correct answer, score, completion, replay, and navigation.
@@ -127,4 +133,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 7 — Localize external Bible Story images.
+**Next:** Item 8 — Audit every playable game end-to-end.
