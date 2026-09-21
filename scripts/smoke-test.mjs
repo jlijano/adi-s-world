@@ -22,6 +22,7 @@ const html = fs.readFileSync("index.html", "utf8");
 const app = fs.readFileSync("app.js", "utf8");
 const audio = fs.readFileSync("audio-manager.js", "utf8");
 const progressStore = fs.readFileSync("progress-store.js", "utf8");
+const assetRegistry = fs.readFileSync("asset-registry.js", "utf8");
 const sw = fs.readFileSync("service-worker.js", "utf8");
 const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8"));
 
@@ -30,6 +31,8 @@ check(html.includes('id="screen"'), "Main screen mount exists");
 check(html.includes('data-nav="home"') && html.includes('data-nav="worlds"') && html.includes('data-nav="progress"'), "Primary navigation controls exist");
 check(html.includes('data-action="show-settings"'), "Settings entry exists in app header");
 check(html.includes('audio-manager.js?v='), "Central audio manager loads before app");
+check(html.indexOf('asset-registry.js?v=') < html.indexOf('app.js?v='), "Asset registry loads before app");
+check(assetRegistry.includes("globalThis.AdiAssets"), "Central asset registry exports its API");
 
 for (const id of ["home","word","number","drawing","discovery","blessing","robot","puzzle","memory","feelings","adventure"]) {
   check(app.includes(`id: "${id}"`), `World definition exists: ${id}`);
