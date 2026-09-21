@@ -68,18 +68,48 @@
   let outfitState = loadOutfit();
   let activeCategory = "top";
 
+  function safeGet(key) {
+    try {
+      return window.localStorage?.getItem(key) ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  function safeSet(key, value) {
+    try {
+      window.localStorage?.setItem(key, value);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function sanitizeOutfit(candidate) {
+    const source = candidate && typeof candidate === "object" && !Array.isArray(candidate) ? candidate : {};
+    const sanitized = { ...DEFAULT_OUTFIT };
+    for (const category of Object.keys(OUTFIT_OPTIONS)) {
+      const requested = source[category];
+      if (OUTFIT_OPTIONS[category].some((item) => item.id === requested)) {
+        sanitized[category] = requested;
+      }
+    }
+    return sanitized;
+  }
+
   function loadOutfit() {
     try {
-      const current = JSON.parse(localStorage.getItem(OUTFIT_STORAGE_KEY) || "{}");
-      const legacy = JSON.parse(localStorage.getItem("adis-world-outfit-v1") || "{}");
-      return { ...DEFAULT_OUTFIT, ...legacy, ...current };
+      const current = JSON.parse(safeGet(OUTFIT_STORAGE_KEY) || "{}");
+      const legacy = JSON.parse(safeGet("adis-world-outfit-v1") || "{}");
+      return sanitizeOutfit({ ...legacy, ...current });
     } catch {
       return { ...DEFAULT_OUTFIT };
     }
   }
 
   function saveOutfit() {
-    localStorage.setItem(OUTFIT_STORAGE_KEY, JSON.stringify(outfitState));
+    outfitState = sanitizeOutfit(outfitState);
+    safeSet(OUTFIT_STORAGE_KEY, JSON.stringify(outfitState));
   }
 
   function optionFor(category, id) {
