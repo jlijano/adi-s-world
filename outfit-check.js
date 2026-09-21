@@ -1,6 +1,6 @@
 (() => {
   const OUTFIT_STORAGE_KEY = "adis-world-outfit-v2";
-  const SPRITE_URL = "assets/character/outfit-check/outfit-layers.svg";
+  const SPRITE_URL = globalThis.AdiAssets.resolve("character.outfitLayers", "character");
 
   const DEFAULT_OUTFIT = Object.freeze({
     top: "pink-donut",
@@ -131,7 +131,7 @@
         </div>
         <div class="adi-doll-stage" aria-label="Adi wearing the selected outfit">
           <div class="adi-doll-stack">
-            <img class="adi-doll-base" src="assets/character/adi-front-3d.webp?v=70" alt="Adi">
+            <img class="adi-doll-base" src="${globalThis.AdiAssets.resolve("character.outfitBase", "character")}" alt="Adi">
             ${svgUse(selected.bottom.layer, "layer-bottom")}
             ${svgUse(selected.top.layer, "layer-top")}
             ${svgUse(selected.shoes.layer, "layer-shoes")}
