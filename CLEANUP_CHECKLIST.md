@@ -110,8 +110,17 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## P2 — Important Cleanup
 
-- [ ] **12. Begin modularizing `app.js`**
-  - Gradually separate worlds, games, navigation, audio, data, scoring, and progress.
+- [x] **12. Begin modularizing `app.js`**
+  - Mapped the main responsibilities in `app.js`: activity/world data and round builders, shared game rendering/handlers, Bible Story logic, navigation/screens, audio integration, and persistence/progress.
+  - Measured the starting monolith at about 4,303 lines / 187 KB with 108 top-level functions.
+  - Chose persistence/progress as the safest first extraction because it is pure logic with minimal DOM/game coupling and already had strong regression coverage.
+  - Added `progress-store.js` as the owner of the `adis-world-progress-v1` key, guarded storage access, normalization, load, and save behavior.
+  - Removed duplicated storage helpers and progress normalization logic from `app.js`, reducing it to about 4,241 lines / 186 KB without changing storage keys or user data.
+  - Loaded `progress-store.js` before `app.js`, added it to the PWA core cache, and bumped the app/PWA version to `v85`.
+  - Updated persistence and smoke tests for the new module boundary.
+  - Added `scripts/audit-modularization.mjs` and wired it into the GitHub Actions quality gate so persistence logic cannot silently drift back into `app.js`.
+  - Verified deployment validation, game-flow audit, responsive audit, tracing audit, persistence audit, modularization audit, and smoke tests all pass together.
+  - Completed across commits `87049b8eb2c30c9e9e4ab407a074b42c0af38622`, `03fd93dcc471b45e8d784b592936f25df2f79982`, `68e52b18b8045f6d84086c41f96aab87ee0258e4`, `1e9af5b997dc5f486cc40440ece88d99c322d970`, `bbefab12f9128d4f8afe1d292a9568059b2b5c14`, `2230ad7f5fd54edc8fe7854e27b6eb1387fd7cc0`, `1c5e56fc51c4922272695383044813267ff99434`, `472299ca1afdd11c767527589ec8b20f7e3eb8fa`, `19f87f044b0122586a8107317422662d7f0ed55a`, and `30e1aab98b66d3190066c6060120999c2882e5b3`.
 
 - [ ] **13. Create a central asset registry**
   - Manage world images, game art, character art, story images, and fallbacks from one mapping.
@@ -173,4 +182,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 12 — Begin modularizing `app.js`.
+**Next:** Item 13 — Create a central asset registry.
