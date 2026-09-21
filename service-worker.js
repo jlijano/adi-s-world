@@ -1,14 +1,14 @@
-const APP_VERSION = "84";
+const APP_VERSION = "85";
 const CACHE_NAME = `adis-world-v${APP_VERSION}`;
 const APP_SHELL = [
   "./", "./index.html",
-  "./styles.css?v=84", "./drawing-garden.css?v=84", "./outfit-check.css?v=84", "./outfit-check-layered.css?v=84",
-  "./audio-manager.js?v=84", "./app.js?v=84", "./drawing-garden.js?v=84", "./outfit-check.js?v=84",
+  "./styles.css?v=85", "./drawing-garden.css?v=85", "./outfit-check.css?v=85", "./outfit-check-layered.css?v=85",
+  "./progress-store.js?v=85", "./audio-manager.js?v=85", "./app.js?v=85", "./drawing-garden.js?v=85", "./outfit-check.js?v=85",
   "./assets/character/adi-front-3d.webp",
   "./assets/character/outfit-check/outfit-layers.svg",
   "./assets/character/idle-front.webp", "./assets/character/hi-wave.webp",
   "./styles.css", "./drawing-garden.css", "./outfit-check.css", "./outfit-check-layered.css",
-  "./audio-manager.js", "./app.js", "./drawing-garden.js", "./outfit-check.js", "./manifest.json",
+  "./progress-store.js", "./audio-manager.js", "./app.js", "./drawing-garden.js", "./outfit-check.js", "./manifest.json",
   "./assets/icons/icon.svg", "./assets/icons/adis-world-splash.jpg", "./assets/worlds/word-forest-card.svg",
   "./assets/blessing-garden/gideon/gideon-call.jpg",
   "./assets/blessing-garden/stories/creation.jpg",
@@ -26,7 +26,7 @@ const APP_SHELL = [
   "./assets/discovery/plant-foods/kangkong.jpg", "./assets/discovery/plant-foods/string-beans.jpg", "./assets/discovery/plant-foods/CREDITS.md",
   "./assets/worlds/word-forest-card.webp",
 ];
-const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/drawing-garden.css", "/outfit-check.css", "/outfit-check-layered.css", "/audio-manager.js", "/app.js", "/drawing-garden.js", "/outfit-check.js"]);
+const CORE_PATHS = new Set(["/", "/index.html", "/styles.css", "/drawing-garden.css", "/outfit-check.css", "/outfit-check-layered.css", "/progress-store.js", "/audio-manager.js", "/app.js", "/drawing-garden.js", "/outfit-check.js"]);
 self.addEventListener("install", (event) => { event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (event) => { event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))).then(() => self.clients.claim())); });
 async function networkFirst(request) {
