@@ -3863,3 +3863,201 @@ body {
     align-items: flex-start;
   }
 }
+
+
+/* Mobile + tablet responsive hardening (audit item 9) */
+.activity-card.activity-card-visual,
+.world-card.world-card-visual,
+.game-card,
+.settings-panel,
+.bible-reader-card,
+.bible-story-card,
+.progress-world,
+.outfit-check-layout,
+.outfit-avatar-host,
+.outfit-closet {
+  min-width: 0;
+}
+
+.picture-confirm-card {
+  width: min(92vw, 520px);
+  max-width: calc(100vw - 24px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+}
+
+@media (max-width: 520px) {
+  .screen {
+    padding-inline: 12px;
+  }
+
+  .topbar {
+    gap: 8px;
+    padding-inline: 10px;
+  }
+
+  .brand-button {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .brand-copy {
+    min-width: 0;
+  }
+
+  .brand-copy strong,
+  .brand-copy small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .topbar-actions {
+    flex: 0 0 auto;
+    gap: 5px;
+  }
+
+  .star-pill {
+    min-height: 44px;
+    padding-inline: 9px;
+  }
+
+  .icon-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .activity-card.activity-card-visual {
+    grid-template-columns: 96px minmax(0, 1fr);
+    min-height: 108px;
+  }
+
+  .activity-card-art {
+    min-height: 108px;
+  }
+
+  .activity-card-copy {
+    padding: 11px 12px 6px;
+  }
+
+  .activity-card-visual .activity-stars {
+    grid-column: 2;
+    justify-self: start;
+    align-self: start;
+    padding: 0 12px 11px;
+  }
+
+  .world-hero-heading {
+    align-items: flex-start;
+  }
+
+  .world-hero-art {
+    width: 72px;
+    border-radius: 15px;
+  }
+
+  .compare-stage {
+    grid-template-columns: minmax(0, 1fr) 12px minmax(0, 1fr);
+    gap: 5px;
+  }
+
+  .compare-objects {
+    gap: 4px;
+  }
+
+  .bible-reader-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .bible-reader-actions button {
+    width: 100%;
+  }
+
+  .setting-row {
+    padding-inline: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .brand-copy small {
+    display: none;
+  }
+
+  .brand-copy strong {
+    font-size: 15px;
+  }
+
+  .brand-mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+  }
+
+  .star-pill {
+    padding-inline: 7px;
+  }
+
+  .topbar-actions {
+    gap: 4px;
+  }
+
+  .icon-button {
+    min-width: 42px;
+  }
+
+  .activity-card.activity-card-visual {
+    grid-template-columns: 86px minmax(0, 1fr);
+  }
+
+  .activity-card-copy strong {
+    font-size: .94rem;
+  }
+
+  .activity-card-copy small {
+    font-size: 12px;
+  }
+
+  .world-hero-heading {
+    gap: 10px;
+  }
+
+  .world-hero-art {
+    width: 62px;
+  }
+
+  .settings-panel {
+    padding: 14px;
+  }
+
+  .setting-toggle {
+    gap: 8px;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1023px) {
+  .screen {
+    width: min(100%, 900px);
+    padding-inline: 24px;
+  }
+
+  .world-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .activity-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bible-story-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .game-card,
+  .settings-panel,
+  .settings-note {
+    max-width: 860px;
+    margin-inline: auto;
+  }
+}
