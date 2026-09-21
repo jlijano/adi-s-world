@@ -1,0 +1,74 @@
+name: Cache Bible Story Images
+
+on:
+  push:
+    paths:
+      - ".github/workflows/cache-bible-story-images.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cache-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Download verified Wikimedia Commons Bible images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/blessing-garden/stories
+
+          download_story() {
+            local output="$1"
+            local commons_name="$2"
+            local encoded
+            encoded="$(python -c 'import sys; from urllib.parse import quote; print(quote(sys.argv[1], safe=""))' "$commons_name")"
+            echo "Downloading $commons_name -> $output"
+            curl -L --fail --retry 3 --retry-delay 2               "https://commons.wikimedia.org/wiki/Special:Redirect/file/${encoded}?width=1200"               -o "assets/blessing-garden/stories/${output}"
+          }
+
+          download_story "creation.jpg" "Figures 001 In the beginning God Created the Heaven and the Earth.jpg"
+          download_story "noah.png" "New pictorial Bible (1) - Noah entering the ark.png"
+          download_story "david-goliath.jpg" "Tissot Drawing 266 Goliath addresses David 1 Samuel 17 43 for Brunoff 254 Goliath s'adresse à David.jpg"
+          download_story "daniel-lions.jpg" "Daniel's Answer to the King, by Briton Riviere, GMIII MCAG 1937 123-001.jpg"
+          download_story "jesus-children.jpg" "Jesus Blessing the Children.jpg"
+
+          for f in             assets/blessing-garden/stories/creation.jpg             assets/blessing-garden/stories/noah.png             assets/blessing-garden/stories/david-goliath.jpg             assets/blessing-garden/stories/daniel-lions.jpg             assets/blessing-garden/stories/jesus-children.jpg; do
+            test -s "$f"
+          done
+
+          cat > assets/blessing-garden/stories/CREDITS.md <<'EOF'
+          # Bible Story Image Credits
+
+          These local offline assets were downloaded from Wikimedia Commons for Adi's World.
+
+          - `creation.jpg` — "Figures 001 In the beginning God Created the Heaven and the Earth.jpg" — public domain.
+          - `noah.png` — "New pictorial Bible (1) - Noah entering the ark.png" — public domain.
+          - `david-goliath.jpg` — James Tissot, "Goliath addresses David" — public domain.
+          - `daniel-lions.jpg` — Briton Rivière, "Daniel's Answer to the King" — public domain / public-domain artwork reproduction.
+          - `jesus-children.jpg` — Bernhard Plockhorst, "Jesus Blessing the Children" — public domain.
+
+          Original source pages remain documented in `app.js` metadata for attribution/reference.
+          EOF
+
+      - name: Commit cached assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/blessing-garden/stories
+          if git diff --cached --quiet; then
+            echo "No asset changes to commit."
+            exit 0
+          fi
+          git commit -m "Cache Bible Story images for offline use"
+          git pull --rebase origin main
+          git push origin HEAD:main
