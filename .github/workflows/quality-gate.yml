@@ -39,5 +39,8 @@ jobs:
       - name: Audit persistent state
         run: node scripts/audit-persistence.mjs
 
+      - name: Audit modularization boundary
+        run: node scripts/audit-modularization.mjs
+
       - name: Run smoke tests
         run: node scripts/smoke-test.mjs
