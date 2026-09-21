@@ -242,38 +242,38 @@ const BIBLE_STORIES = [
     reference: "Genesis 1",
     summary: "God makes the world, the sky, plants, animals, and people.",
     maxStars: 5,
-    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+    coverImage: "assets/blessing-garden/stories/creation.jpg",
     coverAlt: "Child-friendly Bible illustration representing God's creation of the world.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
     credits: "Bible illustration via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        image: "assets/blessing-garden/stories/creation.jpg",
         title: "In the Beginning",
         text: "In the beginning, God made the heavens and the earth. Everything began because God created it.",
         alt: "Bible illustration representing the beginning of God's creation."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        image: "assets/blessing-garden/stories/creation.jpg",
         title: "Light and Darkness",
         text: "God made light. He called the light day, and He called the darkness night.",
         alt: "Bible illustration representing light and darkness in the creation story."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        image: "assets/blessing-garden/stories/creation.jpg",
         title: "Sky, Land, and Plants",
         text: "God made the sky, the seas, and dry land. He made plants and trees grow on the land.",
         alt: "Bible illustration representing the sky, land, seas, and plants God created."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        image: "assets/blessing-garden/stories/creation.jpg",
         title: "Sun, Moon, and Stars",
         text: "God made the sun for the day. He made the moon and stars to shine at night.",
         alt: "Bible illustration representing the sun, moon, and stars in the creation story."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
+        image: "assets/blessing-garden/stories/creation.jpg",
         title: "Animals and People",
         text: "God made fish, birds, and animals. Then God made people. God saw that His creation was very good.",
         alt: "Bible illustration representing animals and people as part of God's creation."
@@ -286,38 +286,38 @@ const BIBLE_STORIES = [
     reference: "Genesis 6–9",
     summary: "Noah obeys God, builds the ark, and sees God's rainbow promise.",
     maxStars: 5,
-    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+    coverImage: "assets/blessing-garden/stories/noah.png",
     coverAlt: "Bible illustration of Noah and his family entering the ark.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:New_pictorial_Bible_(1)_-_Noah_entering_the_ark.png",
     credits: "New Pictorial Bible illustration via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        image: "assets/blessing-garden/stories/noah.png",
         title: "God Speaks to Noah",
         text: "God told Noah to build a very large ark. Noah trusted God and listened carefully.",
         alt: "Bible illustration representing God telling Noah to prepare the ark."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        image: "assets/blessing-garden/stories/noah.png",
         title: "Noah Builds the Ark",
         text: "Noah worked hard and built the ark just as God told him to do.",
         alt: "Bible illustration representing Noah preparing the ark."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        image: "assets/blessing-garden/stories/noah.png",
         title: "Animals Enter the Ark",
         text: "Animals came to the ark, and Noah's family went inside too. God kept them together and safe.",
         alt: "Bible illustration of Noah, his family, and animals entering the ark."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        image: "assets/blessing-garden/stories/noah.png",
         title: "The Rain",
         text: "Rain fell for many days. Noah, his family, and the animals stayed safe inside the ark.",
         alt: "Bible illustration representing Noah and the animals safe inside the ark during the rain."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/New_pictorial_Bible_%281%29_-_Noah_entering_the_ark.png",
+        image: "assets/blessing-garden/stories/noah.png",
         title: "The Rainbow Promise",
         text: "When the water went down, God put a rainbow in the sky as a sign of His promise.",
         alt: "Bible illustration representing Noah's family after the flood and God's promise."
@@ -330,38 +330,38 @@ const BIBLE_STORIES = [
     reference: "1 Samuel 17",
     summary: "David trusts God when he faces the giant Goliath.",
     maxStars: 5,
-    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+    coverImage: "assets/blessing-garden/stories/david-goliath.jpg",
     coverAlt: "Bible illustration of David standing before Goliath.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
     credits: "James Tissot Bible illustration via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        image: "assets/blessing-garden/stories/david-goliath.jpg",
         title: "A Giant Challenge",
         text: "A giant named Goliath challenged the people of Israel. The soldiers were afraid of him.",
         alt: "Bible illustration of Goliath speaking to David without graphic violence."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        image: "assets/blessing-garden/stories/david-goliath.jpg",
         title: "David Trusts God",
         text: "David remembered how God had helped him before. He trusted that God would be with him again.",
         alt: "Bible illustration of young David courageously facing Goliath."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        image: "assets/blessing-garden/stories/david-goliath.jpg",
         title: "Five Smooth Stones",
         text: "David chose five smooth stones from a stream. He carried his sling and went forward with courage.",
         alt: "Bible illustration representing David preparing to face Goliath."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        image: "assets/blessing-garden/stories/david-goliath.jpg",
         title: "David Faces Goliath",
         text: "David trusted God and used his sling. Goliath fell, and the danger was over.",
         alt: "Bible illustration of David facing Goliath, shown without graphic detail."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
+        image: "assets/blessing-garden/stories/david-goliath.jpg",
         title: "The People Rejoice",
         text: "The people were glad and no longer afraid. David knew that God had helped him.",
         alt: "Bible illustration representing David's courage and the people's relief."
@@ -374,38 +374,38 @@ const BIBLE_STORIES = [
     reference: "Daniel 6",
     summary: "Daniel keeps praying to God, and God protects him.",
     maxStars: 5,
-    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+    coverImage: "assets/blessing-garden/stories/daniel-lions.jpg",
     coverAlt: "Bible illustration of Daniel safely sitting near calm lions.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
     credits: "Briton Rivière, Daniel's Answer to the King, via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        image: "assets/blessing-garden/stories/daniel-lions.jpg",
         title: "Daniel Prays",
         text: "Daniel loved God and prayed every day. Prayer was an important part of his life.",
         alt: "Bible illustration representing Daniel faithfully praying to God."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        image: "assets/blessing-garden/stories/daniel-lions.jpg",
         title: "A Law Against Prayer",
         text: "A new law said Daniel should not pray to God. Daniel still chose to pray faithfully.",
         alt: "Bible illustration representing Daniel continuing to pray despite the new law."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        image: "assets/blessing-garden/stories/daniel-lions.jpg",
         title: "Daniel and the Lions",
         text: "Daniel was placed in a lions' den. God stayed with Daniel through the night.",
         alt: "Child-friendly Bible illustration of Daniel safely sitting near lions."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        image: "assets/blessing-garden/stories/daniel-lions.jpg",
         title: "God Protects Daniel",
         text: "God sent an angel and kept the lions from hurting Daniel. Daniel was safe.",
         alt: "Bible illustration of Daniel protected by God among calm lions."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
+        image: "assets/blessing-garden/stories/daniel-lions.jpg",
         title: "Daniel Is Safe",
         text: "In the morning, the king was very happy to find Daniel safe. Daniel kept trusting God.",
         alt: "Bible illustration of Daniel safe after spending the night near the lions."
@@ -418,38 +418,38 @@ const BIBLE_STORIES = [
     reference: "Mark 10:13–16",
     summary: "Jesus welcomes children and shows that they are important to Him.",
     maxStars: 5,
-    coverImage: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
+    coverImage: "assets/blessing-garden/stories/jesus-children.jpg",
     coverAlt: "Bible illustration of Jesus warmly welcoming children.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Jesus_Blessing_the_Children.jpg",
     credits: "Bernard Plockhorst, Christ Blessing the Children, via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
+        image: "assets/blessing-garden/stories/jesus-children.jpg",
         title: "Families Come to Jesus",
         text: "Families brought their children to Jesus. They wanted Jesus to bless them.",
         alt: "Bible illustration of families bringing children to Jesus."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
+        image: "assets/blessing-garden/stories/jesus-children.jpg",
         title: "The Disciples Try to Stop Them",
         text: "Some disciples tried to send the families away. Jesus wanted the children to come to Him.",
         alt: "Bible illustration representing children coming to Jesus."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
+        image: "assets/blessing-garden/stories/jesus-children.jpg",
         title: "Jesus Says Come",
         text: "Jesus said, \"Let the little children come to me.\" He welcomed them with love.",
         alt: "Bible illustration of Jesus inviting children to come close."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
+        image: "assets/blessing-garden/stories/jesus-children.jpg",
         title: "Jesus Welcomes the Children",
         text: "The children came close to Jesus. He showed everyone that children are important to God.",
         alt: "Bible illustration of Jesus warmly welcoming children."
       },
       {
-        image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jesus_Blessing_the_Children.jpg",
+        image: "assets/blessing-garden/stories/jesus-children.jpg",
         title: "Jesus Blesses Them",
         text: "Jesus took the children in His arms and blessed them. He showed them kindness and love.",
         alt: "Bible illustration of Jesus blessing children."
@@ -4181,7 +4181,7 @@ if ("serviceWorker" in navigator) {
     });
 
     navigator.serviceWorker
-      .register("./service-worker.js?v=79", { updateViaCache: "none" })
+      .register("./service-worker.js?v=80", { updateViaCache: "none" })
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
