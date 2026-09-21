@@ -2470,6 +2470,10 @@ function renderGame(worldId, activityId, roundIndex = 0) {
   setActiveNav("worlds");
 
   const round = activity.rounds[roundIndex];
+  if (!round) {
+    gameSession = null;
+    return renderWorld(worldId);
+  }
   const progressPct = ((roundIndex + 1) / activity.rounds.length) * 100;
   const isSequence = /\s{2}|\?/.test(round.stage);
   const isNumber = /^\d$/.test(round.stage);
@@ -2707,6 +2711,9 @@ function closePictureChoiceConfirmation() {
   const overlay = document.getElementById("picture-confirm-overlay");
   overlay?.remove();
   pendingPictureChoice = null;
+  document.querySelectorAll(".picture-word-choice").forEach((button) => {
+    if (!activeGame?.correctThisRound) button.disabled = false;
+  });
 }
 
 function numberWord(value) {
@@ -3113,12 +3120,18 @@ function closeFirstSoundConfirmation() {
   const overlay = document.getElementById("first-sound-confirm-overlay");
   overlay?.remove();
   pendingFirstSoundChoice = null;
+  document.querySelectorAll(".letter-sound-choice").forEach((button) => {
+    if (!activeGame?.correctThisRound) button.disabled = false;
+  });
 }
 
 function showFirstSoundConfirmation(choice, button) {
-  if (!activeGame || activeGame.correctThisRound) return;
+  if (!activeGame || activeGame.correctThisRound || pendingFirstSoundChoice) return;
 
   pendingFirstSoundChoice = { choice, button };
+  document.querySelectorAll(".letter-sound-choice").forEach((choiceButton) => {
+    choiceButton.disabled = true;
+  });
 
   const openDialog = () => {
     if (!pendingFirstSoundChoice || pendingFirstSoundChoice.choice !== choice) return;
@@ -3154,9 +3167,12 @@ function showFirstSoundConfirmation(choice, button) {
 }
 
 function showPictureChoiceConfirmation(choice, button) {
-  if (!activeGame || activeGame.correctThisRound) return;
+  if (!activeGame || activeGame.correctThisRound || pendingPictureChoice) return;
 
   pendingPictureChoice = { choice, button };
+  document.querySelectorAll(".picture-word-choice").forEach((choiceButton) => {
+    choiceButton.disabled = true;
+  });
 
   const openDialog = () => {
     if (!pendingPictureChoice || pendingPictureChoice.choice !== choice) return;
@@ -3196,7 +3212,7 @@ function resetBuildWordRound() {
   activeGame.buildIndex = 0;
   document.querySelectorAll("[data-build-slot]").forEach((slot) => {
     slot.textContent = "_";
-    slot.classList.remove("is-filled");
+    slot.classList.remove("is-filled", "is-locked");
   });
   document.querySelectorAll("[data-build-letter]").forEach((button) => {
     button.disabled = false;
@@ -3275,7 +3291,7 @@ function handleSoundMatchLetter(letter, button) {
   const picture = round.soundMatchPictures[pictureIndex];
   if (!picture || activeGame.soundMatchMatchedIndexes.has(pictureIndex)) return;
 
-  speakLetterSound(letter, button);
+  const speakMatchFeedback = (message) => speakLetterSound(letter, button, () => speak(message));
 
   if (letter !== picture.letter) {
     updateSessionScore(-1);
@@ -3284,7 +3300,7 @@ function handleSoundMatchLetter(letter, button) {
     const feedback = document.getElementById("feedback");
     feedback.className = "feedback try";
     feedback.textContent = `Almost! ${picture.word} starts with a different sound.`;
-    speak(`Almost. Listen again. ${picture.word}.`);
+    speakMatchFeedback(`Almost. Listen again. ${picture.word}.`);
     setTimeout(() => button.classList.remove("is-try-again"), 600);
     return;
   }
@@ -3316,7 +3332,7 @@ function handleSoundMatchLetter(letter, button) {
   if (remaining > 0) {
     feedback.className = "feedback good";
     feedback.textContent = `${picture.word} starts with ${letter}! Match ${remaining} more.`;
-    speak(`${picture.word} starts with ${letter}. Great match!`);
+    speakMatchFeedback(`${picture.word} starts with ${letter}. Great match!`);
     return;
   }
 
@@ -3329,7 +3345,7 @@ function handleSoundMatchLetter(letter, button) {
   });
   feedback.className = "feedback good";
   feedback.textContent = "Brilliant! You matched every picture! ⭐";
-  speak("Brilliant! You matched every picture to its beginning sound.");
+  speakMatchFeedback("Brilliant! You matched every picture to its beginning sound.");
 
   setTimeout(() => {
     const nextRound = roundIndex + 1;
@@ -3450,7 +3466,6 @@ function handleBuildLetter(letter, button) {
   if (!round?.buildWordRound) return;
 
   const expectedLetter = round.answer[activeGame.buildIndex];
-  speakLetterSound(letter, button);
 
   if (letter !== expectedLetter) {
     updateSessionScore(-1);
@@ -3459,10 +3474,12 @@ function handleBuildLetter(letter, button) {
     const feedback = document.getElementById("feedback");
     feedback.className = "feedback try";
     feedback.textContent = "Almost! That letter does not go here yet.";
-    speak("Almost! That letter does not go here yet.");
+    speakLetterSound(letter, button, () => speak("Almost! That letter does not go here yet."));
     setTimeout(() => button.classList.remove("is-try-again"), 600);
     return;
   }
+
+  speakLetterSound(letter, button);
 
   const slot = document.querySelector("[data-build-slot=\"" + activeGame.buildIndex + "\"]");
   if (slot) {
@@ -3487,6 +3504,7 @@ function handleBuildLetter(letter, button) {
 
   activeGame.correctThisRound = true;
   updateSessionScore(1);
+  refreshVisibleSessionScore();
   const feedback = document.getElementById("feedback");
   feedback.className = "feedback good";
   feedback.textContent = "You built " + round.word + "! ⭐";
@@ -3573,6 +3591,7 @@ function handleChoice(choice, button) {
     }, round.alphabetRound ? 1050 : 900);
   } else {
     updateSessionScore(-1);
+    refreshVisibleSessionScore();
     button.classList.add("is-try-again");
     feedback.className = "feedback try";
     feedback.textContent = "Almost! Try another one.";
