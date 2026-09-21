@@ -83,8 +83,18 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
   - Verified deployment validation, game-flow audit, responsive-layout audit, and smoke tests all pass together.
   - Completed across commits `57c7d5bf7dfeb068c4363cc82f0fab52a1615cd5`, `f0bbdc3191769f238f7f251a9a7465b447d92771`, `979fed7843c2294418c153cf17709274cfb5ae96`, `cb47f5e6e6cf08832142e8ad91820668a79e2603`, `bb087a8576a97ce4e1cece98ab1fc3942e8612f3`, `8ea580f9f53a661a31ffd72a3a2b067a9fba197a`, `29c19c34ededb75d499a60212e3cf2b05a0ac78e`, and `939b541f0ad130bef0fd4ce0502ba652fa264a02`.
 
-- [ ] **10. Verify tracing/drawing input logic**
-  - Make tracing tolerant of realistic child input and verify touch/stylus behavior.
+- [x] **10. Verify tracing/drawing input logic**
+  - Reworked the structured tracing validator to be child-friendly on touchscreens.
+  - Increased the accepted guide corridor from 22–26px to 48–54px so normal finger wobble is recognized.
+  - Expanded the coverage mask so near-line strokes count toward successful tracing.
+  - Lowered the minimum trace distance from 140 to 70 so short letters, numbers, and shapes are not rejected unfairly.
+  - Relaxed accuracy, coverage, and stray-line thresholds while still rejecting clearly off-path scribbles.
+  - Added a second acceptance path for strong guide coverage, allowing a child to pass even when pixel accuracy is lower.
+  - Changed retry feedback so children can keep tracing instead of being told to clear a mostly-correct attempt.
+  - Added `scripts/audit-tracing.mjs` and wired it into the GitHub Actions quality gate.
+  - Bumped app/PWA cache version to `v83`.
+  - Verified deployment validation, game-flow audit, responsive-layout audit, tracing-recognition audit, and smoke tests all pass together.
+  - Completed across commits `b79289997e2265817a8ed0e70519c5009066f0c4`, `0b548d995c70ae2cd37c4694b259939028983056`, `f8d525aeb706fd739209950999f99367d077f3df`, `f150aeae64c1bcc6e1b6623cf8caaa857b428c9a`, `182123342f0b18ed3cfa8b216de5cc1ef3ac7c32`, `73dfd418ac365be57e4b2e4f6026247e8ad51322`, and `79ad3dc47c8d2e85775db97b8c00cee6caeda950`.
 
 - [ ] **11. Verify persistent progress/state**
   - Stars, completed games, story progress, outfit choices, and sound settings.
@@ -154,4 +164,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 10 — Verify tracing/drawing input logic.
+**Next:** Item 11 — Verify persistent progress/state.
