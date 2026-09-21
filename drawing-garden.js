@@ -606,13 +606,15 @@
     const ink = makeMask();
     const expandedInk = makeMask();
 
-    const centerWidth = round.guideType === "shape" ? 12 : 10;
-    const toleranceWidth = round.guideType === "shape" ? 26 : 22;
+    // Child-friendly tracing tolerance: the visible dotted guide is only a centerline,
+    // so accept a wider corridor around it for fingers and small touchscreens.
+    const centerWidth = round.guideType === "shape" ? 14 : 12;
+    const toleranceWidth = round.guideType === "shape" ? 54 : 48;
 
     drawValidationGuide(centerGuide.getContext("2d"), centerGuide, round, centerWidth);
     drawValidationGuide(toleranceGuide.getContext("2d"), toleranceGuide, round, toleranceWidth);
     drawStrokeMask(ink.getContext("2d"), strokes, 0);
-    drawStrokeMask(expandedInk.getContext("2d"), strokes, 8);
+    drawStrokeMask(expandedInk.getContext("2d"), strokes, 18);
 
     const centerPixels = centerGuide.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
     const tolerancePixels = toleranceGuide.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
@@ -656,7 +658,7 @@
     const round = activity?.rounds?.[activeGame.roundIndex];
     if (!round) return;
 
-    if ((activeGame.drawingDistance || 0) < 140 || !(activeGame.strokes || []).length) {
+    if ((activeGame.drawingDistance || 0) < 70 || !(activeGame.strokes || []).length) {
       updateSessionScore(-1);
       refreshVisibleSessionScore();
       feedback.className = "feedback try";
@@ -667,16 +669,22 @@
 
     const result = evaluateTracing(round);
     const isWord = activeGame.activityId === "word-writing";
-    const minimumAccuracy = isWord ? 0.74 : 0.80;
-    const minimumCoverage = isWord ? 0.40 : 0.48;
-    const maximumStrayRatio = isWord ? 0.26 : 0.20;
 
-    if (result.accuracy < minimumAccuracy || result.strayRatio > maximumStrayRatio) {
+    // These thresholds intentionally favor encouragement over pixel-perfect tracing.
+    // A child can pass by following enough of the guide even with normal finger wobble.
+    const minimumAccuracy = isWord ? 0.42 : 0.48;
+    const minimumCoverage = isWord ? 0.22 : 0.28;
+    const maximumStrayRatio = isWord ? 0.58 : 0.52;
+    const strongCoverage = isWord ? 0.34 : 0.40;
+    const acceptablePath = result.accuracy >= minimumAccuracy && result.strayRatio <= maximumStrayRatio;
+    const clearlyFollowedGuide = result.coverage >= strongCoverage && result.strayRatio <= 0.68;
+
+    if (!acceptablePath && !clearlyFollowedGuide) {
       updateSessionScore(-1);
       refreshVisibleSessionScore();
       feedback.className = "feedback try";
-      feedback.textContent = "Stay on the dotted line. Clear it and try the shape again.";
-      speak("Stay on the dotted line. Clear it and try the shape again.");
+      feedback.textContent = "Good try! Follow the dotted line a little more, then tap Done again.";
+      speak("Good try. Follow the dotted line a little more, then tap Done again.");
       return;
     }
 
@@ -684,8 +692,8 @@
       updateSessionScore(-1);
       refreshVisibleSessionScore();
       feedback.className = "feedback try";
-      feedback.textContent = "Good start! Follow more of the dotted line before you finish.";
-      speak("Good start. Follow more of the dotted line before you finish.");
+      feedback.textContent = "Almost there! Trace a little more of the dotted line.";
+      speak("Almost there. Trace a little more of the dotted line.");
       return;
     }
 
