@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import vm from "node:vm";
 
-const jsFiles = ["audio-manager.js", "app.js", "drawing-garden.js", "outfit-check.js", "service-worker.js"];
+const jsFiles = ["progress-store.js", "audio-manager.js", "app.js", "drawing-garden.js", "outfit-check.js", "service-worker.js"];
 const jsonFiles = ["manifest.json", "master-prompt-version.json"];
 let failed = false;
 
