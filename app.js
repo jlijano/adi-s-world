@@ -5,8 +5,9 @@ const BLESSING_PITCH_KEY = "adis-world-blessing-pitch-v1";
 const BLESSING_RATE_KEY = "adis-world-blessing-rate-v1";
 const BLESSING_SYSTEM_VOICE_KEY = "adis-world-blessing-system-voice-v1";
 const BLESSING_PROFILE_VERSION_KEY = "adis-world-blessing-profile-version";
-const ADI_HOME_IDLE_IMAGE = "assets/character/idle-front.webp";
-const ADI_HOME_HI_IMAGE = "assets/character/hi-wave.webp";
+const ASSETS = globalThis.AdiAssets;
+const ADI_HOME_IDLE_IMAGE = ASSETS.resolve("character.idle", "character");
+const ADI_HOME_HI_IMAGE = ASSETS.resolve("character.hiWave", "character");
 
 const worlds = [
   { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "open" },
@@ -241,38 +242,38 @@ const BIBLE_STORIES = [
     reference: "Genesis 1",
     summary: "God makes the world, the sky, plants, animals, and people.",
     maxStars: 5,
-    coverImage: "assets/blessing-garden/stories/creation.jpg",
+    coverImage: ASSETS.resolve("blessing.stories.creation", "story"),
     coverAlt: "Child-friendly Bible illustration representing God's creation of the world.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Figures_001_In_the_beginning_God_Created_the_Heaven_and_the_Earth.jpg",
     credits: "Bible illustration via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "assets/blessing-garden/stories/creation.jpg",
+        image: ASSETS.resolve("blessing.stories.creation", "story"),
         title: "In the Beginning",
         text: "In the beginning, God made the heavens and the earth. Everything began because God created it.",
         alt: "Bible illustration representing the beginning of God's creation."
       },
       {
-        image: "assets/blessing-garden/stories/creation.jpg",
+        image: ASSETS.resolve("blessing.stories.creation", "story"),
         title: "Light and Darkness",
         text: "God made light. He called the light day, and He called the darkness night.",
         alt: "Bible illustration representing light and darkness in the creation story."
       },
       {
-        image: "assets/blessing-garden/stories/creation.jpg",
+        image: ASSETS.resolve("blessing.stories.creation", "story"),
         title: "Sky, Land, and Plants",
         text: "God made the sky, the seas, and dry land. He made plants and trees grow on the land.",
         alt: "Bible illustration representing the sky, land, seas, and plants God created."
       },
       {
-        image: "assets/blessing-garden/stories/creation.jpg",
+        image: ASSETS.resolve("blessing.stories.creation", "story"),
         title: "Sun, Moon, and Stars",
         text: "God made the sun for the day. He made the moon and stars to shine at night.",
         alt: "Bible illustration representing the sun, moon, and stars in the creation story."
       },
       {
-        image: "assets/blessing-garden/stories/creation.jpg",
+        image: ASSETS.resolve("blessing.stories.creation", "story"),
         title: "Animals and People",
         text: "God made fish, birds, and animals. Then God made people. God saw that His creation was very good.",
         alt: "Bible illustration representing animals and people as part of God's creation."
@@ -285,38 +286,38 @@ const BIBLE_STORIES = [
     reference: "Genesis 6–9",
     summary: "Noah obeys God, builds the ark, and sees God's rainbow promise.",
     maxStars: 5,
-    coverImage: "assets/blessing-garden/stories/noah.png",
+    coverImage: ASSETS.resolve("blessing.stories.noah", "story"),
     coverAlt: "Bible illustration of Noah and his family entering the ark.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:New_pictorial_Bible_(1)_-_Noah_entering_the_ark.png",
     credits: "New Pictorial Bible illustration via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "assets/blessing-garden/stories/noah.png",
+        image: ASSETS.resolve("blessing.stories.noah", "story"),
         title: "God Speaks to Noah",
         text: "God told Noah to build a very large ark. Noah trusted God and listened carefully.",
         alt: "Bible illustration representing God telling Noah to prepare the ark."
       },
       {
-        image: "assets/blessing-garden/stories/noah.png",
+        image: ASSETS.resolve("blessing.stories.noah", "story"),
         title: "Noah Builds the Ark",
         text: "Noah worked hard and built the ark just as God told him to do.",
         alt: "Bible illustration representing Noah preparing the ark."
       },
       {
-        image: "assets/blessing-garden/stories/noah.png",
+        image: ASSETS.resolve("blessing.stories.noah", "story"),
         title: "Animals Enter the Ark",
         text: "Animals came to the ark, and Noah's family went inside too. God kept them together and safe.",
         alt: "Bible illustration of Noah, his family, and animals entering the ark."
       },
       {
-        image: "assets/blessing-garden/stories/noah.png",
+        image: ASSETS.resolve("blessing.stories.noah", "story"),
         title: "The Rain",
         text: "Rain fell for many days. Noah, his family, and the animals stayed safe inside the ark.",
         alt: "Bible illustration representing Noah and the animals safe inside the ark during the rain."
       },
       {
-        image: "assets/blessing-garden/stories/noah.png",
+        image: ASSETS.resolve("blessing.stories.noah", "story"),
         title: "The Rainbow Promise",
         text: "When the water went down, God put a rainbow in the sky as a sign of His promise.",
         alt: "Bible illustration representing Noah's family after the flood and God's promise."
@@ -329,38 +330,38 @@ const BIBLE_STORIES = [
     reference: "1 Samuel 17",
     summary: "David trusts God when he faces the giant Goliath.",
     maxStars: 5,
-    coverImage: "assets/blessing-garden/stories/david-goliath.jpg",
+    coverImage: ASSETS.resolve("blessing.stories.davidGoliath", "story"),
     coverAlt: "Bible illustration of David standing before Goliath.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Tissot_Drawing_266_Goliath_addresses_David_1_Samuel_17_43_for_Brunoff_254_Goliath_s%27adresse_%C3%A0_David.jpg",
     credits: "James Tissot Bible illustration via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "assets/blessing-garden/stories/david-goliath.jpg",
+        image: ASSETS.resolve("blessing.stories.davidGoliath", "story"),
         title: "A Giant Challenge",
         text: "A giant named Goliath challenged the people of Israel. The soldiers were afraid of him.",
         alt: "Bible illustration of Goliath speaking to David without graphic violence."
       },
       {
-        image: "assets/blessing-garden/stories/david-goliath.jpg",
+        image: ASSETS.resolve("blessing.stories.davidGoliath", "story"),
         title: "David Trusts God",
         text: "David remembered how God had helped him before. He trusted that God would be with him again.",
         alt: "Bible illustration of young David courageously facing Goliath."
       },
       {
-        image: "assets/blessing-garden/stories/david-goliath.jpg",
+        image: ASSETS.resolve("blessing.stories.davidGoliath", "story"),
         title: "Five Smooth Stones",
         text: "David chose five smooth stones from a stream. He carried his sling and went forward with courage.",
         alt: "Bible illustration representing David preparing to face Goliath."
       },
       {
-        image: "assets/blessing-garden/stories/david-goliath.jpg",
+        image: ASSETS.resolve("blessing.stories.davidGoliath", "story"),
         title: "David Faces Goliath",
         text: "David trusted God and used his sling. Goliath fell, and the danger was over.",
         alt: "Bible illustration of David facing Goliath, shown without graphic detail."
       },
       {
-        image: "assets/blessing-garden/stories/david-goliath.jpg",
+        image: ASSETS.resolve("blessing.stories.davidGoliath", "story"),
         title: "The People Rejoice",
         text: "The people were glad and no longer afraid. David knew that God had helped him.",
         alt: "Bible illustration representing David's courage and the people's relief."
@@ -373,38 +374,38 @@ const BIBLE_STORIES = [
     reference: "Daniel 6",
     summary: "Daniel keeps praying to God, and God protects him.",
     maxStars: 5,
-    coverImage: "assets/blessing-garden/stories/daniel-lions.jpg",
+    coverImage: ASSETS.resolve("blessing.stories.danielLions", "story"),
     coverAlt: "Bible illustration of Daniel safely sitting near calm lions.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Daniel%27s_Answer_to_the_King%2C_by_Briton_Riviere%2C_GMIII_MCAG_1937_123-001.jpg",
     credits: "Briton Rivière, Daniel's Answer to the King, via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "assets/blessing-garden/stories/daniel-lions.jpg",
+        image: ASSETS.resolve("blessing.stories.danielLions", "story"),
         title: "Daniel Prays",
         text: "Daniel loved God and prayed every day. Prayer was an important part of his life.",
         alt: "Bible illustration representing Daniel faithfully praying to God."
       },
       {
-        image: "assets/blessing-garden/stories/daniel-lions.jpg",
+        image: ASSETS.resolve("blessing.stories.danielLions", "story"),
         title: "A Law Against Prayer",
         text: "A new law said Daniel should not pray to God. Daniel still chose to pray faithfully.",
         alt: "Bible illustration representing Daniel continuing to pray despite the new law."
       },
       {
-        image: "assets/blessing-garden/stories/daniel-lions.jpg",
+        image: ASSETS.resolve("blessing.stories.danielLions", "story"),
         title: "Daniel and the Lions",
         text: "Daniel was placed in a lions' den. God stayed with Daniel through the night.",
         alt: "Child-friendly Bible illustration of Daniel safely sitting near lions."
       },
       {
-        image: "assets/blessing-garden/stories/daniel-lions.jpg",
+        image: ASSETS.resolve("blessing.stories.danielLions", "story"),
         title: "God Protects Daniel",
         text: "God sent an angel and kept the lions from hurting Daniel. Daniel was safe.",
         alt: "Bible illustration of Daniel protected by God among calm lions."
       },
       {
-        image: "assets/blessing-garden/stories/daniel-lions.jpg",
+        image: ASSETS.resolve("blessing.stories.danielLions", "story"),
         title: "Daniel Is Safe",
         text: "In the morning, the king was very happy to find Daniel safe. Daniel kept trusting God.",
         alt: "Bible illustration of Daniel safe after spending the night near the lions."
@@ -417,38 +418,38 @@ const BIBLE_STORIES = [
     reference: "Mark 10:13–16",
     summary: "Jesus welcomes children and shows that they are important to Him.",
     maxStars: 5,
-    coverImage: "assets/blessing-garden/stories/jesus-children.jpg",
+    coverImage: ASSETS.resolve("blessing.stories.jesusChildren", "story"),
     coverAlt: "Bible illustration of Jesus warmly welcoming children.",
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Jesus_Blessing_the_Children.jpg",
     credits: "Bernard Plockhorst, Christ Blessing the Children, via Wikimedia Commons",
     license: "Public Domain",
     scenes: [
       {
-        image: "assets/blessing-garden/stories/jesus-children.jpg",
+        image: ASSETS.resolve("blessing.stories.jesusChildren", "story"),
         title: "Families Come to Jesus",
         text: "Families brought their children to Jesus. They wanted Jesus to bless them.",
         alt: "Bible illustration of families bringing children to Jesus."
       },
       {
-        image: "assets/blessing-garden/stories/jesus-children.jpg",
+        image: ASSETS.resolve("blessing.stories.jesusChildren", "story"),
         title: "The Disciples Try to Stop Them",
         text: "Some disciples tried to send the families away. Jesus wanted the children to come to Him.",
         alt: "Bible illustration representing children coming to Jesus."
       },
       {
-        image: "assets/blessing-garden/stories/jesus-children.jpg",
+        image: ASSETS.resolve("blessing.stories.jesusChildren", "story"),
         title: "Jesus Says Come",
         text: "Jesus said, \"Let the little children come to me.\" He welcomed them with love.",
         alt: "Bible illustration of Jesus inviting children to come close."
       },
       {
-        image: "assets/blessing-garden/stories/jesus-children.jpg",
+        image: ASSETS.resolve("blessing.stories.jesusChildren", "story"),
         title: "Jesus Welcomes the Children",
         text: "The children came close to Jesus. He showed everyone that children are important to God.",
         alt: "Bible illustration of Jesus warmly welcoming children."
       },
       {
-        image: "assets/blessing-garden/stories/jesus-children.jpg",
+        image: ASSETS.resolve("blessing.stories.jesusChildren", "story"),
         title: "Jesus Blesses Them",
         text: "Jesus took the children in His arms and blessed them. He showed them kindness and love.",
         alt: "Bible illustration of Jesus blessing children."
@@ -463,40 +464,40 @@ const BIBLE_STORIES = [
     maxStars: 5,
     memoryVerseReference: "Judges 6:17",
     memoryVerse: "If now I have found favor in your eyes, give me a sign.",
-    memoryVerseImage: "assets/blessing-garden/gideon/gideon-call.jpg",
+    memoryVerseImage: ASSETS.resolve("blessing.gideon", "story"),
     memoryVerseImageAlt: "Child-friendly illustration of an angel and Gideon beside the stone altar.",
-    coverImage: "assets/blessing-garden/gideon/gideon-call.jpg",
+    coverImage: ASSETS.resolve("blessing.gideon", "story"),
     coverAlt: "Colorful child-friendly illustration of an angel and Gideon beside a stone altar with a small flame.",
-    sourceUrl: "assets/blessing-garden/gideon/gideon-call.jpg",
+    sourceUrl: ASSETS.resolve("blessing.gideon", "story"),
     credits: "Colorized child-friendly adaptation based on the workbook illustration provided by the user",
     license: "User-provided reference, adapted for this Adi's World lesson",
     scenes: [
       {
-        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        image: ASSETS.resolve("blessing.gideon", "story"),
         title: "The Israelites Ask for Help",
         text: "The Israelites had forgotten God. The Midianites came and took their animals and crops, so the people became poor and afraid. They remembered God and cried to Him for help.",
         alt: "Colorful Bible story illustration representing God's help for the Israelites in the time of Gideon."
       },
       {
-        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        image: ASSETS.resolve("blessing.gideon", "story"),
         title: "God Chooses Gideon",
         text: "God heard their prayers and chose a man named Gideon to lead His people. An angel came to Gideon while he was hiding and threshing grain.",
         alt: "Colorful child-friendly illustration of an angel speaking to Gideon."
       },
       {
-        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        image: ASSETS.resolve("blessing.gideon", "story"),
         title: "Gideon Asks for a Sign",
         text: "Gideon was afraid and wanted to know that God was really calling him. He brought food, and the angel touched it on the rock. A flame rose up as a sign.",
         alt: "Colorful child-friendly illustration of an angel, Gideon, a stone altar, food, and a gentle flame."
       },
       {
-        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        image: ASSETS.resolve("blessing.gideon", "story"),
         title: "The Fleece",
         text: "Gideon asked God for more assurance. He placed a fleece in the field and prayed that the fleece would be wet while the ground stayed dry.",
         alt: "Child-friendly Gideon story illustration accompanying the story of the fleece."
       },
       {
-        image: "assets/blessing-garden/gideon/gideon-call.jpg",
+        image: ASSETS.resolve("blessing.gideon", "story"),
         title: "God Answers Gideon",
         text: "God answered Gideon's prayer. Gideon asked once more for the ground to be wet and the fleece to be dry, and God answered again. Gideon learned that God would help him.",
         alt: "Colorful child-friendly Gideon story illustration representing God's patient answer to Gideon."
@@ -623,26 +624,26 @@ const LETTER_FIND_LEVELS = [
 ];
 
 const PLANT_FOOD_POOL = [
-  { name: "Mango", spokenName: "mango", image: "./assets/discovery/plant-foods/mango.jpg", category: "Fruit", difficulty: 1 },
-  { name: "Banana", spokenName: "banana", image: "./assets/discovery/plant-foods/banana-photo.jpg", category: "Fruit", difficulty: 1 },
-  { name: "Pineapple", spokenName: "pineapple", image: "./assets/discovery/plant-foods/pineapple.jpg", category: "Fruit", difficulty: 1 },
-  { name: "Carrot", spokenName: "carrot", image: "./assets/discovery/plant-foods/carrot.jpg", category: "Vegetable", difficulty: 1 },
-  { name: "Broccoli", spokenName: "broccoli", image: "./assets/discovery/plant-foods/broccoli.jpg", category: "Vegetable", difficulty: 1 },
-  { name: "Papaya", spokenName: "papaya", image: "./assets/discovery/plant-foods/papaya.jpg", category: "Fruit", difficulty: 2 },
-  { name: "Guava", spokenName: "guava", image: "./assets/discovery/plant-foods/guava.jpg", category: "Fruit", difficulty: 2 },
-  { name: "Coconut", spokenName: "coconut", image: "./assets/discovery/plant-foods/coconut.jpg", category: "Fruit", difficulty: 2 },
-  { name: "Eggplant", spokenName: "eggplant", image: "./assets/discovery/plant-foods/eggplant.jpg", category: "Vegetable", difficulty: 2, culinaryGroup: true },
-  { name: "Squash", spokenName: "squash", image: "./assets/discovery/plant-foods/squash.jpg", category: "Vegetable", difficulty: 2, culinaryGroup: true },
-  { name: "Cucumber", spokenName: "cucumber", image: "./assets/discovery/plant-foods/cucumber.jpg", category: "Vegetable", difficulty: 2, culinaryGroup: true },
-  { name: "Chico", spokenName: "chico", image: "./assets/discovery/plant-foods/chico.jpg", category: "Fruit", difficulty: 3 },
-  { name: "Calamansi", spokenName: "calamansi", image: "./assets/discovery/plant-foods/calamansi.jpg", category: "Fruit", difficulty: 3 },
-  { name: "Lanzones", spokenName: "lanzones", image: "./assets/discovery/plant-foods/lanzones.jpg", category: "Fruit", difficulty: 3 },
-  { name: "Jackfruit", spokenName: "jackfruit", image: "./assets/discovery/plant-foods/jackfruit.jpg", category: "Fruit", difficulty: 3 },
-  { name: "Ampalaya", spokenName: "ampalaya, or bitter melon", image: "./assets/discovery/plant-foods/ampalaya.jpg", category: "Vegetable", difficulty: 3, culinaryGroup: true },
-  { name: "Malunggay", spokenName: "malunggay", image: "./assets/discovery/plant-foods/malunggay.jpg", category: "Vegetable", difficulty: 3 },
-  { name: "Patola", spokenName: "patola", image: "./assets/discovery/plant-foods/patola.jpg", category: "Vegetable", difficulty: 3, culinaryGroup: true },
-  { name: "Kangkong", spokenName: "kangkong", image: "./assets/discovery/plant-foods/kangkong.jpg", category: "Vegetable", difficulty: 3 },
-  { name: "String Beans", spokenName: "string beans", image: "./assets/discovery/plant-foods/string-beans.jpg", category: "Vegetable", difficulty: 3, culinaryGroup: true }
+  { name: "Mango", spokenName: "mango", image: ASSETS.resolve("discovery.plantFoods.mango", "food"), category: "Fruit", difficulty: 1 },
+  { name: "Banana", spokenName: "banana", image: ASSETS.resolve("discovery.plantFoods.banana", "food"), category: "Fruit", difficulty: 1 },
+  { name: "Pineapple", spokenName: "pineapple", image: ASSETS.resolve("discovery.plantFoods.pineapple", "food"), category: "Fruit", difficulty: 1 },
+  { name: "Carrot", spokenName: "carrot", image: ASSETS.resolve("discovery.plantFoods.carrot", "food"), category: "Vegetable", difficulty: 1 },
+  { name: "Broccoli", spokenName: "broccoli", image: ASSETS.resolve("discovery.plantFoods.broccoli", "food"), category: "Vegetable", difficulty: 1 },
+  { name: "Papaya", spokenName: "papaya", image: ASSETS.resolve("discovery.plantFoods.papaya", "food"), category: "Fruit", difficulty: 2 },
+  { name: "Guava", spokenName: "guava", image: ASSETS.resolve("discovery.plantFoods.guava", "food"), category: "Fruit", difficulty: 2 },
+  { name: "Coconut", spokenName: "coconut", image: ASSETS.resolve("discovery.plantFoods.coconut", "food"), category: "Fruit", difficulty: 2 },
+  { name: "Eggplant", spokenName: "eggplant", image: ASSETS.resolve("discovery.plantFoods.eggplant", "food"), category: "Vegetable", difficulty: 2, culinaryGroup: true },
+  { name: "Squash", spokenName: "squash", image: ASSETS.resolve("discovery.plantFoods.squash", "food"), category: "Vegetable", difficulty: 2, culinaryGroup: true },
+  { name: "Cucumber", spokenName: "cucumber", image: ASSETS.resolve("discovery.plantFoods.cucumber", "food"), category: "Vegetable", difficulty: 2, culinaryGroup: true },
+  { name: "Chico", spokenName: "chico", image: ASSETS.resolve("discovery.plantFoods.chico", "food"), category: "Fruit", difficulty: 3 },
+  { name: "Calamansi", spokenName: "calamansi", image: ASSETS.resolve("discovery.plantFoods.calamansi", "food"), category: "Fruit", difficulty: 3 },
+  { name: "Lanzones", spokenName: "lanzones", image: ASSETS.resolve("discovery.plantFoods.lanzones", "food"), category: "Fruit", difficulty: 3 },
+  { name: "Jackfruit", spokenName: "jackfruit", image: ASSETS.resolve("discovery.plantFoods.jackfruit", "food"), category: "Fruit", difficulty: 3 },
+  { name: "Ampalaya", spokenName: "ampalaya, or bitter melon", image: ASSETS.resolve("discovery.plantFoods.ampalaya", "food"), category: "Vegetable", difficulty: 3, culinaryGroup: true },
+  { name: "Malunggay", spokenName: "malunggay", image: ASSETS.resolve("discovery.plantFoods.malunggay", "food"), category: "Vegetable", difficulty: 3 },
+  { name: "Patola", spokenName: "patola", image: ASSETS.resolve("discovery.plantFoods.patola", "food"), category: "Vegetable", difficulty: 3, culinaryGroup: true },
+  { name: "Kangkong", spokenName: "kangkong", image: ASSETS.resolve("discovery.plantFoods.kangkong", "food"), category: "Vegetable", difficulty: 3 },
+  { name: "String Beans", spokenName: "string beans", image: ASSETS.resolve("discovery.plantFoods.stringBeans", "food"), category: "Vegetable", difficulty: 3, culinaryGroup: true }
 ];
 
 function buildPlantFoodRounds() {
@@ -1969,7 +1970,7 @@ function setActiveNav(name) {
 
 function visualCardArtwork(kind, label) {
   if (kind === "word") {
-    return `<img class="card-illustration-svg" src="assets/worlds/word-forest/word-forest-reference.jpg?v=77" alt="" aria-hidden="true" decoding="async">`;
+    return `<img class="card-illustration-svg" src=ASSETS.resolve("worlds.wordForestReference", "world") alt="" aria-hidden="true" decoding="async">`;
   }
   const seed = [...String(kind || label || "adi")].reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const variants = [
