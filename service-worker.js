@@ -1,9 +1,9 @@
-const APP_VERSION = "83";
+const APP_VERSION = "84";
 const CACHE_NAME = `adis-world-v${APP_VERSION}`;
 const APP_SHELL = [
   "./", "./index.html",
-  "./styles.css?v=83", "./drawing-garden.css?v=83", "./outfit-check.css?v=83", "./outfit-check-layered.css?v=83",
-  "./audio-manager.js?v=83", "./app.js?v=83", "./drawing-garden.js?v=83", "./outfit-check.js?v=83",
+  "./styles.css?v=84", "./drawing-garden.css?v=84", "./outfit-check.css?v=84", "./outfit-check-layered.css?v=84",
+  "./audio-manager.js?v=84", "./app.js?v=84", "./drawing-garden.js?v=84", "./outfit-check.js?v=84",
   "./assets/character/adi-front-3d.webp",
   "./assets/character/outfit-check/outfit-layers.svg",
   "./assets/character/idle-front.webp", "./assets/character/hi-wave.webp",
