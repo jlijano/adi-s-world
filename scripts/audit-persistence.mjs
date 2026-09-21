@@ -1,6 +1,7 @@
 import fs from "node:fs";
 
 const app = fs.readFileSync("app.js", "utf8");
+const progressStore = fs.readFileSync("progress-store.js", "utf8");
 const outfit = fs.readFileSync("outfit-check.js", "utf8");
 const audio = fs.readFileSync("audio-manager.js", "utf8");
 
@@ -17,15 +18,15 @@ function check(condition, message) {
   }
 }
 
-check(app.includes('const STORAGE_KEY = "adis-world-progress-v1"'), "Progress storage key remains backward-compatible");
-check(app.includes("function safeStorageGet"), "Progress reads are guarded");
-check(app.includes("function safeStorageSet"), "Progress writes are guarded");
-check(app.includes("function safeStorageRemove"), "Legacy setting cleanup is guarded");
-check(app.includes("function normalizeProgressState"), "Stored progress is normalized before use");
-check(app.includes("Math.max(0, Math.floor(Number(source.stars) || 0))"), "Stored stars cannot become negative or invalid");
-check(app.includes("completed[key] = Math.floor(numericStars)"), "Completed activity star values are normalized");
-check(app.includes("storyProgress"), "Bible Story progress remains part of persisted progress");
-check(app.includes("saveProgress()") && app.includes("safeStorageSet(STORAGE_KEY"), "Progress saving uses safe storage wrapper");
+check(progressStore.includes('const STORAGE_KEY = "adis-world-progress-v1"'), "Progress storage key remains backward-compatible");
+check(progressStore.includes("function safeGet"), "Progress reads are guarded");
+check(progressStore.includes("function safeSet"), "Progress writes are guarded");
+check(progressStore.includes("function safeRemove"), "Legacy setting cleanup is guarded");
+check(progressStore.includes("function normalize"), "Stored progress is normalized before use");
+check(progressStore.includes("Math.max(0, Math.floor(Number(source.stars) || 0))"), "Stored stars cannot become negative or invalid");
+check(progressStore.includes("completed[key] = Math.floor(numericStars)"), "Completed activity star values are normalized");
+check(progressStore.includes("storyProgress"), "Bible Story progress remains part of persisted progress");
+check(app.includes("window.AdiProgressStore?.save?.(progress)"), "App saves progress through extracted store");
 check(app.includes("markStorySceneSeen") && app.includes("saveProgress();"), "Bible Story scene progress is persisted");
 
 check(outfit.includes('const OUTFIT_STORAGE_KEY = "adis-world-outfit-v2"'), "Outfit storage key remains backward-compatible");
