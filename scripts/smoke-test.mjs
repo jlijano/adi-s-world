@@ -21,6 +21,7 @@ function exists(localPath) {
 const html = fs.readFileSync("index.html", "utf8");
 const app = fs.readFileSync("app.js", "utf8");
 const audio = fs.readFileSync("audio-manager.js", "utf8");
+const progressStore = fs.readFileSync("progress-store.js", "utf8");
 const sw = fs.readFileSync("service-worker.js", "utf8");
 const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8"));
 
@@ -47,7 +48,7 @@ check(app.includes('document.addEventListener("click"'), "Delegated interaction 
 
 check(app.includes("gameSession.score = Math.max(0"), "Session score cannot go below zero");
 check(app.includes("progress.stars"), "Persistent star tracking is present");
-check(app.includes("localStorage"), "Local progress storage is present");
+check(progressStore.includes("window.AdiProgressStore") && progressStore.includes("localStorage"), "Local progress storage is present through progress-store.js");
 check(app.includes("function renderSettings()"), "Settings screen renderer is present");
 check(!app.includes("https://commons.wikimedia.org/wiki/Special:Redirect/file/"), "Bible Story images are local");
 check(app.includes("window.AdiAudio"), "App routes speech through centralized audio manager");
