@@ -11,3 +11,14 @@
 @media(max-width:620px){.outfit-avatar-layered{min-height:570px}.adi-doll-stage{inset:58px 66px 48px}.outfit-avatar-layered .room-poster{left:22px;top:42px}.outfit-avatar-layered .room-window{right:20px;top:48px;transform:scale(.86);transform-origin:top right}.outfit-avatar-layered .room-shelf{left:24px;top:192px;transform:scale(.90);transform-origin:top left}}
 @media(max-width:420px){.outfit-avatar-layered{min-height:520px}.adi-doll-stage{inset:66px 52px 44px}.outfit-avatar-layered .room-poster{font-size:10px;padding:10px 11px}.outfit-avatar-layered .room-window{transform:scale(.76)}.outfit-avatar-layered .room-shelf{top:184px;transform:scale(.82)}}
 @media(prefers-reduced-motion:reduce){.adi-doll-stack{animation:none}}
+
+
+@media(max-width:360px){
+  .outfit-avatar-layered{min-height:470px}
+  .adi-doll-stage{inset:62px 38px 40px}
+  .outfit-avatar-layered .room-window{right:10px;transform:scale(.66);transform-origin:top right}
+  .outfit-avatar-layered .room-shelf{left:12px;top:170px;transform:scale(.72);transform-origin:top left}
+  .outfit-category-tabs{gap:6px}
+  .outfit-category-button{min-height:44px!important;padding:9px 11px!important}
+  .outfit-option-card{flex-basis:112px}
+}
