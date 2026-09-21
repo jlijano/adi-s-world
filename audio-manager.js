@@ -7,8 +7,25 @@
     quick: 1.00
   };
 
-  let enabled = localStorage.getItem(SOUND_KEY) !== "off";
-  let ratePreset = localStorage.getItem(RATE_KEY);
+  function safeGet(key) {
+    try {
+      return window.localStorage?.getItem(key) ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  function safeSet(key, value) {
+    try {
+      window.localStorage?.setItem(key, value);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  let enabled = safeGet(SOUND_KEY) !== "off";
+  let ratePreset = safeGet(RATE_KEY);
   if (!Object.prototype.hasOwnProperty.call(RATE_PRESETS, ratePreset)) ratePreset = "normal";
 
   let activeToken = 0;
@@ -119,7 +136,7 @@
 
   function setEnabled(value, options = {}) {
     enabled = Boolean(value);
-    localStorage.setItem(SOUND_KEY, enabled ? "on" : "off");
+    safeSet(SOUND_KEY, enabled ? "on" : "off");
     if (!enabled) cancel();
     if (enabled && options.announce !== false) {
       speak("Sound on.");
@@ -130,7 +147,7 @@
   function setRatePreset(value, options = {}) {
     if (!Object.prototype.hasOwnProperty.call(RATE_PRESETS, value)) return;
     ratePreset = value;
-    localStorage.setItem(RATE_KEY, ratePreset);
+    safeSet(RATE_KEY, ratePreset);
     window.dispatchEvent(new CustomEvent("adi-audio-settings-changed"));
     if (options.preview) speak("This is how Adi's World will speak.");
   }
