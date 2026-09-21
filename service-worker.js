@@ -1,9 +1,9 @@
-const APP_VERSION = "79";
+const APP_VERSION = "80";
 const CACHE_NAME = `adis-world-v${APP_VERSION}`;
 const APP_SHELL = [
   "./", "./index.html",
-  "./styles.css?v=79", "./drawing-garden.css?v=79", "./outfit-check.css?v=79", "./outfit-check-layered.css?v=79",
-  "./audio-manager.js?v=79", "./app.js?v=79", "./drawing-garden.js?v=79", "./outfit-check.js?v=79",
+  "./styles.css?v=80", "./drawing-garden.css?v=80", "./outfit-check.css?v=80", "./outfit-check-layered.css?v=80",
+  "./audio-manager.js?v=80", "./app.js?v=80", "./drawing-garden.js?v=80", "./outfit-check.js?v=80",
   "./assets/character/adi-front-3d.webp",
   "./assets/character/outfit-check/outfit-layers.svg",
   "./assets/character/idle-front.webp", "./assets/character/hi-wave.webp",
@@ -11,6 +11,12 @@ const APP_SHELL = [
   "./audio-manager.js", "./app.js", "./drawing-garden.js", "./outfit-check.js", "./manifest.json",
   "./assets/icons/icon.svg", "./assets/icons/adis-world-splash.jpg", "./assets/worlds/word-forest-card.svg",
   "./assets/blessing-garden/gideon/gideon-call.jpg",
+  "./assets/blessing-garden/stories/creation.jpg",
+  "./assets/blessing-garden/stories/noah.png",
+  "./assets/blessing-garden/stories/david-goliath.jpg",
+  "./assets/blessing-garden/stories/daniel-lions.jpg",
+  "./assets/blessing-garden/stories/jesus-children.jpg",
+  "./assets/blessing-garden/stories/CREDITS.md",
   "./assets/discovery/plant-foods/mango.jpg", "./assets/discovery/plant-foods/banana-photo.jpg", "./assets/discovery/plant-foods/pineapple.jpg",
   "./assets/discovery/plant-foods/carrot.jpg", "./assets/discovery/plant-foods/broccoli.jpg", "./assets/discovery/plant-foods/papaya.jpg",
   "./assets/discovery/plant-foods/guava.jpg", "./assets/discovery/plant-foods/coconut.jpg", "./assets/discovery/plant-foods/eggplant.jpg",
