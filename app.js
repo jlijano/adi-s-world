@@ -1,4 +1,3 @@
-const STORAGE_KEY = "adis-world-progress-v1";
 const SOUND_KEY = "adis-world-sound-v1";
 const BLESSING_VOICE_KEY = "adis-world-blessing-voice-v1";
 const BLESSING_GENDER_KEY = "adis-world-blessing-gender-v1";
@@ -8,58 +7,6 @@ const BLESSING_SYSTEM_VOICE_KEY = "adis-world-blessing-system-voice-v1";
 const BLESSING_PROFILE_VERSION_KEY = "adis-world-blessing-profile-version";
 const ADI_HOME_IDLE_IMAGE = "assets/character/idle-front.webp";
 const ADI_HOME_HI_IMAGE = "assets/character/hi-wave.webp";
-
-function safeStorageGet(key) {
-  try {
-    return window.localStorage?.getItem(key) ?? null;
-  } catch {
-    return null;
-  }
-}
-
-function safeStorageSet(key, value) {
-  try {
-    window.localStorage?.setItem(key, value);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function safeStorageRemove(key) {
-  try {
-    window.localStorage?.removeItem(key);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function normalizeProgressState(value) {
-  const source = value && typeof value === "object" && !Array.isArray(value) ? value : {};
-  const completedSource = source.completed && typeof source.completed === "object" && !Array.isArray(source.completed)
-    ? source.completed
-    : {};
-  const completed = {};
-
-  for (const [key, stars] of Object.entries(completedSource)) {
-    const numericStars = Number(stars);
-    if (Number.isFinite(numericStars) && numericStars >= 0) {
-      completed[key] = Math.floor(numericStars);
-    }
-  }
-
-  const storyProgress = source.storyProgress && typeof source.storyProgress === "object" && !Array.isArray(source.storyProgress)
-    ? source.storyProgress
-    : {};
-
-  return {
-    ...source,
-    stars: Math.max(0, Math.floor(Number(source.stars) || 0)),
-    completed,
-    storyProgress
-  };
-}
 
 const worlds = [
   { id: "home", name: "Adi's Home", icon: "🏠", note: "Routines & life skills", status: "open" },
@@ -1590,7 +1537,7 @@ function updateSessionScore(delta) {
 }
 
 let progress = loadProgress();
-let soundEnabled = window.AdiAudio?.isEnabled?.() ?? safeStorageGet(SOUND_KEY) !== "off";
+let soundEnabled = window.AdiAudio?.isEnabled?.() ?? window.AdiProgressStore?.safeGet?.(SOUND_KEY) !== "off";
 let blessingVoiceMode = "standard";
 let blessingVoiceGender = "neutral";
 let blessingVoicePitch = 1.0;
@@ -1603,7 +1550,7 @@ let blessingSystemVoiceId = "";
   BLESSING_RATE_KEY,
   BLESSING_SYSTEM_VOICE_KEY,
   BLESSING_PROFILE_VERSION_KEY
-].forEach((key) => safeStorageRemove(key));
+].forEach((key) => window.AdiProgressStore?.safeRemove?.(key));
 let currentView = { type: "home" };
 let activeGame = null;
 let gameSession = null;
@@ -1624,22 +1571,13 @@ const soundButton = document.getElementById("sound-button");
 const celebration = document.getElementById("celebration");
 
 function loadProgress() {
-  const raw = safeStorageGet(STORAGE_KEY);
-  if (!raw) return normalizeProgressState(null);
-
-  try {
-    return normalizeProgressState(JSON.parse(raw));
-  } catch {
-    return normalizeProgressState(null);
-  }
+  return window.AdiProgressStore?.load?.() || { stars: 0, completed: {}, storyProgress: {} };
 }
 
 function saveProgress() {
-  progress = normalizeProgressState(progress);
-  safeStorageSet(STORAGE_KEY, JSON.stringify(progress));
+  progress = window.AdiProgressStore?.save?.(progress) || progress;
   updateStarCount();
 }
-
 function ensureStoryProgressStore() {
   if (!progress.storyProgress || typeof progress.storyProgress !== "object") {
     progress.storyProgress = {};
