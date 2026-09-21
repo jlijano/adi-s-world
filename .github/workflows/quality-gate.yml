@@ -36,5 +36,8 @@ jobs:
       - name: Audit tracing recognition
         run: node scripts/audit-tracing.mjs
 
+      - name: Audit persistent state
+        run: node scripts/audit-persistence.mjs
+
       - name: Run smoke tests
         run: node scripts/smoke-test.mjs
