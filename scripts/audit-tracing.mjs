@@ -15,7 +15,7 @@ function check(condition, message) {
 }
 
 check(drawing.includes('const toleranceWidth = round.guideType === "shape" ? 54 : 48;'), "Tracing uses widened child-friendly tolerance corridor");
-check(drawing.includes("drawStrokeMask(expandedInk.getContext("2d"), strokes, 18)"), "Tracing coverage uses expanded stroke mask");
+check(drawing.includes('drawStrokeMask(expandedInk.getContext("2d"), strokes, 18)'), "Tracing coverage uses expanded stroke mask");
 check(drawing.includes("(activeGame.drawingDistance || 0) < 70"), "Minimum drawing distance is child-friendly");
 check(drawing.includes("const minimumAccuracy = isWord ? 0.42 : 0.48;"), "Minimum accuracy threshold is relaxed");
 check(drawing.includes("const minimumCoverage = isWord ? 0.22 : 0.28;"), "Minimum coverage threshold is relaxed");
