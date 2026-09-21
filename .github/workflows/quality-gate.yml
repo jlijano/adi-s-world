@@ -42,5 +42,8 @@ jobs:
       - name: Audit modularization boundary
         run: node scripts/audit-modularization.mjs
 
+      - name: Audit asset registry
+        run: node scripts/audit-assets.mjs
+
       - name: Run smoke tests
         run: node scripts/smoke-test.mjs
