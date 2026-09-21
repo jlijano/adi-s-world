@@ -766,6 +766,16 @@
 
     if (event.target.closest("[data-drawing-undo]")) {
       freeDrawingState.history.pop();
+      if (activeGame?.activityId === "free-drawing") {
+        activeGame.strokes = freeDrawingState.history.slice();
+        activeGame.drawingDistance = freeDrawingState.history.reduce((total, stroke) => {
+          const points = stroke.points || [];
+          for (let i = 1; i < points.length; i += 1) {
+            total += Math.hypot(points[i].x - points[i - 1].x, points[i].y - points[i - 1].y);
+          }
+          return total;
+        }, 0);
+      }
       redrawFreeCanvas();
       return;
     }
@@ -777,7 +787,7 @@
 
     if (event.target.closest("[data-free-drawing-finish]")) {
       const feedback = document.getElementById("feedback");
-      if ((activeGame?.drawingDistance || 0) < 120) {
+      if (!freeDrawingState.history.length || (activeGame?.drawingDistance || 0) < 120) {
         feedback.className = "feedback try";
         feedback.textContent = "Draw a little more before you finish.";
         speak("Draw a little more before you finish.");
