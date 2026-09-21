@@ -96,8 +96,17 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
   - Verified deployment validation, game-flow audit, responsive-layout audit, tracing-recognition audit, and smoke tests all pass together.
   - Completed across commits `b79289997e2265817a8ed0e70519c5009066f0c4`, `0b548d995c70ae2cd37c4694b259939028983056`, `f8d525aeb706fd739209950999f99367d077f3df`, `f150aeae64c1bcc6e1b6623cf8caaa857b428c9a`, `182123342f0b18ed3cfa8b216de5cc1ef3ac7c32`, `73dfd418ac365be57e4b2e4f6026247e8ad51322`, and `79ad3dc47c8d2e85775db97b8c00cee6caeda950`.
 
-- [ ] **11. Verify persistent progress/state**
-  - Stars, completed games, story progress, outfit choices, and sound settings.
+- [x] **11. Verify persistent progress/state**
+  - Audited stars, completed activities, Bible Story scene progress, Outfit Check selections, sound preference, and speaking-speed preference.
+  - Added guarded storage helpers so localStorage read/write/remove failures no longer break the app.
+  - Normalized stored progress so invalid, negative, malformed, or non-numeric star/completion values cannot corrupt the UI.
+  - Preserved the existing `adis-world-progress-v1`, `adis-world-outfit-v2`, `adis-world-sound-v1`, and `adis-world-speech-rate-v1` keys so current user data remains compatible.
+  - Kept legacy Outfit Check v1 migration support and now validate stored outfit option IDs before applying them.
+  - Hardened Outfit Check saves and audio Settings saves against restricted storage/quota errors.
+  - Added `scripts/audit-persistence.mjs` and wired it into the GitHub Actions quality gate.
+  - Bumped app/PWA cache version to `v84`.
+  - Verified deployment validation, game-flow audit, responsive audit, tracing audit, persistence audit, and smoke tests all pass together.
+  - Completed across commits `3bf1bd2e84a2eb49aeb0b6c9b0a12895ae544036`, `f26ded9d8b37537cfb6a430e27b56529b3a77540`, `c6e0fd396bdcf3d8da1298398cd067481d447958`, `aaf6d924b6201030a062bf67960f4dcd67e02c3e`, `fa968d8ff111aade6073103bfbab78c9774aa616`, `02eeb5727a7b461c8aa088a1f96c139e62131f1e`, `62315f5463bb3c78df2f3c360f716fe91c06d847`, and `d0119b3cd4351b063e2b5fcc06ea6046a89b7a7a`.
 
 ## P2 — Important Cleanup
 
@@ -164,4 +173,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 11 — Verify persistent progress/state.
+**Next:** Item 12 — Begin modularizing `app.js`.
