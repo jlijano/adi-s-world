@@ -27,5 +27,8 @@ jobs:
       - name: Validate deploy files
         run: node scripts/validate-deploy.mjs
 
+      - name: Audit playable game flows
+        run: node scripts/audit-game-flows.mjs
+
       - name: Run smoke tests
         run: node scripts/smoke-test.mjs
