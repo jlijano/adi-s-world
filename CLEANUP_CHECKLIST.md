@@ -122,8 +122,19 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
   - Verified deployment validation, game-flow audit, responsive audit, tracing audit, persistence audit, modularization audit, and smoke tests all pass together.
   - Completed across commits `87049b8eb2c30c9e9e4ab407a074b42c0af38622`, `03fd93dcc471b45e8d784b592936f25df2f79982`, `68e52b18b8045f6d84086c41f96aab87ee0258e4`, `1e9af5b997dc5f486cc40440ece88d99c322d970`, `bbefab12f9128d4f8afe1d292a9568059b2b5c14`, `2230ad7f5fd54edc8fe7854e27b6eb1387fd7cc0`, `1c5e56fc51c4922272695383044813267ff99434`, `472299ca1afdd11c767527589ec8b20f7e3eb8fa`, `19f87f044b0122586a8107317422662d7f0ed55a`, and `30e1aab98b66d3190066c6060120999c2882e5b3`.
 
-- [ ] **13. Create a central asset registry**
-  - Manage world images, game art, character art, story images, and fallbacks from one mapping.
+- [x] **13. Create a central asset registry**
+  - Inventoried hardcoded asset paths across `app.js`, Drawing Garden, Outfit Check, the PWA shell, HTML, CSS, and the manifest.
+  - Added `asset-registry.js` as the source of truth for app icons, character art, Word Forest artwork, Blessing Garden story art, Gideon art, and all 20 Discovery Lab plant-food photos.
+  - Centralized 34 app-owned asset entries with typed safe fallbacks for generic images, characters, worlds, stories, and foods.
+  - Migrated runtime feature code so `app.js`, `drawing-garden.js`, `outfit-check.js`, `audio-manager.js`, and `progress-store.js` contain no direct `assets/` literals.
+  - Migrated the PWA app-owned asset cache to `Object.values(globalThis.AdiAssets.all())` so cache coverage follows the registry automatically.
+  - Kept only intentional bootstrap/metadata exceptions: app icon and splash paths in `index.html`, the manifest icon path, and two credits files in the service worker.
+  - Added `ASSET_INVENTORY.md` documenting the registry, safe fallback policy, bootstrap exceptions, and regression rules.
+  - Added `scripts/audit-assets.mjs` to verify every registered asset exists, fallback resolution works, runtime modules remain free of hardcoded asset paths, bootstrap exceptions stay allowlisted, and the PWA cache remains registry-driven.
+  - Added the asset registry to deployment syntax validation, smoke tests, and the GitHub Actions quality gate.
+  - Bumped app/PWA cache version to `v86`.
+  - Verified deployment validation, game-flow audit, responsive audit, tracing audit, persistence audit, modularization audit, asset-registry audit, and smoke tests all pass together.
+  - Completed across commits `7f64c0b142803db1c8db6372da608105d00f3043`, `31cab4a07fcd58ab255f8425720f977bb92d43db`, `13b671a9ef3fbd340fe24a649230d5c21e52a7fa`, `8842103979c5a878b2daf2e480b15c45b242bf7d`, `077bb136c0cd8fc3faf40343b91d4aaa4e7c401e`, `9f67d503eebf65c6cb30e401ae16d4ec20fd4f66`, `002c3f2d4f9e475b409408c3d2aa5219397c2008`, `9374c7e09f1cca2457240b9793eb7d0b6986601b`, `01b6bd85ef79a02147904c1e6d7333748471b3e4`, `b902b3c7f877a66b18282a9185770a0ee65ef73c`, and `e282ee250bbdde87ac6b3435225e26ff3a8a61b0`.
 
 - [ ] **14. Add controlled asset fallbacks**
   - Never expose a broken-image icon to the child.
@@ -182,4 +193,4 @@ This checklist tracks the active cleanup and stabilization work from the Septemb
 
 ## Active Item
 
-**Next:** Item 13 — Create a central asset registry.
+**Next:** Item 14 — Add controlled asset fallbacks.
